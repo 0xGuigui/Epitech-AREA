@@ -1,12 +1,28 @@
-module.exports = function (app) {
-    app.get('/about.json', (req, res) => {
+module.exports = function (area) {
+    area.app.get('/about.json', (req, res) => {
         res.json({
             client: {
                 host: req.socket.remoteAddress
             },
             server: {
                 current_time: Date.now(),
-                services: []
+                services: area.services.map(service => {
+                    return {
+                        name: service.name,
+                        actions: service.actions.map(action => {
+                            return {
+                                name: action.name,
+                                description: action.description
+                            };
+                        }),
+                        reactions: service.reactions.map(reaction => {
+                            return {
+                                name: reaction.name,
+                                description: reaction.description
+                            }
+                        })
+                    }
+                })
             }
         })
     })

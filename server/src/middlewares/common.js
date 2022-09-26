@@ -1,9 +1,9 @@
 const bodyParser = require('body-parser')
 
-module.exports = (app) => {
+module.exports = (area) => {
     // parse application/x-www-form-urlencoded
-    app.use(bodyParser.urlencoded({extended: false}))
+    area.app.use(bodyParser.urlencoded({extended: false}))
 
     // parse application/json
-    app.use(bodyParser.json())
+    area.app.use(bodyParser.json())
 }

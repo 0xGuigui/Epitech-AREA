@@ -9,13 +9,13 @@ let expressDynamicLoader = (area, path) => {
         let stat = fs.statSync(filePath);
 
         if (stat && stat.isDirectory()) {
-            expressDynamicLoader(area.app, filePath);
+            expressDynamicLoader(area, filePath);
         } else {
             if (file.endsWith('.js')) {
                 let fileContent = require(filePath);
 
                 if (typeof fileContent === 'function') {
-                    fileContent(area.app);
+                    fileContent(area);
                 }
             }
         }

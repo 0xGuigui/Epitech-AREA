@@ -8,6 +8,7 @@ class AREA {
     constructor() {
         this.app = express()
         this.config = config
+        this.services = []
 
         // Load all services
         loadServices(this)
