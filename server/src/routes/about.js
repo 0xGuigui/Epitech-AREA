@@ -1,4 +1,4 @@
-module.exports = function (area) {
+module.exports = (area) => {
     area.app.get('/about.json', (req, res) => {
         res.json({
             client: {
