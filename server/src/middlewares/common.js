@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 module.exports = (area) => {
     // parse application/x-www-form-urlencoded
@@ -6,4 +7,7 @@ module.exports = (area) => {
 
     // parse application/json
     area.app.use(bodyParser.json())
+
+    // CORS policy
+    area.app.use(cors())
 }
