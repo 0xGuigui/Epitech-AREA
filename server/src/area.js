@@ -9,6 +9,7 @@ class AREA {
         this.app = express()
         this.config = config
         this.services = []
+        this.jwtTokenBlacklist = []
 
         // Load all services
         loadServices(this)

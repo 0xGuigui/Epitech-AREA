@@ -5,7 +5,7 @@ module.exports = (area) => {
 
     router.get('/', (req, res) => {
         // use query to get the search index (to not return too many results)
-        res.send('Get all users (for admins)')
+        res.send('Get all users  (for admins or people with the right permissions)')
     })
 
     router.get('/search/:name', (req, res) => {
