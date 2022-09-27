@@ -6,4 +6,5 @@ module.exports = {
     // The jwt secret used to sign the tokens
     // we recommend using the secret generator in scripts/jwtSecretGenerator.bash
     jwtSecret: process.env.JWT_SECRET || 'secret',
+    minPasswordLength: 5,
 }
