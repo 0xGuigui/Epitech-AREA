@@ -10,6 +10,7 @@ class AREA {
         this.config = config
         this.services = []
         this.jwtTokenBlacklist = []
+        this.unprotectedRoutes = ["login", "register", "reset-password", "about.json"]
 
         // Load all services
         loadServices(this)
