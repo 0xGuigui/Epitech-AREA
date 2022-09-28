@@ -1,6 +1,6 @@
 # area
 
-A new Flutter project.
+Area Mobile App
 
 ## Getting Started
 
