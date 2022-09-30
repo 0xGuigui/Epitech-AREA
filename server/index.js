@@ -1,4 +1,4 @@
-const area = require('./area')()
+const area = require('./src/area')()
 
 // Start the server
 area.start(() => {
