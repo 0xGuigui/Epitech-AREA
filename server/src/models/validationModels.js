@@ -7,7 +7,7 @@ let loginValidator = [
 ]
 
 let registerValidator = [
-    expressValidator.check('nickname').isLength({min: 1}),
+    expressValidator.check('username').isLength({min: 1}),
     expressValidator.check('email').isEmail(),
     expressValidator.check('password').isLength({min: config.minPasswordLength}),
 ]

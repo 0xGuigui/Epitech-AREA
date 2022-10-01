@@ -9,4 +9,6 @@ module.exports = {
     jwtAccessSecret: process.env.JWT_ACCESS_SECRET || undefined,
     env: process.env.NODE_ENV || 'development',
     minPasswordLength: 5,
+    // MongoDB URI: mongodb://[username:password@]host1[:port1][/[database][?options]]
+    dbURL: process.env.DB_URL || 'mongodb://localhost:27017',
 }

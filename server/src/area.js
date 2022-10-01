@@ -9,6 +9,7 @@ class AREA {
     constructor() {
         this.app = express()
         this.config = config
+        this.dbConnection = null
         this.services = []
         this.jwtDenyList = []
         this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json"]
@@ -22,17 +23,30 @@ class AREA {
         // Load all middlewares and routes
         expressDynamicLoader(this, path.join(__dirname, 'middlewares'))
         expressDynamicLoader(this, path.join(__dirname, 'routes'))
+
+        // Load db models
+        expressDynamicLoader(this, path.join(__dirname, 'models/mongodb'))
+
+        // Connect to the database
+        this.connectToDB()
     }
 
     checkConfig() {
-        // Check if the config is valid
         if (!this.config.jwtAccessSecret || !this.config.jwtRefreshSecret) {
             throw new Error('Missing JWT secret/s')
         }
     }
 
+    connectToDB() {
+        mongoose.connect(this.config.dbURL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }).then((connection) => {
+            this.dbConnection = connection
+        })
+    }
+
     start(callback) {
-        // Start the server
         this.app.listen(this.config.port, callback)
     }
 
