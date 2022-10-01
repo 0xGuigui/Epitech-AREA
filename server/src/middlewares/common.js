@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const config = require('../config')
@@ -13,6 +14,9 @@ module.exports = (area) => {
     // CORS policy
     area.app.use(cors())
 
+    // parse cookies
+    area.app.use(cookieParser())
+
     // JWT middleware
     area.app.use((req, res, next) => {
         const token = req.headers['x-access-token'] || req.headers['authorization']
@@ -23,12 +27,15 @@ module.exports = (area) => {
         if (!token) {
             return res.status(401).json({message: 'No token provided'})
         }
-        jwt.verify(token, config.jwtSecret,{}, (err, decoded) => {
+        const rawToken = token.split(' ')[1]
+        jwt.verify(rawToken, config.jwtAccessSecret, {}, (err, decoded) => {
             if (err) {
-                return res.status(401).json({message: 'Invalid token'})
+                return res.status(401).json({message: 'Unauthorized'})
             }
-
-            req.user = decoded
+            if (area.isTokenBlacklisted(decoded.userId, decoded.iat)) {
+                return res.status(401).json({message: 'Unauthorized'})
+            }
+            req.jwt = decoded
             next()
         })
     })
