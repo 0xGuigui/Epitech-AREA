@@ -1,16 +1,27 @@
 const jwt = require('jsonwebtoken')
 const payloadValidator = require('../utils/payloadValidator')
+const {hashPassword, comparePassword} = require('../utils/passwordHashing')
+const mongoose = require('mongoose')
 const {
     loginValidator,
     registerValidator,
     resetPasswordValidator,
     updatePasswordValidator
-} = require('../utils/validationSchemas')
+} = require('../models/validationModels')
 
 module.exports = (area) => {
-    area.app.post('/login', ...loginValidator, (req, res) => {
+    area.app.post('/login', ...loginValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
+        const {email, password} = req.body
+        let user = await mongoose.model('User').findOne({email: email}).exec()
+        if (!user) {
+            return res.status(401).json({message: 'Invalid credentials'})
+        }
+        let passwordMatch = await comparePassword(password, user.password)
+        if (!passwordMatch) {
+            return res.status(401).json({message: 'Invalid credentials'})
+        }
         // Check sent information in db, here we assume that everything is ok
         let accessToken = jwt.sign({
             userId: 1,
@@ -59,10 +70,23 @@ module.exports = (area) => {
         }
     })
 
-    area.app.post('/register', ...registerValidator, (req, res) => {
+    area.app.post('/register', ...registerValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
-        res.send('Register page');
+        const {email, password, username} = req.body
+
+        let newUser = new mongoose.model('User')({
+            username: username,
+            email: email,
+            password: await hashPassword(password),
+        })
+
+        newUser.save().then(() => {
+            res.status(200).json({message: 'User created'})
+        }).catch((err) => {
+            res.status(500).json({message: 'Internal server error'})
+        })
+        res.status(200).json({message: 'User created'})
     })
 
     area.app.post('/reset-password', ...resetPasswordValidator, (req, res) => {
