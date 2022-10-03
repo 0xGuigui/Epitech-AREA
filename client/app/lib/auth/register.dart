@@ -77,6 +77,9 @@ class _registerPageState extends State<registerPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
                       return null;
                     },
                   ),
@@ -95,6 +98,9 @@ class _registerPageState extends State<registerPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
+                      }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
                       }
                       if (value != _passwordController.text) {
                         return 'Password not match';
@@ -116,6 +122,15 @@ class _registerPageState extends State<registerPage> {
                       }
                     },
                     child: const Text('Submit'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Back'),
                   ),
                 ),
               ],
