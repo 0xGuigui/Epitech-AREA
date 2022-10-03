@@ -17,8 +17,8 @@ let resetPasswordValidator = [
 ]
 
 let updatePasswordValidator = [
-    expressValidator.check('oldPassword').isLength({min: config.minPasswordLength}),
     expressValidator.check('password').isLength({min: config.minPasswordLength}),
+    expressValidator.check('newPassword').isLength({min: config.minPasswordLength}),
 ]
 
 module.exports = {loginValidator, registerValidator, resetPasswordValidator, updatePasswordValidator}
