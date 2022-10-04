@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 //page who display the register form, need support navigation
 
-class registerPage extends StatefulWidget {
-  const registerPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<registerPage> createState() => _registerPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _registerPageState extends State<registerPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -110,27 +110,33 @@ class _registerPageState extends State<registerPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ElevatedButton(
+                  padding: const EdgeInsets.all(6.0),
+                  child: TextButton.icon(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Processing Data'),
-                          ),
-                        );
-                      }
+                      Navigator.pushNamed(context, '/email_verification');
                     },
-                    child: const Text('Submit'),
+                    label: const Text('Register'),
+                    icon: const Icon(Icons.login),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
+                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ElevatedButton(
+                  padding: const EdgeInsets.all(6.0),
+                  child: TextButton.icon(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Back'),
+                    label: const Text('Back to Login'),
+                    icon: const Icon(Icons.arrow_back),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
+                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                    ),
                   ),
                 ),
               ],

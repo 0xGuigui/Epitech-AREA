@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:area/auth/login.dart';
 
-class welcomePage extends StatelessWidget {
-  const welcomePage({Key? key}) : super(key: key);
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/login': (context) => const loginPage(),
+        '/login': (context) => const LoginPage(),
       },
       title: 'Welcome',
       home: Theme(
@@ -40,7 +40,7 @@ class welcomePage extends StatelessWidget {
                   //change color of text button
                   child: TextButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushNamed(context, '/server');
                     },
                     label: const Text('Get Started'),
                     icon: const Icon(Icons.thumb_up_off_alt_rounded),
