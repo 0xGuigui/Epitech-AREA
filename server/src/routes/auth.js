@@ -1,12 +1,15 @@
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 const payloadValidator = require('../utils/payloadValidator')
 const {hashPassword, comparePassword} = require('../utils/passwordHashing')
+const {formatString} = require('../utils/stringUtils')
 const mongoose = require('mongoose')
 const {
     loginValidator,
     registerValidator,
     resetPasswordValidator,
-    updatePasswordValidator
+    updatePasswordValidator,
+    sendResetPasswordEmailValidator
 } = require('../models/validationModels')
 
 module.exports = (area) => {
@@ -21,11 +24,42 @@ module.exports = (area) => {
             email: email,
             password: hashedPassword,
         })
+        newUser.save().then((info) => {
+            let mailTemplate = fs.readFileSync(__dirname + '/../../mail/register-template.html', 'utf8')
 
-        newUser.save().then(() => {
-            return res.status(200).json({message: 'User created'})
+            let verifyToken = jwt.sign({
+                id: info._id,
+            }, area.config.jwtSecret, {
+                expiresIn: '1d'
+            }, null)
+            area.sendMail({
+                from: area.config.mailUser,
+                to: email,
+                subject: 'Area - Verify your account',
+                html: formatString(mailTemplate, 'paul', 'http://' + req.get('host') + '/verify/' + verifyToken)
+            }, (err, _) => {
+                if (err) {
+                    return res.status(500).json({message: err.message})
+                }
+                res.status(200).json({message: 'User created'})
+            })
         }).catch((err) => {
             return res.status(500).json({message: err.message})
+        })
+    })
+
+    area.app.get('/verify/:token', async (req, res) => {
+        jwt.verify(req.params.token, area.config.jwtSecret, {}, (err, decoded) => {
+            if (err) {
+                return res.status(500).json({message: err.message})
+            }
+            area.mongoModels["User"].findByIdAndUpdate(decoded.id, {verified: true}, (err, _) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(500).json({message: err.message})
+                }
+                res.status(200).json({message: 'User verified'})
+            })
         })
     })
 
@@ -52,10 +86,8 @@ module.exports = (area) => {
 
         jwt.sign(payload, area.config.jwtRefreshSecret, {expiresIn: '1d'}, (err, refreshToken) => {
             if (err) {
-                res.status(500).send({error: 'Internal server error'})
-                return
+                return res.status(500).send({error: 'Internal server error'})
             }
-
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
                 secure: area.config.env === 'production',
@@ -69,7 +101,6 @@ module.exports = (area) => {
         if (req.cookies?.jwt) {
             const refreshToken = req.cookies.jwt;
 
-            // Verifying refresh token
             jwt.verify(refreshToken, area.config.jwtRefreshSecret, {}, async (err, decoded) => {
                 if (err) {
                     return res.status(406).json({message: 'Unauthorized'});
@@ -91,10 +122,47 @@ module.exports = (area) => {
         }
     })
 
-    area.app.post('/reset-password', ...resetPasswordValidator, (req, res) => {
+    area.app.post('/reset-password', ...sendResetPasswordEmailValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
-        res.send('Reset password page');
+        let user = await mongoose.model('User').findOne({email: req.body.email}).exec()
+        if (!user) {
+            return res.status(200).json({message: 'Processed'})
+        }
+        let mailTemplate = fs.readFileSync(__dirname + '/../../mail/reset-password-template.html', 'utf8')
+        let verifyToken = jwt.sign({
+            id: user.id,
+        }, area.config.jwtSecret, {
+            expiresIn: '1d'
+        }, null)
+        area.sendMail({
+            from: area.config.mailUser,
+            to: user.email,
+            subject: 'Reset password',
+            html: formatString(mailTemplate, user.username, 'http://' + req.get('host') + '/reset-password/' + verifyToken)
+        }, (err, _) => {
+            if (err) {
+                return res.status(500).json({message: err.message})
+            }
+            return res.status(200).json({message: 'Processed'})
+        })
+    })
+
+    area.app.get('/reset-password/:token', ...resetPasswordValidator, async (req, res) => {
+        if (!payloadValidator(req, res)) return
+
+        jwt.verify(req.params.token, area.config.jwtSecret, {}, (err, decoded) => {
+            if (err) {
+                return res.status(500).json({message: err.message})
+            }
+            let hashedPassword = hashPassword(req.body.password)
+            area.mongoModels["User"].findByIdAndUpdate(decoded.id, {password: hashedPassword}, (err, _) => {
+                if (err) {
+                    return res.status(500).json({message: err.message})
+                }
+                return res.status(200).json({message: 'Password reset'})
+            })
+        })
     })
 
     area.app.post('/update-password', ...updatePasswordValidator, async (req, res) => {
