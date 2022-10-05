@@ -36,7 +36,14 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Register'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
+          resizeToAvoidBottomInset: false,
           body: Form(
             key: _formKey,
             child: Column(
@@ -124,21 +131,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TextButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    label: const Text('Back to Login'),
-                    icon: const Icon(Icons.arrow_back),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
-                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
-                    ),
-                  ),
-                ),
+
+
+
+                // Padding(
+                //   padding: const EdgeInsets.all(6.0),
+                //   child: TextButton.icon(
+                //     onPressed: () {
+                //       Navigator.pop(context);
+                //     },
+                //     label: const Text('Back to Login'),
+                //     icon: const Icon(Icons.arrow_back),
+                //     style: TextButton.styleFrom(
+                //       foregroundColor: Colors.white,
+                //       backgroundColor: Colors.blue,
+                //       disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                //     ),
+                //   ),
+                // ),
+
+
+
               ],
             ),
           ),
