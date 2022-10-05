@@ -2,6 +2,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 const express = require('express')
 const config = require('./config')
+const nodemailer = require('nodemailer')
 const {expressDynamicLoader} = require('./utils/dynamicLoader')
 const {loadServices} = require('./services/servicesHandler')
 
@@ -13,7 +14,8 @@ class AREA {
         this.mongoModels = {}
         this.services = []
         this.jwtDenyList = []
-        this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json"]
+        this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify"]
+        this.mailTransporter = null
 
         // Check for required fields in the config
         this.checkConfig()
@@ -28,13 +30,25 @@ class AREA {
         // Load db models
         expressDynamicLoader(this, path.join(__dirname, 'models/mongodb'))
 
+        // Load mail transporter
+        this.mailTransporter = nodemailer.createTransport({
+            service: this.config.mailService,
+            auth: {
+                user: this.config.mailUser,
+                pass: this.config.mailPass
+            }
+        })
+
         // Connect to the database
         this.connectToDB()
     }
 
     checkConfig() {
-        if (!this.config.jwtAccessSecret || !this.config.jwtRefreshSecret) {
+        if (!this.config.jwtAccessSecret || !this.config.jwtRefreshSecret || !this.config.jwtSecret) {
             throw new Error('Missing JWT secret/s')
+        }
+        if (!this.config.mailUser || !this.config.mailPass) {
+            throw new Error('Missing mail credential/s')
         }
     }
 
@@ -59,6 +73,10 @@ class AREA {
         return this.jwtDenyList.some((token) => {
             return token[0] === userId && createdAt <= token[1]
         })
+    }
+
+    sendMail(mailConfig, callback) {
+        this.mailTransporter.sendMail(mailConfig, callback)
     }
 }
 
