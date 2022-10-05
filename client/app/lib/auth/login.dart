@@ -33,7 +33,14 @@ class _LoginPageState extends State<LoginPage> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Login'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
+          resizeToAvoidBottomInset: false,
           body: Form(
             key: _formKey,
             child: Column(
@@ -120,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(6.0),
                   child: TextButton.icon(
                     onPressed: () {
-                      //do nothing
+                      Navigator.pushNamed(context, '/forgot_password');
                     },
                     label: const Text('Forgot password'),
                     icon: const Icon(Icons.help),
@@ -137,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/dashboard');
                     },
-                    label: const Text('Admin Mode'),
+                    label: const Text('Bypass login'),
                     icon: const Icon(Icons.accessibility),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
