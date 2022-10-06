@@ -27,5 +27,5 @@ let userSchema = new mongoose.Schema({
 });
 
 module.exports = (area) => {
-    area.mongoModels["User"] = mongoose.model('User', userSchema);
+    mongoose.model('User', userSchema);
 }
