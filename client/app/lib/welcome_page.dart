@@ -17,6 +17,7 @@ class WelcomePage extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +27,6 @@ class WelcomePage extends StatelessWidget {
                   width: 200,
                   height: 200,
                 ),
-                // add title in the middle of the screen
                 const SizedBox(height: 30),
                 const Text(
                   'Welcome to the AREA Project',
@@ -37,7 +37,6 @@ class WelcomePage extends StatelessWidget {
                 const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.all(6.0),
-                  //change color of text button
                   child: TextButton.icon(
                     onPressed: () {
                       Navigator.pushNamed(context, '/server');

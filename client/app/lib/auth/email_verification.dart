@@ -13,7 +13,14 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Email verification'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
+      resizeToAvoidBottomInset: false,
       body: const Center(
         child: Text('Email verification'),
       ),
