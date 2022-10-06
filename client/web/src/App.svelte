@@ -23,7 +23,11 @@
   <Hint for="password" on="required">Mandatory field</Hint>
   <input bind:value={password} type="password" name="password" placeholder="enter your password" style="margin-bottom: 8px" use:validators={[required]} />
 
-  <button disabled={!$form.valid}>Login</button>
+  <button on:click={(e) => {
+    e.preventDefault();
+    console.log(mail);
+    console.log(password);
+  }} disabled={!$form.valid}>Login</button>
 </form>
 
 <style>
