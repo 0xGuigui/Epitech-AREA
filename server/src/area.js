@@ -11,7 +11,6 @@ class AREA {
         this.app = express()
         this.config = config
         this.dbConnection = null
-        this.mongoModels = {}
         this.services = []
         this.jwtDenyList = []
         this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify"]
