@@ -23,7 +23,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Select server',
+      title: 'Server Connection',
       home: Theme(
         data: ThemeData(
           primarySwatch: Colors.blue,
@@ -33,6 +33,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
           appBar: AppBar(
             title: const Text('Select server'),
           ),
+          resizeToAvoidBottomInset: false,
           body: Form(
             key: _formKey,
             child: Column(
@@ -45,10 +46,18 @@ class _SelectServerPageState extends State<SelectServerPage> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.language),
-                      labelText: 'Server',
+                      labelText: 'Server IP',
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty || value == ' ') {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a correct server IP';
+                      }
+                      if (value == 'localhost') {
+                        return null;
+                      }
+                      if (!RegExp(
+                              r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$|^(?:https?://)?(?:[a-z0-9]+(?:-[a-z0-9]+)*\.)+[a-z]{2,6}$')
+                          .hasMatch(value)) {
                         return 'Please enter a correct server IP';
                       }
                       return null;
@@ -69,7 +78,10 @@ class _SelectServerPageState extends State<SelectServerPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a port';
                       }
-                      if (int.tryParse(value) == null || int.parse(value) < 1 || int.parse(value) > 65535 || value.contains('.')) {
+                      if (int.tryParse(value) == null ||
+                          int.parse(value) < 1 ||
+                          int.parse(value) > 65535 ||
+                          value.contains('.')) {
                         return 'Please enter a valid port';
                       }
                       return null;
@@ -99,7 +111,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/login');
                     },
-                    label: const Text('Admin Mode'),
+                    label: const Text('Bypass server connection'),
                     icon: const Icon(Icons.accessibility),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
