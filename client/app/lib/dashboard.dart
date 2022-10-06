@@ -20,7 +20,6 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Dashboard'),
-            // add button to open a drawer from the left and add inside the drawer a button to close the drawer
             leading: IconButton(
               icon: const Icon(Icons.menu),
               onPressed: () {

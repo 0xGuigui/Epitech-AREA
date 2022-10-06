@@ -78,27 +78,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ),
                   ),
-
-
-
-                  // Padding(padding:
-                  // const EdgeInsets.all(6.0),
-                  //   child: TextButton.icon(
-                  //     onPressed: () {
-                  //       Navigator.pop(context);
-                  //     },
-                  //     label: const Text('Back'),
-                  //     icon: const Icon(Icons.arrow_back),
-                  //     style: TextButton.styleFrom(
-                  //       foregroundColor: Colors.white,
-                  //       backgroundColor: Colors.blue,
-                  //       disabledForegroundColor: Colors.grey.withOpacity(0.38),
-                  //     ),
-                  //   ),
-                  // ),
-
-
-
                 ],
               ),
             ),
