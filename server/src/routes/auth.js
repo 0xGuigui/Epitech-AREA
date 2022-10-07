@@ -11,6 +11,7 @@ const {
     updatePasswordValidator,
     sendResetPasswordEmailValidator
 } = require('../models/validationModels')
+const {mongo} = require("mongoose");
 
 module.exports = (area) => {
     area.app.post('/register', ...registerValidator, async (req, res) => {
@@ -19,7 +20,7 @@ module.exports = (area) => {
         const {email, password, username} = req.body
 
         let hashedPassword = await hashPassword(password)
-        let newUser = new area.mongoModels["User"]({
+        let newUser = new mongoose.models.User({
             username: username,
             email: email,
             password: hashedPassword,
@@ -53,7 +54,7 @@ module.exports = (area) => {
             if (err) {
                 return res.status(500).json({message: err.message})
             }
-            area.mongoModels["User"].findByIdAndUpdate(decoded.id, {verified: true}, (err, _) => {
+            mongoose.models.User.findByIdAndUpdate(decoded.id, {verified: true}, (err, _) => {
                 if (err) {
                     console.log(err)
                     return res.status(500).json({message: err.message})
@@ -66,7 +67,7 @@ module.exports = (area) => {
     area.app.post('/login', ...loginValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
-        let user = await mongoose.model('User').findOne({email: req.body.email}).exec()
+        let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
         if (!user) {
             return res.status(401).json({message: 'Invalid credentials'})
         }
@@ -105,7 +106,7 @@ module.exports = (area) => {
                 if (err) {
                     return res.status(406).json({message: 'Unauthorized'});
                 } else {
-                    let user = await mongoose.model('User').findById(decoded.userId).exec()
+                    let user = await mongoose.models.User.findById(decoded.userId).exec()
 
                     const accessToken = jwt.sign({
                         userId: user.id,
@@ -125,7 +126,7 @@ module.exports = (area) => {
     area.app.post('/reset-password', ...sendResetPasswordEmailValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
-        let user = await mongoose.model('User').findOne({email: req.body.email}).exec()
+        let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
         if (!user) {
             return res.status(200).json({message: 'Processed'})
         }
@@ -156,7 +157,7 @@ module.exports = (area) => {
                 return res.status(500).json({message: err.message})
             }
             let hashedPassword = hashPassword(req.body.password)
-            area.mongoModels["User"].findByIdAndUpdate(decoded.id, {password: hashedPassword}, (err, _) => {
+            mongoose.models.User.findByIdAndUpdate(decoded.id, {password: hashedPassword}, (err, _) => {
                 if (err) {
                     return res.status(500).json({message: err.message})
                 }
@@ -168,7 +169,7 @@ module.exports = (area) => {
     area.app.post('/update-password', ...updatePasswordValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
-        let user = await mongoose.model('User').findById(req.jwt.userId).exec()
+        let user = await mongoose.models.User.findById(req.jwt.userId).exec()
 
         if (!user) {
             return res.status(500).json({message: 'User no longer exists'})
