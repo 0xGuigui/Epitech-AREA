@@ -17,7 +17,6 @@ let sendResetPasswordEmailValidator = [
 ]
 
 let resetPasswordValidator = [
-    expressValidator.check('email').isEmail(),
     expressValidator.check('newPassword').isLength({min: config.minPasswordLength}),
 ]
 
