@@ -4,17 +4,11 @@ const payloadValidator = require('../utils/payloadValidator')
 const {hashPassword, comparePassword} = require('../utils/passwordHashing')
 const {formatString} = require('../utils/stringUtils')
 const mongoose = require('mongoose')
-const {
-    loginValidator,
-    registerValidator,
-    resetPasswordValidator,
-    updatePasswordValidator,
-    sendResetPasswordEmailValidator
-} = require('../models/validationModels')
+const authValidators = require('../models/validationModels')
 const {mongo} = require("mongoose");
 
 module.exports = (area) => {
-    area.app.post('/register', ...registerValidator, async (req, res) => {
+    area.app.post('/register', ...authValidators.registerValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
         const {email, password, username} = req.body
@@ -37,7 +31,7 @@ module.exports = (area) => {
                 from: area.config.mailUser,
                 to: email,
                 subject: 'Area - Verify your account',
-                html: formatString(mailTemplate, 'paul', 'http://' + req.get('host') + '/verify/' + verifyToken)
+                html: formatString(mailTemplate, username, 'http://' + req.get('host') + '/verify/' + verifyToken)
             }, (err, _) => {
                 if (err) {
                     return res.status(500).json({message: err.message})
@@ -64,7 +58,7 @@ module.exports = (area) => {
         })
     })
 
-    area.app.post('/login', ...loginValidator, async (req, res) => {
+    area.app.post('/login', ...authValidators.loginValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
@@ -85,14 +79,14 @@ module.exports = (area) => {
         }
         let accessToken = jwt.sign(payload, area.config.jwtAccessSecret, {expiresIn: '5m'}, null)
 
-        jwt.sign(payload, area.config.jwtRefreshSecret, {expiresIn: '1d'}, (err, refreshToken) => {
+        jwt.sign(payload, area.config.jwtRefreshSecret, {expiresIn: '3h'}, (err, refreshToken) => {
             if (err) {
                 return res.status(500).send({error: 'Internal server error'})
             }
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
                 secure: area.config.env === 'production',
-                maxAge: 24 * 60 * 60 * 1000
+                maxAge: 3 * 60 * 60 * 1000
             });
             res.status(200).send({accessToken})
         })
@@ -103,8 +97,8 @@ module.exports = (area) => {
             const refreshToken = req.cookies.jwt;
 
             jwt.verify(refreshToken, area.config.jwtRefreshSecret, {}, async (err, decoded) => {
-                if (err) {
-                    return res.status(406).json({message: 'Unauthorized'});
+                if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
+                    return res.status(401).json({message: 'Unauthorized'});
                 } else {
                     let user = await mongoose.models.User.findById(decoded.userId).exec()
 
@@ -123,7 +117,7 @@ module.exports = (area) => {
         }
     })
 
-    area.app.post('/reset-password', ...sendResetPasswordEmailValidator, async (req, res) => {
+    area.app.post('/reset-password', ...authValidators.sendResetPasswordEmailValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
@@ -149,24 +143,25 @@ module.exports = (area) => {
         })
     })
 
-    area.app.get('/reset-password/:token', ...resetPasswordValidator, async (req, res) => {
+    area.app.get('/reset-password/:token', ...authValidators.resetPasswordValidator, (req, res) => {
         if (!payloadValidator(req, res)) return
 
-        jwt.verify(req.params.token, area.config.jwtSecret, {}, (err, decoded) => {
+        jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
             if (err) {
                 return res.status(500).json({message: err.message})
             }
-            let hashedPassword = hashPassword(req.body.password)
+            let hashedPassword = await hashPassword(req.body.newPassword)
             mongoose.models.User.findByIdAndUpdate(decoded.id, {password: hashedPassword}, (err, _) => {
                 if (err) {
                     return res.status(500).json({message: err.message})
                 }
+                area.jwtDenyList.addDeniedUser(decoded.id)
                 return res.status(200).json({message: 'Password reset'})
             })
         })
     })
 
-    area.app.post('/update-password', ...updatePasswordValidator, async (req, res) => {
+    area.app.post('/update-password', ...authValidators.updatePasswordValidator, async (req, res) => {
         if (!payloadValidator(req, res)) return
 
         let user = await mongoose.models.User.findById(req.jwt.userId).exec()
@@ -180,7 +175,7 @@ module.exports = (area) => {
         }
         user.password = await hashPassword(req.body.newPassword)
         user.save().then(() => {
-            area.blacklistJWT(user.id)
+            area.jwtDenyList.addDeniedUser(user.id)
             return res.status(200).json({message: 'Password updated'})
         }).catch((err) => {
             return res.status(500).json({message: err.message})

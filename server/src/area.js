@@ -5,16 +5,17 @@ const config = require('./config')
 const nodemailer = require('nodemailer')
 const {expressDynamicLoader} = require('./utils/dynamicLoader')
 const {loadServices} = require('./services/servicesHandler')
+const JwtDenyList = require('./jwtDenyList/jwtDenyList')
 
 class AREA {
     constructor() {
         this.app = express()
         this.config = config
-        this.dbConnection = null
         this.services = []
         this.jwtDenyList = []
         this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify"]
-        this.mailTransporter = null
+        this.mailTransporter = undefined
+        this.jwtDenyList = undefined
 
         // Check for required fields in the config
         this.checkConfig()
@@ -29,6 +30,9 @@ class AREA {
         // Load db models
         expressDynamicLoader(this, path.join(__dirname, 'models/mongodb'))
 
+        // Instantiate jwt deny list
+        this.jwtDenyList = new JwtDenyList()
+
         // Load mail transporter
         this.mailTransporter = nodemailer.createTransport({
             service: this.config.mailService,
@@ -37,9 +41,6 @@ class AREA {
                 pass: this.config.mailPass
             }
         })
-
-        // Connect to the database
-        this.connectToDB()
     }
 
     checkConfig() {
@@ -51,27 +52,15 @@ class AREA {
         }
     }
 
-    connectToDB() {
-        mongoose.connect(this.config.dbURL, {
+    async connectToDB() {
+        return await mongoose.connect(this.config.dbURL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-        }).then((connection) => {
-            this.dbConnection = connection
         })
     }
 
-    start(callback) {
-        this.app.listen(this.config.port, callback)
-    }
-
-    blacklistJWT(userId) {
-        this.jwtDenyList.push([userId, Date.now() / 1000])
-    }
-
-    isTokenBlacklisted(userId, createdAt) {
-        return this.jwtDenyList.some((token) => {
-            return token[0] === userId && createdAt <= token[1]
-        })
+    async start(callback) {
+        return this.app.listen(this.config.port, callback)
     }
 
     sendMail(mailConfig, callback) {

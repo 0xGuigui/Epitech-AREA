@@ -31,10 +31,7 @@ module.exports = (area) => {
         }
         const rawToken = token.split(' ')[1]
         jwt.verify(rawToken, config.jwtAccessSecret, {}, (err, decoded) => {
-            if (err) {
-                return res.status(401).json({message: 'Unauthorized'})
-            }
-            if (area.isTokenBlacklisted(decoded.userId, decoded.iat)) {
+            if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.exp)) {
                 return res.status(401).json({message: 'Unauthorized'})
             }
             req.jwt = decoded
