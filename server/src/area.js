@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer')
 const {expressDynamicLoader} = require('./utils/dynamicLoader')
 const {loadServices} = require('./services/servicesHandler')
 const JwtDenyList = require('./jwtDenyList/jwtDenyList')
+const MailSender = require('./mailSender/mailSender')
 
 class AREA {
     constructor() {
@@ -14,8 +15,6 @@ class AREA {
         this.services = []
         this.jwtDenyList = []
         this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify"]
-        this.mailTransporter = undefined
-        this.jwtDenyList = undefined
 
         // Check for required fields in the config
         this.checkConfig()
@@ -33,14 +32,8 @@ class AREA {
         // Instantiate jwt deny list
         this.jwtDenyList = new JwtDenyList()
 
-        // Load mail transporter
-        this.mailTransporter = nodemailer.createTransport({
-            service: this.config.mailService,
-            auth: {
-                user: this.config.mailUser,
-                pass: this.config.mailPass
-            }
-        })
+        // Instantiate email sender
+        this.mailSender = new MailSender()
     }
 
     checkConfig() {
@@ -61,10 +54,6 @@ class AREA {
 
     async start(callback) {
         return this.app.listen(this.config.port, callback)
-    }
-
-    sendMail(mailConfig, callback) {
-        this.mailTransporter.sendMail(mailConfig, callback)
     }
 }
 

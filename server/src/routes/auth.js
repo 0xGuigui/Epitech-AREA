@@ -2,44 +2,32 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const payloadValidator = require('../utils/payloadValidator')
 const {hashPassword, comparePassword} = require('../utils/passwordHashing')
-const {formatString} = require('../utils/stringUtils')
 const mongoose = require('mongoose')
 const authValidators = require('../models/validationModels')
-const {mongo} = require("mongoose");
 
 module.exports = (area) => {
-    area.app.post('/register', ...authValidators.registerValidator, async (req, res) => {
-        if (!payloadValidator(req, res)) return
+    area.app.post('/register', ...authValidators.registerValidator, payloadValidator, async (req, res) => {
+        new mongoose.models.User({
+            username: req.body.username,
+            email: req.body.email,
+            password: await hashPassword(req.body.password),
+        }).save().then((newUser) => {
+            let verifyToken = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
+            let redirectUrl = 'http://' + req.get('host') + '/verify/' + verifyToken
 
-        const {email, password, username} = req.body
-
-        let hashedPassword = await hashPassword(password)
-        let newUser = new mongoose.models.User({
-            username: username,
-            email: email,
-            password: hashedPassword,
-        })
-        newUser.save().then((info) => {
-            let mailTemplate = fs.readFileSync(__dirname + '/../../mail/register-template.html', 'utf8')
-
-            let verifyToken = jwt.sign({
-                id: info._id,
-            }, area.config.jwtSecret, {
-                expiresIn: '1d'
-            }, null)
-            area.sendMail({
-                from: area.config.mailUser,
-                to: email,
-                subject: 'Area - Verify your account',
-                html: formatString(mailTemplate, username, 'http://' + req.get('host') + '/verify/' + verifyToken)
-            }, (err, _) => {
-                if (err) {
-                    return res.status(500).json({message: err.message})
-                }
-                res.status(200).json({message: 'User created'})
-            })
+            area.mailSender.sendMail(
+                newUser.email,
+                'Area - Verify your account',
+                'verify-account-template',
+                newUser.username,
+                redirectUrl
+            )
+            res.status(200).json({message: 'User created'})
         }).catch((err) => {
-            return res.status(500).json({message: err.message})
+            if (err.code === 11000) {
+                return res.status(409).json({message: 'User already exists'})
+            }
+            return res.status(500).send(err)
         })
     })
 
@@ -50,18 +38,16 @@ module.exports = (area) => {
             }
             mongoose.models.User.findByIdAndUpdate(decoded.id, {verified: true}, (err, _) => {
                 if (err) {
-                    console.log(err)
                     return res.status(500).json({message: err.message})
                 }
-                res.status(200).json({message: 'User verified'})
+                return res.status(200).json({message: 'User verified'})
             })
         })
     })
 
-    area.app.post('/login', ...authValidators.loginValidator, async (req, res) => {
-        if (!payloadValidator(req, res)) return
-
+    area.app.post('/login', ...authValidators.loginValidator, payloadValidator, async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
+
         if (!user) {
             return res.status(401).json({message: 'Invalid credentials'})
         }
@@ -117,35 +103,24 @@ module.exports = (area) => {
         }
     })
 
-    area.app.post('/reset-password', ...authValidators.sendResetPasswordEmailValidator, async (req, res) => {
-        if (!payloadValidator(req, res)) return
-
+    area.app.post('/reset-password', ...authValidators.sendResetPasswordEmailValidator, payloadValidator, async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
-        if (!user) {
-            return res.status(200).json({message: 'Processed'})
+        if (user) {
+            let verifyToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
+            let redirectUrl = 'http://' + req.get('host') + '/reset-password/' + verifyToken
+
+            area.mailSender.sendMail(
+                user.email,
+                'Area - Reset your password',
+                'reset-password-template',
+                user.username,
+                redirectUrl
+            )
         }
-        let mailTemplate = fs.readFileSync(__dirname + '/../../mail/reset-password-template.html', 'utf8')
-        let verifyToken = jwt.sign({
-            id: user.id,
-        }, area.config.jwtSecret, {
-            expiresIn: '1d'
-        }, null)
-        area.sendMail({
-            from: area.config.mailUser,
-            to: user.email,
-            subject: 'Reset password',
-            html: formatString(mailTemplate, user.username, 'http://' + req.get('host') + '/reset-password/' + verifyToken)
-        }, (err, _) => {
-            if (err) {
-                return res.status(500).json({message: err.message})
-            }
-            return res.status(200).json({message: 'Processed'})
-        })
+        return res.status(200).json({message: 'Processed'})
     })
 
-    area.app.get('/reset-password/:token', ...authValidators.resetPasswordValidator, (req, res) => {
-        if (!payloadValidator(req, res)) return
-
+    area.app.get('/reset-password/:token', ...authValidators.resetPasswordValidator, payloadValidator, (req, res) => {
         jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
             if (err) {
                 return res.status(500).json({message: err.message})
@@ -161,9 +136,7 @@ module.exports = (area) => {
         })
     })
 
-    area.app.post('/update-password', ...authValidators.updatePasswordValidator, async (req, res) => {
-        if (!payloadValidator(req, res)) return
-
+    area.app.post('/update-password', ...authValidators.updatePasswordValidator, payloadValidator, async (req, res) => {
         let user = await mongoose.models.User.findById(req.jwt.userId).exec()
 
         if (!user) {
