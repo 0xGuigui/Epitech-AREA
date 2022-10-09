@@ -8,9 +8,11 @@ module.exports = (area) => {
 
         try {
             await mongoose.models.User.deleteMany({username: {$ne: "admin"}}).exec()
+            area.jwtDenyList.addGlobalDenyRule()
+
+            return res.status(200).json({message: 'Database purged'})
         } catch (err) {
             return res.status(500).json({message: err.message})
         }
-        return res.status(200).json({message: "Database purged"})
     })
 }

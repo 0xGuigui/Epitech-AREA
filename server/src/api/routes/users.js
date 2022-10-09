@@ -21,6 +21,10 @@ module.exports = (area) => {
 
     router.get('/', async (req, res) => {
         let page = req.query.page || 1
+
+        if (page < 1) {
+            page = 1
+        }
         let users = await mongoose
             .model("User")
             .find()
@@ -41,12 +45,15 @@ module.exports = (area) => {
 
         mongoose
             .model("User")
-            .find({
+            .findOne({
                 $or: orQuery
             })
             .exec()
-            .then((users) => {
-                res.json({users: users})
+            .then((user) => {
+                if (user) {
+                    return res.json({user: user})
+                }
+                return res.status(404).json({message: 'User not found'})
             })
             .catch((err) => {
                 res.status(500).json({message: err.message})

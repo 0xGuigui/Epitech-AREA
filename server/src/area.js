@@ -45,8 +45,7 @@ class AREA {
 
     async connectToDB() {
         return await mongoose.connect(this.config.dbURL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
+            useNewUrlParser: true, useUnifiedTopology: true,
         })
     }
 
@@ -59,10 +58,9 @@ class AREA {
         }
 
         let result = await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
-            upsert: true,
-            setDefaultsOnInsert: true
+            upsert: true, setDefaultsOnInsert: true
         }).exec()
-        console.log(`Admin user: ${adminUserData.email} - admin - ${this.config.adminPassword}`)
+        console.log(`To connect to the admin panel, use the following credentials:\n\tmail: ${this.config.adminEmail}\n\tpassword: ${this.config.adminPassword}\n`)
 
         return this.app.listen(this.config.port, callback)
     }
