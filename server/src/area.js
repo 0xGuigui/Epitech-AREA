@@ -2,38 +2,36 @@ const path = require('path')
 const mongoose = require('mongoose')
 const express = require('express')
 const config = require('./config')
-const nodemailer = require('nodemailer')
-const {expressDynamicLoader} = require('./utils/dynamicLoader')
-const {loadServices} = require('./services/servicesHandler')
-const JwtDenyList = require('./jwtDenyList/jwtDenyList')
-const MailSender = require('./mailSender/mailSender')
+const {dynamicLoader, servicesLoader} = require('./utils/dynamicLoader')
+const {hashPassword} = require('./utils/passwordHashing')
+const JwtDenyList = require('./core/jwtDenyList')
+const MailSender = require('./core/mailSender')
 
 class AREA {
     constructor() {
         this.app = express()
         this.config = config
-        this.services = []
-        this.jwtDenyList = []
+        this.services = {}
         this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify"]
 
         // Check for required fields in the config
         this.checkConfig()
 
         // Load all services
-        loadServices(this)
+        servicesLoader(this, path.join(__dirname, 'core/services'))
 
         // Load all middlewares and routes
-        expressDynamicLoader(this, path.join(__dirname, 'middlewares'))
-        expressDynamicLoader(this, path.join(__dirname, 'routes'))
+        dynamicLoader(this, path.join(__dirname, 'api/middlewares'))
+        dynamicLoader(this, path.join(__dirname, 'api/routes'))
 
         // Load db models
-        expressDynamicLoader(this, path.join(__dirname, 'models/mongodb'))
+        dynamicLoader(this, path.join(__dirname, 'api/models/mongodb'))
 
         // Instantiate jwt deny list
         this.jwtDenyList = new JwtDenyList()
 
         // Instantiate email sender
-        this.mailSender = new MailSender()
+        this.mailSender = new MailSender(config)
     }
 
     checkConfig() {
@@ -53,6 +51,19 @@ class AREA {
     }
 
     async start(callback) {
+        let adminUserData = {
+            password: await hashPassword(this.config.adminPassword),
+            email: this.config.adminEmail,
+            verified: true,
+            admin: true,
+        }
+
+        let result = await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
+            upsert: true,
+            setDefaultsOnInsert: true
+        }).exec()
+        console.log(`Admin user: ${adminUserData.email} - admin - ${this.config.adminPassword}`)
+
         return this.app.listen(this.config.port, callback)
     }
 }

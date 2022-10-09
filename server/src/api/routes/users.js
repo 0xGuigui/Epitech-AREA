@@ -13,7 +13,7 @@ module.exports = (area) => {
     const router = express.Router()
 
     router.use((req, res, next) => {
-        if (!req.jwt.isAdministrator) {
+        if (!req.jwt.admin) {
             return res.status(401).json({message: 'Unauthorized'})
         }
         next()
@@ -74,7 +74,7 @@ module.exports = (area) => {
                 $set: {
                     username: req.body.username,
                     email: req.body.email,
-                    isAdministrator: req.body.isAdministrator,
+                    admin: req.body.admin,
                     verified: req.body.verified,
                 }
             }
@@ -87,10 +87,12 @@ module.exports = (area) => {
                     if (!user) {
                         return res.status(404).json({message: 'User not found'})
                     }
-                    res.json({user: user})
+                    area.jwtDenyList.addDeniedUser(req.params.userId)
+
+                    return res.json({user: user})
                 })
                 .catch(err => {
-                    res.status(500).json({message: err.message})
+                    return res.status(500).json({message: err.message})
                 })
         })
         .delete(checkUserIdValidity, (req, res) => {
@@ -102,7 +104,9 @@ module.exports = (area) => {
                     if (!user) {
                         return res.status(404).json({message: 'User not found'})
                     }
-                    res.json({user: user})
+                    area.jwtDenyList.addDeniedUser(req.params.userId)
+
+                    res.status(200).json({message: 'User deleted'})
                 })
                 .catch(err => {
                     res.status(500).json({message: err.message})

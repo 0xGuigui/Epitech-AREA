@@ -20,7 +20,7 @@ let userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    isAdministrator: {
+    admin: {
         type: Boolean,
         default: false,
     }

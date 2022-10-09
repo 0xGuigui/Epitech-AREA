@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
-const payloadValidator = require('../utils/payloadValidator')
-const {hashPassword, comparePassword} = require('../utils/passwordHashing')
+const payloadValidator = require('../../utils/payloadValidator')
+const {hashPassword, comparePassword} = require('../../utils/passwordHashing')
 const mongoose = require('mongoose')
 const authValidators = require('../models/validationModels')
 
@@ -13,7 +13,7 @@ module.exports = (area) => {
             password: await hashPassword(req.body.password),
         }).save().then((newUser) => {
             let verifyToken = jwt.sign({id: newUser._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
-            let redirectUrl = 'http://' + req.get('host') + '/verify/' + verifyToken
+            let redirectUrl = 'http://' + req.get('host') + '/register/' + verifyToken
 
             area.mailSender.sendMail(
                 newUser.email,
@@ -31,10 +31,10 @@ module.exports = (area) => {
         })
     })
 
-    area.app.get('/verify/:token', async (req, res) => {
+    area.app.get('/register/:token', async (req, res) => {
         jwt.verify(req.params.token, area.config.jwtSecret, {}, (err, decoded) => {
             if (err) {
-                return res.status(500).json({message: err.message})
+                return res.status(401).json({message: 'Invalid token'})
             }
             mongoose.models.User.findByIdAndUpdate(decoded.id, {verified: true}, (err, _) => {
                 if (err) {
@@ -54,14 +54,13 @@ module.exports = (area) => {
         if (!user.verified) {
             return res.status(401).json({message: 'User not verified'})
         }
-        let passwordMatch = await comparePassword(req.body.password, user.password)
-        if (!passwordMatch) {
+        if (!await comparePassword(req.body.password, user.password)) {
             return res.status(401).json({message: 'Invalid credentials'})
         }
         let payload = {
             userId: user.id,
             username: req.body.username,
-            isAdmin: user.isAdministrator
+            admin: user.admin
         }
         let accessToken = jwt.sign(payload, area.config.jwtAccessSecret, {expiresIn: '5m'}, null)
 
@@ -74,37 +73,35 @@ module.exports = (area) => {
                 secure: area.config.env === 'production',
                 maxAge: 3 * 60 * 60 * 1000
             });
-            res.status(200).send({accessToken})
+            res.status(200).send({token: accessToken})
         })
     })
 
     area.app.post('/refresh', (req, res) => {
-        if (req.cookies?.jwt) {
-            const refreshToken = req.cookies.jwt;
-
-            jwt.verify(refreshToken, area.config.jwtRefreshSecret, {}, async (err, decoded) => {
-                if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
-                    return res.status(401).json({message: 'Unauthorized'});
-                } else {
-                    let user = await mongoose.models.User.findById(decoded.userId).exec()
-
-                    const accessToken = jwt.sign({
-                        userId: user.id,
-                        username: user.username,
-                        isAdmin: user.isAdminiastrator,
-                    }, area.config.jwtAccessSecret, {
-                        expiresIn: '5m'
-                    }, null);
-                    return res.json({accessToken});
-                }
-            })
-        } else {
-            return res.status(406).json({message: 'Unauthorized'});
+        if (!req.cookies.jwt) {
+            return res.status(401).json({message: 'Unauthorized'})
         }
+
+        jwt.verify(req.cookies.jwt, area.config.jwtRefreshSecret, {}, async (err, decoded) => {
+            if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
+                return res.status(401).json({message: 'Unauthorized'});
+            }
+            let user = await mongoose.models.User.findById(decoded.userId).exec()
+
+            const accessToken = jwt.sign({
+                userId: user.id,
+                username: user.username,
+                admin: user.admin,
+            }, area.config.jwtAccessSecret, {
+                expiresIn: '5m'
+            }, null);
+            return res.json({token: accessToken});
+        })
     })
 
     area.app.post('/reset-password', ...authValidators.sendResetPasswordEmailValidator, payloadValidator, async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
+
         if (user) {
             let verifyToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
             let redirectUrl = 'http://' + req.get('host') + '/reset-password/' + verifyToken
@@ -123,9 +120,10 @@ module.exports = (area) => {
     area.app.get('/reset-password/:token', ...authValidators.resetPasswordValidator, payloadValidator, (req, res) => {
         jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
             if (err) {
-                return res.status(500).json({message: err.message})
+                return res.status(401).json({message: 'Invalid token'})
             }
             let hashedPassword = await hashPassword(req.body.newPassword)
+
             mongoose.models.User.findByIdAndUpdate(decoded.id, {password: hashedPassword}, (err, _) => {
                 if (err) {
                     return res.status(500).json({message: err.message})
