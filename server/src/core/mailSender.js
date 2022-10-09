@@ -1,18 +1,16 @@
 const cron = require('cron');
 const nodemailer = require('nodemailer');
-const config = require('../config');
 const fs = require('fs');
 const path = require('path');
 const {formatString} = require('../utils/stringUtils')
 
 module.exports = class MailSender {
-    cronJob = undefined
     maxRetries = 4;
     bufferSize = 100;
     templates = {}
     failedEmails = {}
 
-    constructor() {
+    constructor(config = {}) {
         let templatesDir = path.join(__dirname, '../../mailTemplates');
 
         fs.readdirSync(templatesDir).forEach(file => {
@@ -39,7 +37,7 @@ module.exports = class MailSender {
 
     sendMail(to, subject, templateName, ...args) {
         this.transporter.sendMail({
-            from: config.mailUser,
+            from: this.transporter.options.auth.user,
             to: to,
             subject: subject,
             html: formatString(this.templates[templateName], ...args)

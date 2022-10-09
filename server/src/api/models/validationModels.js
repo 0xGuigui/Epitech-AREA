@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../config');
 const expressValidator = require("express-validator");
 
 let loginValidator = [

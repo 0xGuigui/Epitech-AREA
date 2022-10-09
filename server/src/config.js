@@ -1,6 +1,9 @@
 require('dotenv').config()
 
 module.exports = {
+    // Admin user config
+    adminPassword: process.env.ADMIN_PASSWORD || 'admin',
+    adminEmail: process.env.ADMIN_EMAIL || 'admin@admin.admin',
     // The port the server will listen on
     port: process.env.PORT || 8080,
     // Project
