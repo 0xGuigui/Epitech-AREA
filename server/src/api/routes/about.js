@@ -6,14 +6,14 @@ module.exports = (area) => {
             },
             server: {
                 current_time: Date.now(),
-                services: area.services.map(service => {
+                services: area.servicesManager.services.map(service => {
                     return {
                         name: service.name,
                         actions: service.actions.map(action => {
                             return {
                                 name: action.name,
                                 description: action.description
-                            };
+                            }
                         }),
                         reactions: service.reactions.map(reaction => {
                             return {
