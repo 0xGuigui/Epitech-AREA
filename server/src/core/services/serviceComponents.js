@@ -17,6 +17,7 @@ class ServiceComponent {
     setFunction(name, func) {
         if (func instanceof Function) {
             this[name] = func;
+            return this;
         } else {
             throw new Error("The function must be a function");
         }
