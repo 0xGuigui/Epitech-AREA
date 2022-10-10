@@ -7,15 +7,20 @@
     let result = null;
 
     async function doPost () {
-        const res = await fetch('https://httpbin.org/post', {
+        console.log(mail, password);
+        const res = await fetch('http://localhost:8080/login', {
             method: 'POST',
             body: JSON.stringify({
-                mail,
-                password
-            })
-        })
+                email: mail,
+                password: password
+            }),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        });
         const json = await res.json()
         result = JSON.stringify(json)
+        console.log(result)
     }
     //(async () => {
     //const response = await fetch(`http://localhost:8080/about.json`);
