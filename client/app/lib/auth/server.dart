@@ -91,9 +91,29 @@ class _SelectServerPageState extends State<SelectServerPage> {
                 Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: TextButton.icon(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                      //do nothing
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        Requests.get(
+                                'http://${_serverController.text}:${_portController.text}')
+                            .then((value) {
+                          if (value.statusCode == 401) {
+                            Navigator.pushNamed(context, '/login');
+                            print(context);
+                          } else if (value.statusCode == 0) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Host lookup failed'),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Server not found'),
+                              ),
+                            );
+                          }
+                        });
                       }
                     },
                     label: const Text('Connect to server'),
