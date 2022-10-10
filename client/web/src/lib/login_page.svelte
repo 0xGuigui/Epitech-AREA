@@ -4,12 +4,24 @@
     const form = useForm();
     let mail = '';
     let password = '';
+    let result = null;
 
-    (async () => {
-        const response = await fetch(`http://localhost:8080/about.json`);
-        const data = await response.json();
-        console.log(data);
-    })();
+    async function doPost () {
+        const res = await fetch('https://httpbin.org/post', {
+            method: 'POST',
+            body: JSON.stringify({
+                mail,
+                password
+            })
+        })
+        const json = await res.json()
+        result = JSON.stringify(json)
+    }
+    //(async () => {
+    //const response = await fetch(`http://localhost:8080/about.json`);
+    //const data = await response.json();
+    //console.log(data);
+    //})();	async function doPost () {
 </script>
 
 <form use:form style="display: flex; flex-direction: column">
@@ -25,6 +37,7 @@
 
     <button on:click={(e) => {
     e.preventDefault();
+    doPost();
     console.log(mail);
     console.log(password);
   }} disabled={!$form.valid}>Login</button>
