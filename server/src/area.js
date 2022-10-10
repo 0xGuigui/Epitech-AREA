@@ -2,10 +2,11 @@ const path = require('path')
 const mongoose = require('mongoose')
 const express = require('express')
 const config = require('./config')
-const {dynamicLoader, servicesLoader} = require('./utils/dynamicLoader')
+const {dynamicLoader} = require('./utils/dynamicLoader')
 const {hashPassword} = require('./utils/passwordHashing')
 const JwtDenyList = require('./core/jwtDenyList')
 const MailSender = require('./core/mailSender')
+const ServicesManager = require('./core/services/servicesManager')
 
 class AREA {
     constructor() {
@@ -17,8 +18,8 @@ class AREA {
         // Check for required fields in the config
         this.checkConfig()
 
-        // Load all services
-        servicesLoader(this, path.join(__dirname, 'core/services'))
+        // Instantiate the services manager
+        this.servicesManager = new ServicesManager(this)
 
         // Load all middlewares and routes
         dynamicLoader(this, path.join(__dirname, 'api/middlewares'))

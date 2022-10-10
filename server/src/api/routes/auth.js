@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const fs = require('fs')
 const payloadValidator = require('../../utils/payloadValidator')
 const {hashPassword, comparePassword} = require('../../utils/passwordHashing')
 const mongoose = require('mongoose')
@@ -48,14 +47,11 @@ module.exports = (area) => {
     area.app.post('/login', ...authValidators.loginValidator, payloadValidator, async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
 
-        if (!user) {
+        if (!user || !await comparePassword(req.body.password, user.password)) {
             return res.status(401).json({message: 'Invalid credentials'})
         }
         if (!user.verified) {
             return res.status(401).json({message: 'User not verified'})
-        }
-        if (!await comparePassword(req.body.password, user.password)) {
-            return res.status(401).json({message: 'Invalid credentials'})
         }
         let payload = {
             userId: user.id,
