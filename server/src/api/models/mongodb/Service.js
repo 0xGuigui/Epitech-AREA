@@ -18,10 +18,11 @@ let ActionSchema = new mongoose.Schema({
     type: {
         service: String,
         name: String,
+        webhook: Boolean,
     },
     data: Mixed,
     reaction: ReactionSchema,
-    createdAt: Date,
+    createdAt: { type: Date, default: Date.now },
 })
 
 module.exports = (area) => {

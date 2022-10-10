@@ -27,7 +27,21 @@ module.exports = class ServicesManager {
         return this.services.find(service => service.name === serviceName);
     }
 
-    getServiceComponent(serviceName, componentName) {
-        return this.getService(serviceName).getServiceComponent(componentName);
+    getServiceAction(serviceName, actionName) {
+        let service = this.getService(serviceName);
+
+        if (service) {
+            return service.actions.find(action => action.name === actionName);
+        }
+        return null;
+    }
+
+    getServiceReaction(serviceName, reactionName) {
+        let service = this.getService(serviceName);
+
+        if (service) {
+            return service.reactions.find(reaction => reaction.name === reactionName);
+        }
+        return null;
     }
 }
