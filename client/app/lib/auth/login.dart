@@ -2,14 +2,14 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
 
-class loginPage extends StatefulWidget {
-  const loginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<loginPage> createState() => _loginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -33,7 +33,14 @@ class _loginPageState extends State<loginPage> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Login'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
+          resizeToAvoidBottomInset: false,
           body: Form(
             key: _formKey,
             child: Column(
@@ -103,7 +110,7 @@ class _loginPageState extends State<loginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const registerPage(),
+                          builder: (context) => const RegisterPage(),
                         ),
                       );
                     },
@@ -120,9 +127,24 @@ class _loginPageState extends State<loginPage> {
                   padding: const EdgeInsets.all(6.0),
                   child: TextButton.icon(
                     onPressed: () {
-                      //do nothing
+                      Navigator.pushNamed(context, '/forgot_password');
                     },
-                    label: const Text('Admin Mode'),
+                    label: const Text('Forgot password'),
+                    icon: const Icon(Icons.help),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
+                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: TextButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/dashboard');
+                    },
+                    label: const Text('Bypass login'),
                     icon: const Icon(Icons.accessibility),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,

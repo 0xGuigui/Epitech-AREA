@@ -20,12 +20,12 @@ let userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    isAdministrator: {
+    admin: {
         type: Boolean,
         default: false,
     }
 });
 
 module.exports = (area) => {
-    area.mongoModels["User"] = mongoose.model('User', userSchema);
+    mongoose.model('User', userSchema);
 }
