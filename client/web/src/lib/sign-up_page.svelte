@@ -2,8 +2,6 @@
     import { useForm, Hint, HintGroup, validators, required, minLength, email } from "svelte-use-form";
 
     const form = useForm();
-    let mail = '';
-    let password = '';
 
     const requiredMessage = "This field is required";
     (async () => {
@@ -18,7 +16,7 @@
         <h1>
             Registration
         </h1>
-        <label for="mail">Email</label>
+        <label for="email">Email</label>
         <input type="email" name="email" use:validators={[required, email]}/>
         <HintGroup for="email">
             <Hint on="required">{requiredMessage}</Hint>
