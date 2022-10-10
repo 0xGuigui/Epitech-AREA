@@ -1,13 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const ObjectId = require('mongoose').Types.ObjectId
-
-let checkUserIdValidity = (req, res, next) => {
-    if (!ObjectId.isValid(req.params.userId)) {
-        return res.status(400).json({message: 'Invalid user id'})
-    }
-    next()
-}
+const {checkUserIdValidity} = require('../../utils/checkIdValidity')
 
 module.exports = (area) => {
     const router = express.Router()

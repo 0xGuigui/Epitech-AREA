@@ -25,10 +25,18 @@ let updatePasswordValidator = [
     expressValidator.check('newPassword').isLength({min: config.minPasswordLength}),
 ]
 
+let createActionValidator = [
+    expressValidator.check('actionServiceName').isLength({min: 1}),
+    expressValidator.check('actionName').isLength({min: 1}),
+    expressValidator.check('reactionServiceName').isLength({min: 1}),
+    expressValidator.check('reactionName').isLength({min: 1}),
+]
+
 module.exports = {
     loginValidator,
     registerValidator,
     resetPasswordValidator,
     sendResetPasswordEmailValidator,
-    updatePasswordValidator
+    updatePasswordValidator,
+    createActionValidator,
 }
