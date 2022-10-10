@@ -58,7 +58,7 @@ class AREA {
             admin: true,
         }
 
-        let result = await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
+        await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
             upsert: true, setDefaultsOnInsert: true
         }).exec()
         console.log(`To connect to the admin panel, use the following credentials:\n\tmail: ${this.config.adminEmail}\n\tpassword: ${this.config.adminPassword}\n`)
