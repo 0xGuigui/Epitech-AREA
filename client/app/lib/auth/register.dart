@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 //page who display the register form, need support navigation
 
-class registerPage extends StatefulWidget {
-  const registerPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<registerPage> createState() => _registerPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _registerPageState extends State<registerPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -36,7 +36,14 @@ class _registerPageState extends State<registerPage> {
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Register'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
+          resizeToAvoidBottomInset: false,
           body: Form(
             key: _formKey,
             child: Column(
@@ -77,6 +84,9 @@ class _registerPageState extends State<registerPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
                       return null;
                     },
                   ),
@@ -96,6 +106,9 @@ class _registerPageState extends State<registerPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
                       if (value != _passwordController.text) {
                         return 'Password not match';
                       }
@@ -104,18 +117,18 @@ class _registerPageState extends State<registerPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ElevatedButton(
+                  padding: const EdgeInsets.all(6.0),
+                  child: TextButton.icon(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Processing Data'),
-                          ),
-                        );
-                      }
+                      Navigator.pushNamed(context, '/email_verification');
                     },
-                    child: const Text('Submit'),
+                    label: const Text('Register'),
+                    icon: const Icon(Icons.login),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
+                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                    ),
                   ),
                 ),
               ],

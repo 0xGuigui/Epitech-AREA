@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../config');
 const expressValidator = require("express-validator");
 
 let loginValidator = [
@@ -12,8 +12,12 @@ let registerValidator = [
     expressValidator.check('password').isLength({min: config.minPasswordLength}),
 ]
 
-let resetPasswordValidator = [
+let sendResetPasswordEmailValidator = [
     expressValidator.check('email').isEmail(),
+]
+
+let resetPasswordValidator = [
+    expressValidator.check('newPassword').isLength({min: config.minPasswordLength}),
 ]
 
 let updatePasswordValidator = [
@@ -21,4 +25,10 @@ let updatePasswordValidator = [
     expressValidator.check('newPassword').isLength({min: config.minPasswordLength}),
 ]
 
-module.exports = {loginValidator, registerValidator, resetPasswordValidator, updatePasswordValidator}
+module.exports = {
+    loginValidator,
+    registerValidator,
+    resetPasswordValidator,
+    sendResetPasswordEmailValidator,
+    updatePasswordValidator
+}
