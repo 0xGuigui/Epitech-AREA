@@ -42,7 +42,7 @@ module.exports = (area) => {
 
             res.json({actions: actions})
         })
-        .post(...createActionValidator, payloadValidator, (req, res) => {
+        .post(...createActionValidator, payloadValidator, async (req, res) => {
             let action = area.servicesManager.getServiceAction(req.body.actionServiceName, req.body.actionName)
             let reaction = area.servicesManager.getServiceReaction(req.body.reactionServiceName, req.body.reactionName)
 
@@ -50,6 +50,12 @@ module.exports = (area) => {
                 return res.status(400).json({message: 'Invalid action configuration'})
             }
             // Check for action and reaction parameters and validate them, we assume that the action and reaction parameters are valid
+            try {
+                let actionData = action.onCreate ? await action.onCreate(req.body) : {}
+                let reactionData = reaction.onCreate ? await reaction.onCreate(req.body) : {}
+            } catch (e) {
+                return res.send(400).json({message: e.message})
+            }
             let newActionName = req.body.name || `${action.name}-${reaction.name}`
             let newAction = new mongoose.models.Action({
                 user: req.jwt.userId,
@@ -59,17 +65,17 @@ module.exports = (area) => {
                     name: req.body.actionName,
                     webhook: action.webhook,
                 },
-                data: {},
+                data: actionData,
                 reaction: {
                     type: {
                         service: req.body.reactionServiceName,
                         name: req.body.reactionName,
                     },
-                    data: {},
+                    data: reactionData,
                 }
             })
 
-            newAction.save().then((action) => {
+            newAction.save().then(() => {
                 return res.status(200).json({message: 'Action created'})
             }).catch(() => {
                 return res.status(500).json({message: 'Internal server error'})

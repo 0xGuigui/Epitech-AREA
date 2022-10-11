@@ -12,7 +12,6 @@ class AREA {
     constructor() {
         this.app = express()
         this.config = config
-        this.services = {}
         this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify"]
 
         // Check for required fields in the config
