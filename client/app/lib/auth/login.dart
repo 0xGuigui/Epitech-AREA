@@ -1,6 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
+import 'package:requests/requests.dart';
+import 'server.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -91,7 +93,36 @@ class _LoginPageState extends State<LoginPage> {
                   child: TextButton.icon(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        //do nothing
+                        Requests.post(
+                          'http://${connectionServerData.serverController.text}:${connectionServerData.portController.text}/login',
+                          body: {
+                            'email': _loginController.text,
+                            'password': _passwordController.text,
+                          },
+                        ).then((response) {
+                          if (response.statusCode == 200) {
+                            Navigator.pushNamed(context, '/dashboard');
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text('Wrong login or password'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        _passwordController.clear();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        });
                       }
                     },
                     label: const Text('Login'),
@@ -131,21 +162,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     label: const Text('Forgot password'),
                     icon: const Icon(Icons.help),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
-                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TextButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/dashboard');
-                    },
-                    label: const Text('Bypass login'),
-                    icon: const Icon(Icons.accessibility),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blue,
