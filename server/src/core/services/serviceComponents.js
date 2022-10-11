@@ -5,10 +5,6 @@ let notImplementedYet = async () => {
 }
 
 class ServiceComponent {
-    onCreate = notImplementedYet;
-    onTrigger = notImplementedYet;
-    onDestroy = notImplementedYet;
-
     constructor(componentName, description) {
         this.name = componentName;
         this.description = description;
@@ -25,14 +21,14 @@ class ServiceComponent {
 }
 
 class Action extends ServiceComponent {
-    constructor(actionName, description = "no description", webhook) {
+    constructor(actionName, description, webhook) {
         super(actionName, description);
         this.webhook = webhook;
     }
 }
 
 class Reaction extends ServiceComponent {
-    constructor(reactionName, description = "no description") {
+    constructor(reactionName, description) {
         super(reactionName, description);
     }
 }
@@ -47,6 +43,7 @@ class Service {
     addAction(action) {
         if (action instanceof Action) {
             this.actions.push(action);
+            return this;
         } else {
             throw new Error("The action must be an instance of Action");
         }
@@ -55,6 +52,7 @@ class Service {
     addReaction(reaction) {
         if (reaction instanceof Reaction) {
             this.reactions.push(reaction);
+            return this;
         } else {
             throw new Error("The reaction must be an instance of Reaction");
         }
