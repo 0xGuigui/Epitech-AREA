@@ -1,9 +1,3 @@
-const expressValidator = require('express-validator')
-
-let notImplementedYet = async () => {
-    console.warn("Be careful, a function implementation is missing")
-}
-
 class ServiceComponent {
     constructor(componentName, description) {
         this.name = componentName;

@@ -34,9 +34,10 @@ module.exports = class ServicesManager {
                     .findById(actionId)
                     .exec();
                 let action = this.getServiceAction(actionData.type.service, actionData.type.name);
+                let reaction = this.getServiceReaction(actionData.reaction.type.service, actionData.reaction.type.name);
 
                 if (action.onTrigger) {
-                    action.onTrigger(actionData)
+                    action.onTrigger(actionData, reaction);
                 }
             }
         }, null, true, 'Europe/Paris');
