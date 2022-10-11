@@ -118,13 +118,19 @@ async function createToken(payload) {
 }
 
 module.exports = (area, servicesManager) => {
-	let spotifyService = new Service('testService')
+	let spotifyService = new Service('Spotify', "no desc")
 	let onPlaylistChange = new Action('onPlaylistChange', 'When a playlist you own has changed', false)
 	let pauseMusic = new Reaction('pauseMusic', 'Pause your music')
 
 	pauseMusic.setFunction('onCreate', createToken).setFunction('onTrigger', async (action) => {
-		const accessToken = await getAccessToken(action.reaction.data.refresh_token)
-		await pauseMusic(accessToken.access_token)
+		const accessToken = await getAccessToken(action.data.refresh_token)
+		const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Authorization': `Bearer ${accessToken.access_token}`
+			}
+		})
 	})
 
 	onPlaylistChange.setFunction('onCreate', async (payload) => {

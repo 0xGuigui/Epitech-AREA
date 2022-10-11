@@ -37,6 +37,7 @@ module.exports = class ServicesManager {
                 let reaction = this.getServiceReaction(actionData.reaction.type.service, actionData.reaction.type.name);
 
                 if (action.onTrigger) {
+                    // It might crash here if multiple services are using the same name
                     action.onTrigger(actionData, reaction);
                 }
             }

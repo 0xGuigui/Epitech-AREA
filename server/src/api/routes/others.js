@@ -16,4 +16,8 @@ module.exports = (area) => {
             return res.status(500).json({message: err.message})
         }
     })
+
+    area.app.get('/webhook/:webhookToken', async (req, res) => {
+      res.send('Hello World!')
+    })
 }

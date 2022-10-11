@@ -50,11 +50,13 @@ module.exports = (area) => {
                 return res.status(400).json({message: 'Invalid action configuration'})
             }
             // Check for action and reaction parameters and validate them, we assume that the action and reaction parameters are valid
+            let actionData = {}
+            let reactionData = {}
             try {
-                let actionData = action.onCreate ? await action.onCreate(req.body) : {}
-                let reactionData = reaction.onCreate ? await reaction.onCreate(req.body) : {}
+                actionData = action.onCreate ? await action.onCreate(req.body) : {}
+                reactionData = reaction.onCreate ? await reaction.onCreate(req.body) : {}
             } catch (e) {
-                return res.send(400).json({message: e.message})
+                return res.status(400).json({message: e.message})
             }
             let newActionName = req.body.name || `${action.name}-${reaction.name}`
             let newAction = new mongoose.models.Action({
