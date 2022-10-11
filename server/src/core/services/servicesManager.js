@@ -1,5 +1,7 @@
 const pathBuilder = require("path");
+const cron = require("cron");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 module.exports = class ServicesManager {
     constructor(area) {
@@ -17,6 +19,28 @@ module.exports = class ServicesManager {
                 }
             }
         })
+
+        // Start cron job to update all non-webhook actions
+        this.cronJob = new cron.CronJob('*/15 * * * * *', async () => {
+            let actionIds = await mongoose
+                .model('Action')
+                .find({"type.webhook": false})
+                .distinct('_id')
+                .exec();
+
+            for (let actionId of actionIds) {
+                let actionData = await mongoose
+                    .model('Action')
+                    .findById(actionId)
+                    .exec();
+                let action = this.getServiceAction(actionData.type.service, actionData.type.name);
+                let reaction = this.getServiceReaction(actionData.reaction.type.service, actionData.reaction.type.name);
+
+                if (action.onTrigger) {
+                    action.onTrigger(actionData, reaction);
+                }
+            }
+        }, null, true, 'Europe/Paris');
     }
 
     addService(service) {
