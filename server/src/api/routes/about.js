@@ -1,4 +1,6 @@
 module.exports = (area) => {
+    if (!area?.services?.map)
+        area.services.map = () => []
     area.app.get('/about.json', (req, res) => {
         res.json({
             client: {
