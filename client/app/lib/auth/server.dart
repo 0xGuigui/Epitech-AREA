@@ -8,15 +8,19 @@ class SelectServerPage extends StatefulWidget {
   State<SelectServerPage> createState() => _SelectServerPageState();
 }
 
+mixin connectionServerData {
+  static var serverController = TextEditingController();
+  static var portController = TextEditingController();
+}
+
+
 class _SelectServerPageState extends State<SelectServerPage> {
   final _formKey = GlobalKey<FormState>();
-  final _serverController = TextEditingController();
-  final _portController = TextEditingController();
 
   @override
   void dispose() {
-    _serverController.dispose();
-    _portController.dispose();
+    connectionServerData.serverController.dispose();
+    connectionServerData.portController.dispose();
     super.dispose();
   }
 
@@ -41,7 +45,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: TextFormField(
-                    controller: _serverController,
+                    controller: connectionServerData.serverController,
                     maxLength: 50,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -67,7 +71,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: TextFormField(
-                    controller: _portController,
+                    controller: connectionServerData.portController,
                     maxLength: 5,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -95,24 +99,40 @@ class _SelectServerPageState extends State<SelectServerPage> {
                       if (_formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         Requests.get(
-                                'http://${_serverController.text}:${_portController.text}/about.json')
+                                'http://${connectionServerData.serverController.text}:${connectionServerData.portController.text}/about.json')
                             .then((value) {
-                          if (value.statusCode == 401) {
+                          if (value.statusCode == 200) {
                             Navigator.pushNamed(context, '/login');
-                            print(context);
-                          } else if (value.statusCode == 0) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Host lookup failed'),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Server not found'),
-                              ),
-                            );
                           }
+                        }).catchError((error) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.grey[900],
+                                  title: const Text(
+                                      'Server unreachable',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    'The server is unreachable. Please check your connection and try again.',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              });
                         });
                       }
                     },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:requests/requests.dart';
+import 'server.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -67,7 +69,75 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     padding: const EdgeInsets.all(6.0),
                     child: TextButton.icon(
                       onPressed: () {
-                        // Do nothing
+                        Requests.post(
+                        'http://${connectionServerData.serverController.text}:${connectionServerData.portController.text}/reset-password',
+                        body: {
+                          'email': _emailController.text,
+                        },
+                        bodyEncoding: RequestBodyEncoding.FormURLEncoded,
+                        ).then((response) {
+                          if (response.statusCode == 200) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.grey[900],
+                                  title: const Text(
+                                    'Success',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    'If the email is valid, you will receive an email with a link to reset your password.',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        _emailController.clear();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              });
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.grey[900],
+                                  title: const Text(
+                                    'Error',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    'An error occurred while trying to reset your password.',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        _emailController.clear();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              });
+                          }
+                        });
                       },
                       label: const Text('Submit'),
                       icon: const Icon(Icons.send),
