@@ -107,15 +107,29 @@ class _LoginPageState extends State<LoginPage> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('Error'),
-                                  content: const Text('Wrong login or password'),
+                                  backgroundColor: Colors.grey[900],
+                                  title: const Text(
+                                      'Error',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                  ),
+                                  content: const Text(
+                                      'Wrong login or password',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: const Text('OK'),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white,
+                                      ),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                         _passwordController.clear();
                                       },
+                                      child: const Text('OK'),
                                     ),
                                   ],
                                 );
@@ -144,6 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                           builder: (context) => const RegisterPage(),
                         ),
                       );
+                      _loginController.clear();
+                      _passwordController.clear();
                     },
                     label: const Text('Register'),
                     icon: const Icon(Icons.add),

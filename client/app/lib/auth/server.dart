@@ -145,21 +145,6 @@ class _SelectServerPageState extends State<SelectServerPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: TextButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
-                    label: const Text('Bypass server connection'),
-                    icon: const Icon(Icons.accessibility),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
-                      disabledForegroundColor: Colors.grey.withOpacity(0.38),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
