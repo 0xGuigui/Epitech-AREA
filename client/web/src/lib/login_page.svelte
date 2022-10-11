@@ -20,7 +20,8 @@
         });
         const json = await res.json()
         result = JSON.stringify(json)
-        console.log(result)
+        localStorage.setItem('JWT_tokens', JSON.stringify('value'));
+        console.log(json);
     }
     //(async () => {
     //const response = await fetch(`http://localhost:8080/about.json`);
