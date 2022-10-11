@@ -95,7 +95,7 @@ class _SelectServerPageState extends State<SelectServerPage> {
                       if (_formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         Requests.get(
-                                'http://${_serverController.text}:${_portController.text}')
+                                'http://${_serverController.text}:${_portController.text}/about.json')
                             .then((value) {
                           if (value.statusCode == 401) {
                             Navigator.pushNamed(context, '/login');

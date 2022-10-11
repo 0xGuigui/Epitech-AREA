@@ -21,7 +21,7 @@ module.exports = (area) => {
     area.app.use((req, res, next) => {
         const token = req.headers['x-access-token'] || req.headers['authorization']
 
-        for (let unprotectedRoute of area.unprotectedRoutes) {
+        for (const unprotectedRoute of area.unprotectedRoutes) {
             if (req.path.slice(1).startsWith(unprotectedRoute)) {
                 return next()
             }
