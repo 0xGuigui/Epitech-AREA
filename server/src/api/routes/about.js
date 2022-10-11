@@ -1,6 +1,4 @@
 module.exports = (area) => {
-    if (!area?.services?.map)
-        area.services.map = () => []
     area.app.get('/about.json', (req, res) => {
         res.json({
             client: {
@@ -14,7 +12,8 @@ module.exports = (area) => {
                         actions: service.actions.map(action => {
                             return {
                                 name: action.name,
-                                description: action.description
+                                description: action.description,
+                                webhook: action.webhook,
                             }
                         }),
                         reactions: service.reactions.map(reaction => {
