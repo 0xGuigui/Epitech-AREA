@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const jsonwebtoken = require('jsonwebtoken')
 
 module.exports = (area) => {
     area.app.delete('/purge-database', async (req, res) => {
@@ -18,6 +19,19 @@ module.exports = (area) => {
     })
 
     area.app.get('/webhook/:webhookToken', async (req, res) => {
-      res.send('Hello World!')
+        jsonwebtoken.verify(req.params.webhookToken, area.config.jwtSecret, {}, async (err, decoded) => {
+            if (err) {
+                return res.status(401).json({message: 'Unauthorized'})
+            }
+            let actionData = await mongoose.models.Action.findById(decoded.actionId).exec()
+
+            if (!actionData) {
+                return res.status(404).json({message: 'Unauthorized'})
+            }
+            let reaction = area.servicesManager.getServiceReaction(actionData.reaction.type.service, actionData.reaction.type.name)
+
+            reaction.onTrigger?.(actionData, req.body)
+            return res.status(200).json({message: 'Webhook triggered'})
+        })
     })
 }
