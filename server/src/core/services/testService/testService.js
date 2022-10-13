@@ -6,9 +6,15 @@ module.exports = (area, servicesManager) => {
     let testAction2 = new Action('testActionWebhook', 'test action', true)
     let testReaction = new Reaction('testReaction', 'test reaction')
 
-    testAction.setFunction("onCreate", async (payload) => {
+    testAction.setFunction("onCreate", async (actionData, requestBody) => {
         // For exemple, we stock a variable name
         return {name: "paul"}
+    })
+    testReaction.setFunction("onCreate", async (actionData, requestBody) => {
+        // we can access the previously stored variable
+        return {name: actionData.data.name}
+    }).setFunction("onTrigger", async (payload) => {
+        console.log(payload)
     })
     testService.addAction(testAction).addAction(testAction2)
     testService.addReaction(testReaction)

@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const {createActionValidator} = require('../models/validationModels')
 const payloadValidator = require('../../utils/payloadValidator')
 const {checkActionIdValidity} = require('../../utils/checkIdValidity')
+const createWebhookToken = require('../../utils/createWebhookToken')
 
 module.exports = (area) => {
     const router = express.Router()
@@ -50,16 +51,8 @@ module.exports = (area) => {
                 return res.status(400).json({message: 'Invalid action configuration'})
             }
             // Check for action and reaction parameters and validate them, we assume that the action and reaction parameters are valid
-            let actionData = {}
-            let reactionData = {}
-            try {
-                actionData = action.onCreate ? await action.onCreate(req.body) : {}
-                reactionData = reaction.onCreate ? await reaction.onCreate(req.body) : {}
-            } catch (e) {
-                return res.status(400).json({message: e.message})
-            }
             let newActionName = req.body.name || `${action.name}-${reaction.name}`
-            let newAction = new mongoose.models.Action({
+            let newActionData = {
                 user: req.jwt.userId,
                 actionName: newActionName,
                 type: {
@@ -67,17 +60,29 @@ module.exports = (area) => {
                     name: req.body.actionName,
                     webhook: action.webhook,
                 },
-                data: actionData,
+                data: {},
                 reaction: {
                     type: {
                         service: req.body.reactionServiceName,
                         name: req.body.reactionName,
                     },
-                    data: reactionData,
+                    data: {},
                 }
-            })
+            }
 
+            try {
+                newActionData.data = {...newActionData.data, ...await action.onCreate?.(newActionData, req.body)}
+                newActionData.reaction.data = {...newActionData.reaction.data, ...await reaction.onCreate?.(newActionData, req.body)}
+            } catch (e) {
+                return res.status(400).json({message: e.message})
+            }
+            let newAction = new mongoose.models.Action(newActionData)
             newAction.save().then(() => {
+                if (action.webhook) {
+                    let webhookToken = createWebhookToken({actionId: newAction._id})
+
+                    console.log('http://localhost:8080/webhook/' + webhookToken)
+                }
                 return res.status(200).json({message: 'Action created'})
             }).catch(() => {
                 return res.status(500).json({message: 'Internal server error'})
