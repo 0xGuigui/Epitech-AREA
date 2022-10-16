@@ -4,6 +4,7 @@ const {createActionValidator} = require('../models/validationModels')
 const payloadValidator = require('../../utils/payloadValidator')
 const {checkActionIdValidity} = require('../../utils/checkIdValidity')
 const createWebhookToken = require('../../utils/createWebhookToken')
+const {CreateActionContext} = require('../../core/services/actionContext')
 
 module.exports = (area) => {
     const router = express.Router()
@@ -52,35 +53,22 @@ module.exports = (area) => {
             }
             // Check for action and reaction parameters and validate them, we assume that the action and reaction parameters are valid
             let newActionName = req.body.name || `${action.name}-${reaction.name}`
-            let newActionData = {
+            let newAction = new mongoose.models.Action({
                 user: req.jwt.userId,
-                actionName: newActionName,
-                type: req.body.actionType,
+                name: newActionName,
+                actionType: req.body.actionType,
                 webhook: action.webhook,
+                reactionType: req.body.reactionType,
                 data: {},
-                reaction: {
-                    type: req.body.reactionType,
-                    data: {},
-                }
-            }
+            })
+            let ctx = new CreateActionContext(newAction, action, reaction)
 
             try {
-                newActionData.data = {...newActionData.data, ...await action.onCreate?.(newActionData, req.body)}
-                newActionData.reaction.data = {...newActionData.reaction.data, ...await reaction.onCreate?.(newActionData, req.body)}
+                await ctx.next()
+                return res.status(201).json({action: newAction})
             } catch (e) {
                 return res.status(400).json({message: e.message})
             }
-            let newAction = new mongoose.models.Action(newActionData)
-            newAction.save().then(() => {
-                if (action.webhook) {
-                    let webhookToken = createWebhookToken({actionId: newAction._id})
-
-                    console.log('http://localhost:8080/webhook/' + webhookToken)
-                }
-                return res.status(200).json({message: 'Action created'})
-            }).catch(() => {
-                return res.status(500).json({message: 'Internal server error'})
-            })
         })
 
     router.route('/actions/:actionId')

@@ -118,6 +118,8 @@ async function createToken(payload) {
 }
 
 module.exports = (area, servicesManager) => {
+	// Disable spotify service for now
+	return
 	let spotifyService = new Service('Spotify', "no desc")
 	let onPlaylistChange = new Action('onPlaylistChange', 'When a playlist you own has changed', false)
 	let pauseMusic = new Reaction('pauseMusic', 'Pause your music')
