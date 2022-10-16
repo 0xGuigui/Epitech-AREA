@@ -26,10 +26,8 @@ let updatePasswordValidator = [
 ]
 
 let createActionValidator = [
-    expressValidator.check('actionServiceName').isLength({min: 1}),
-    expressValidator.check('actionName').isLength({min: 1}),
-    expressValidator.check('reactionServiceName').isLength({min: 1}),
-    expressValidator.check('reactionName').isLength({min: 1}),
+    expressValidator.check('actionType').isLength({min: 1}),
+    expressValidator.check('reactionType').isLength({min: 1}),
 ]
 
 module.exports = {

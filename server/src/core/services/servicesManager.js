@@ -21,10 +21,10 @@ module.exports = class ServicesManager {
         })
 
         // Start cron job to update all non-webhook actions
-        this.cronJob = new cron.CronJob('*/15 * * * * *', async () => {
+        this.cronJob = new cron.CronJob('*/10 * * * * *', async () => {
             let actionIds = await mongoose
                 .model('Action')
-                .find({"type.webhook": false})
+                .find({webhook: false})
                 .distinct('_id')
                 .exec();
 
@@ -33,8 +33,8 @@ module.exports = class ServicesManager {
                     .model('Action')
                     .findById(actionId)
                     .exec();
-                let action = this.getServiceAction(actionData.type.service, actionData.type.name);
-                let reaction = this.getServiceReaction(actionData.reaction.type.service, actionData.reaction.type.name);
+                let action = this.getServiceAction(actionData.type);
+                let reaction = this.getServiceReaction(actionData.reaction.type);
 
                 if (action.onTrigger) {
                     // It might crash here if multiple services are using the same name
@@ -52,21 +52,31 @@ module.exports = class ServicesManager {
         return this.services.find(service => service.name === serviceName);
     }
 
-    getServiceAction(serviceName, actionName) {
-        let service = this.getService(serviceName);
+    getServiceAction(actionName) {
+        let split = actionName.split('/');
+        let service = this.getService(split[0]);
 
         if (service) {
-            return service.actions.find(action => action.name === actionName);
+            return service.actions.find(action => action.name === split[1]);
         }
         return null;
     }
 
-    getServiceReaction(serviceName, reactionName) {
-        let service = this.getService(serviceName);
+    getServiceReaction(reactionName) {
+        let split = reactionName.split('/');
+        let service = this.getService(split[0]);
 
         if (service) {
-            return service.reactions.find(reaction => reaction.name === reactionName);
+            return service.reactions.find(reaction => reaction.name === split[1]);
         }
         return null;
+    }
+
+    async createAction(payload) {
+        console.log("createAction");
+    }
+
+    async triggerAction() {
+        console.log("triggerAction");
     }
 }
