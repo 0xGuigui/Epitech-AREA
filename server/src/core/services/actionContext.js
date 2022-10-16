@@ -24,15 +24,12 @@ class ActionContext {
     }
 
     setActionData(key, value) {
-        if (key === "_id" || key === "id") {
-            throw new Error("Cannot set or modify action id");
-        }
-        this.actionData[key] = value;
+        this.actionData.data[key] = value;
         this.#dirty = true;
     }
 
     getActionData(key) {
-        return this.actionData[key];
+        return this.actionData.data[key];
     }
 
     dirty() {
@@ -40,27 +37,33 @@ class ActionContext {
         this.#dirty = true;
     }
 
-    async next(newEnvVariables, options) {
-        // Popping the next function from the call stack
-        let nextFunction = this.#callStack.shift();
-
+    async next(newEnvVariables = {}, options = {}) {
         // Append new extra data to the context
         if (!newEnvVariables instanceof Object) {
             throw new Error("next() only accepts objects as argument");
         }
         this.env = {...this.env, ...newEnvVariables};
 
-        if (options?.forceSave && this.#dirty) {
-            await this.actionData.save();
-        }
+        // Popping the next function from the call stack
+        let nextFunction = this.#callStack.shift();
 
-        // Calling the next function or ending the context
-        await (nextFunction ? nextFunction(this) : this.end());
+        if (nextFunction) {
+            if (options?.forceSave && this.#dirty) {
+                this.actionData.markModified('data');
+                await this.actionData.save();
+            }
+            // If there is a next function, call it
+            await nextFunction(this);
+        } else {
+            // If there is no next function, end the context
+            await this.end();
+        }
     }
 
     async end() {
         // Saving context changes if the context is dirty
         if (this.#dirty) {
+            this.actionData.markModified('data');
             await this.actionData.save();
         }
     }
@@ -69,6 +72,8 @@ class ActionContext {
 class CreateActionContext extends ActionContext {
     constructor(actionData, action, reaction) {
         super("create", actionData, action, reaction);
+        // We set dirty as true to force the context to save the new action
+        super.dirty();
     }
 }
 

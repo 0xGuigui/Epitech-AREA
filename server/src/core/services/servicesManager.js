@@ -2,6 +2,7 @@ const pathBuilder = require("path");
 const cron = require("cron");
 const fs = require("fs");
 const mongoose = require("mongoose");
+const {TriggerActionContext} = require('./actionContext')
 
 module.exports = class ServicesManager {
     constructor(area) {
@@ -33,12 +34,14 @@ module.exports = class ServicesManager {
                     .model('Action')
                     .findById(actionId)
                     .exec();
-                let action = this.getServiceAction(actionData.type);
-                let reaction = this.getServiceReaction(actionData.reaction.type);
+                let action = this.getServiceAction(actionData.actionType);
+                let reaction = this.getServiceReaction(actionData.reactionType);
+                let ctx = new TriggerActionContext(actionData, action, reaction);
 
-                if (action.onTrigger) {
-                    // It might crash here if multiple services are using the same name
-                    action.onTrigger(actionData, reaction);
+                try {
+                    await ctx.next()
+                } catch (e) {
+                    console.log(e);
                 }
             }
         }, null, true, 'Europe/Paris');

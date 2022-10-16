@@ -4,9 +4,9 @@ class ServiceComponent {
         this.description = description;
     }
 
-    setFunction(name, func) {
+    on(event, func) {
         if (func instanceof Function) {
-            this[name] = func;
+            this[event] = func;
             return this;
         } else {
             throw new Error("The function must be a function");
@@ -15,14 +15,14 @@ class ServiceComponent {
 }
 
 class Action extends ServiceComponent {
-    constructor(actionName, description, webhook) {
+    constructor(actionName, description = actionName, webhook = false) {
         super(actionName, description);
         this.webhook = webhook;
     }
 }
 
 class Reaction extends ServiceComponent {
-    constructor(reactionName, description) {
+    constructor(reactionName, description = reactionName) {
         super(reactionName, description);
     }
 }
