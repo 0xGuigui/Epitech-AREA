@@ -44,8 +44,8 @@ module.exports = (area) => {
             res.json({actions: actions})
         })
         .post(...createActionValidator, payloadValidator, async (req, res) => {
-            let action = area.servicesManager.getServiceAction(req.body.actionServiceName, req.body.actionName)
-            let reaction = area.servicesManager.getServiceReaction(req.body.reactionServiceName, req.body.reactionName)
+            let action = area.servicesManager.getServiceAction(req.body.actionType)
+            let reaction = area.servicesManager.getServiceReaction(req.body.reactionType)
 
             if (!action || !reaction) {
                 return res.status(400).json({message: 'Invalid action configuration'})
@@ -55,17 +55,11 @@ module.exports = (area) => {
             let newActionData = {
                 user: req.jwt.userId,
                 actionName: newActionName,
-                type: {
-                    service: req.body.actionServiceName,
-                    name: req.body.actionName,
-                    webhook: action.webhook,
-                },
+                type: req.body.actionType,
+                webhook: action.webhook,
                 data: {},
                 reaction: {
-                    type: {
-                        service: req.body.reactionServiceName,
-                        name: req.body.reactionName,
-                    },
+                    type: req.body.reactionType,
                     data: {},
                 }
             }

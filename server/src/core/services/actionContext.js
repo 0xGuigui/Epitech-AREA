@@ -40,7 +40,7 @@ class ActionContext {
         this.#dirty = true;
     }
 
-    async next(newEnvVariables) {
+    async next(newEnvVariables, options) {
         // Popping the next function from the call stack
         let nextFunction = this.#callStack.shift();
 
@@ -49,6 +49,10 @@ class ActionContext {
             throw new Error("next() only accepts objects as argument");
         }
         this.env = {...this.env, ...newEnvVariables};
+
+        if (options?.forceSave && this.#dirty) {
+            await this.actionData.save();
+        }
 
         // Calling the next function or ending the context
         await (nextFunction ? nextFunction(this) : this.end());
