@@ -66,6 +66,7 @@ class ActionContext {
             this.actionData.markModified('data');
             await this.actionData.save();
         }
+        return this.actionData;
     }
 }
 
