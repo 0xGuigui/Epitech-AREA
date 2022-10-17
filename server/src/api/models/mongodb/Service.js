@@ -11,6 +11,7 @@ let ActionSchema = new mongoose.Schema({
     actionType: String,
     reactionType: String,
     data: Mixed,
+    error: String,
     createdAt: { type: Date, default: Date.now },
 })
 

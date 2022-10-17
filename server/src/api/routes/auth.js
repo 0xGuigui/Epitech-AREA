@@ -129,23 +129,4 @@ module.exports = (area) => {
             })
         })
     })
-
-    area.app.post('/update-password', ...authValidators.updatePasswordValidator, payloadValidator, async (req, res) => {
-        let user = await mongoose.models.User.findById(req.jwt.userId).exec()
-
-        if (!user) {
-            return res.status(500).json({message: 'User no longer exists'})
-        }
-        let passwordMatch = await comparePassword(req.body.password, user.password)
-        if (!passwordMatch) {
-            return res.status(401).json({message: 'Invalid credentials'})
-        }
-        user.password = await hashPassword(req.body.newPassword)
-        user.save().then(() => {
-            area.jwtDenyList.addDeniedUser(user.id)
-            return res.status(200).json({message: 'Password updated'})
-        }).catch((err) => {
-            return res.status(500).json({message: err.message})
-        })
-    })
 }

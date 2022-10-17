@@ -3,8 +3,9 @@ const mongoose = require('mongoose')
 const {createActionValidator} = require('../models/validationModels')
 const payloadValidator = require('../../utils/payloadValidator')
 const {checkActionIdValidity} = require('../../utils/checkIdValidity')
-const createWebhookToken = require('../../utils/createWebhookToken')
 const {CreateActionContext} = require('../../core/services/actionContext')
+const authValidators = require("../models/validationModels");
+const {comparePassword, hashPassword} = require("../../utils/passwordHashing");
 
 module.exports = (area) => {
     const router = express.Router()
@@ -45,30 +46,12 @@ module.exports = (area) => {
             res.json({actions: actions})
         })
         .post(...createActionValidator, payloadValidator, async (req, res) => {
-            let action = area.servicesManager.getServiceAction(req.body.actionType)
-            let reaction = area.servicesManager.getServiceReaction(req.body.reactionType)
+            let {error, action} = await area.servicesManager.createAction(req.jwt.userId, req.body)
 
-            if (!action || !reaction) {
-                return res.status(400).json({message: 'Invalid action configuration'})
+            if (error) {
+                return res.status(400).json({error: error})
             }
-            // Check for action and reaction parameters and validate them, we assume that the action and reaction parameters are valid
-            let newActionName = req.body.name || `${action.name}-${reaction.name}`
-            let newAction = new mongoose.models.Action({
-                user: req.jwt.userId,
-                name: newActionName,
-                actionType: req.body.actionType,
-                webhook: action.webhook,
-                reactionType: req.body.reactionType,
-                data: {},
-            })
-            let ctx = new CreateActionContext(newAction, action, reaction)
-
-            try {
-                await ctx.next()
-                return res.status(201).json({action: newAction})
-            } catch (e) {
-                return res.status(400).json({message: e.message})
-            }
+            return res.status(201).json({action: action})
         })
 
     router.route('/actions/:actionId')
@@ -96,6 +79,47 @@ module.exports = (area) => {
                 return res.status(500).json({message: 'Internal server error'})
             })
         })
+
+    router.post('/actions/:actionId/execute', checkActionIdValidity, async (req, res) => {
+        let action = await mongoose
+            .model('Action')
+            .findById(req.params.actionId)
+            .exec()
+        let {error, action: actionData} = await area.servicesManager.triggerAction(action)
+
+        if (error) {
+            return res.status(400).json({error: error})
+        }
+        return res.status(200).json({action: actionData})
+    })
+
+    router.post('/actions/:actionId/retry', checkActionIdValidity, async (req, res) => {
+        let action = await mongoose
+            .model('Action')
+            .findByIdAndUpdate(req.params.actionId, {$unset: {error: 1}}, {new: true})
+            .exec()
+
+        return res.status(200).json({action: action})
+    })
+
+    router.post('/update-password', ...authValidators.updatePasswordValidator, payloadValidator, async (req, res) => {
+        let user = await mongoose.models.User.findById(req.jwt.userId).exec()
+
+        if (!user) {
+            return res.status(500).json({message: 'User no longer exists'})
+        }
+        let passwordMatch = await comparePassword(req.body.password, user.password)
+        if (!passwordMatch) {
+            return res.status(401).json({message: 'Invalid credentials'})
+        }
+        user.password = await hashPassword(req.body.newPassword)
+        user.save().then(() => {
+            area.jwtDenyList.addDeniedUser(user.id)
+            return res.status(200).json({message: 'Password updated'})
+        }).catch((err) => {
+            return res.status(500).json({message: err.message})
+        })
+    })
 
     area.app.use('/me', router)
 }

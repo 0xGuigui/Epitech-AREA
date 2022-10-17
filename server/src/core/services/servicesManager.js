@@ -2,7 +2,7 @@ const pathBuilder = require("path");
 const cron = require("cron");
 const fs = require("fs");
 const mongoose = require("mongoose");
-const {TriggerActionContext} = require('./actionContext')
+const {TriggerActionContext, CreateActionContext} = require('./actionContext')
 
 module.exports = class ServicesManager {
     constructor(area) {
@@ -25,7 +25,7 @@ module.exports = class ServicesManager {
         this.cronJob = new cron.CronJob('*/10 * * * * *', async () => {
             let actionIds = await mongoose
                 .model('Action')
-                .find({webhook: false})
+                .find({webhook: false, error: null})
                 .distinct('_id')
                 .exec();
 
@@ -34,15 +34,7 @@ module.exports = class ServicesManager {
                     .model('Action')
                     .findById(actionId)
                     .exec();
-                let action = this.getServiceAction(actionData.actionType);
-                let reaction = this.getServiceReaction(actionData.reactionType);
-                let ctx = new TriggerActionContext(actionData, action, reaction);
-
-                try {
-                    await ctx.next()
-                } catch (e) {
-                    console.log(e);
-                }
+                this.triggerAction(actionData);
             }
         }, null, true, 'Europe/Paris');
     }
@@ -75,11 +67,43 @@ module.exports = class ServicesManager {
         return null;
     }
 
-    async createAction(payload) {
-        console.log("createAction");
+    async createAction(userId, payload) {
+        let action = this.getServiceAction(payload.actionType);
+        let reaction = this.getServiceReaction(payload.reactionType);
+
+        if (!action || !reaction) {
+            return { error: 'Invalid action or reaction' };
+        }
+        let newAction = new mongoose.models.Action({
+            user: userId,
+            name: payload.name || `${action.name}-${reaction.name}`,
+            actionType: payload.actionType,
+            webhook: action.webhook,
+            reactionType: payload.reactionType,
+            data: {},
+        })
+        let ctx = new CreateActionContext(newAction, action, reaction)
+
+        try {
+            await ctx.next()
+            return {action: ctx.actionData, error: null};
+        } catch (e) {
+            return {error: e.message};
+        }
     }
 
-    async triggerAction() {
-        console.log("triggerAction");
+    async triggerAction(actionData) {
+        let action = this.getServiceAction(actionData.actionType);
+        let reaction = this.getServiceReaction(actionData.reactionType);
+        let ctx = new TriggerActionContext(actionData, action, reaction);
+
+        try {
+            await ctx.next()
+            return {action: ctx.actionData, error: null};
+        } catch (e) {
+            ctx.actionData.error = e.message;
+            await ctx.actionData.save();
+            return {error: e.message};
+        }
     }
 }
