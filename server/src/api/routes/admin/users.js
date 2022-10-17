@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const {checkUserIdValidity} = require('../../../utils/checkIdValidity')
+const ObjectId = mongoose.Types.ObjectId
+const {checkUserIdValidity, checkActionIdValidity} = require('../../../utils/checkIdValidity')
 
 module.exports = (area) => {
     const router = express.Router()
@@ -24,7 +25,6 @@ module.exports = (area) => {
             .skip((page - 1) * 10)
             .limit(10)
             .exec()
-
         res.json({users: users})
     })
 
@@ -35,39 +35,26 @@ module.exports = (area) => {
             {username: searchParam},
             ...(ObjectId.isValid(searchParam) ? [{_id: searchParam}] : []),
         ]
-
-        mongoose
-            .model("User")
-            .findOne({
+        let actions = await mongoose
+            .model("Action")
+            .find({
                 $or: orQuery
             })
             .exec()
-            .then((user) => {
-                if (user) {
-                    return res.json({user: user})
-                }
-                return res.status(404).json({message: 'User not found'})
-            })
-            .catch((err) => {
-                res.status(500).json({message: err.message})
-            })
+        res.json({actions: actions || []})
     })
 
     router.route('/:userId')
-        .get(checkUserIdValidity, (req, res) => {
-            mongoose
+        .get(checkUserIdValidity, async (req, res) => {
+            let user = await mongoose
                 .model("User")
                 .findById(req.params.userId)
                 .exec()
-                .then(user => {
-                    if (!user) {
-                        return res.status(404).json({message: 'User not found'})
-                    }
-                    res.json({user: user})
-                })
-                .catch(err => {
-                    res.status(500).json({message: err.message})
-                })
+
+            if (user) {
+                return res.json({user: user})
+            }
+            return res.status(404).json({message: 'User not found'})
         })
         .put(checkUserIdValidity, (req, res) => {
             let updateQuery = {
@@ -107,6 +94,51 @@ module.exports = (area) => {
                     area.jwtDenyList.addDeniedUser(req.params.userId)
 
                     res.status(200).json({message: 'User deleted'})
+                })
+                .catch(err => {
+                    res.status(500).json({message: err.message})
+                })
+        })
+
+    router.get('/:userId/actions', checkUserIdValidity, async (req, res) => {
+        let actions = await mongoose
+            .model("Action")
+            .find({user: req.params.userId})
+            .exec()
+
+        res.json({actions: actions})
+    })
+
+    router.route('/:userId/actions/:actionId')
+        .get(checkUserIdValidity, checkActionIdValidity, (req, res) => {
+            mongoose
+                .model("Action")
+                .findById(req.params.actionId)
+                .exec()
+                .then(action => {
+                    if (!action) {
+                        return res.status(404).json({message: 'Action not found'})
+                    }
+                    return res.status(200).json({action: action})
+                })
+                .catch(err => {
+                    return res.status(500).json({message: err.message})
+                })
+        })
+        .put(checkUserIdValidity, checkActionIdValidity, (req, res) => {
+            // TODO: Update action, we have to check every informations, delete the old action and create a new one
+            res.send('Not implemented')
+        })
+        .delete(checkUserIdValidity, checkActionIdValidity, (req, res) => {
+            mongoose
+                .model("Action")
+                .findByIdAndRemove(req.params.actionId)
+                .exec()
+                .then(action => {
+                    if (!action) {
+                        return res.status(404).json({message: 'Action not found'})
+                    }
+                    res.status(200).json({message: 'Action deleted'})
                 })
                 .catch(err => {
                     res.status(500).json({message: err.message})

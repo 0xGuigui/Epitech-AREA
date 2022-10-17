@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const {createActionValidator} = require('../models/validationModels')
 const payloadValidator = require('../../utils/payloadValidator')
 const {checkActionIdValidity} = require('../../utils/checkIdValidity')
-const {CreateActionContext} = require('../../core/services/actionContext')
 const authValidators = require("../models/validationModels");
 const {comparePassword, hashPassword} = require("../../utils/passwordHashing");
 
@@ -31,19 +30,12 @@ module.exports = (area) => {
 
     router.route('/actions')
         .get(async (req, res) => {
-            let page = req.query.page || 1
-
-            if (page < 1) {
-                page = 1
-            }
             let actions = await mongoose
-                .models.Action
+                .model("Action")
                 .find({user: req.jwt.userId})
-                .skip((page - 1) * 10)
-                .limit(10)
                 .exec()
 
-            res.json({actions: actions})
+            res.json({actions: actions || []})
         })
         .post(...createActionValidator, payloadValidator, async (req, res) => {
             let {error, action} = await area.servicesManager.createAction(req.jwt.userId, req.body)
@@ -55,29 +47,31 @@ module.exports = (area) => {
         })
 
     router.route('/actions/:actionId')
-        .get(checkActionIdValidity, (req, res) => {
-            mongoose.models.Action.findById(req.params.actionId).exec().then((action) => {
-                if (action) {
-                    return res.json({action: action})
-                }
+        .get(checkActionIdValidity, async (req, res) => {
+            let action = await mongoose
+                .model("Action")
+                .findById(req.params.actionId)
+                .exec()
+
+            if (!action) {
                 return res.status(404).json({message: 'Action not found'})
-            }).catch(() => {
-                return res.status(500).json({message: 'Internal server error'})
-            })
+            }
+            return res.json({action: action})
         })
         .put(checkActionIdValidity, (req, res) => {
             // TODO: Update action, we have to check every informations, delete the old action and create a new one
             res.send('Not implemented')
         })
-        .delete(checkActionIdValidity, (req, res) => {
-            mongoose.models.Action.findByIdAndDelete(req.params.actionId).exec().then((action) => {
-                if (action) {
-                    return res.json({message: 'Action deleted'})
-                }
+        .delete(checkActionIdValidity, async (req, res) => {
+            let action = await mongoose
+                .model("Action")
+                .findByIdAndRemove(req.params.actionId)
+                .exec()
+
+            if (!action) {
                 return res.status(404).json({message: 'Action not found'})
-            }).catch(() => {
-                return res.status(500).json({message: 'Internal server error'})
-            })
+            }
+            return res.json({message: 'Action deleted'})
         })
 
     router.post('/actions/:actionId/execute', checkActionIdValidity, async (req, res) => {

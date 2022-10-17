@@ -72,7 +72,7 @@ module.exports = class ServicesManager {
         let reaction = this.getServiceReaction(payload.reactionType);
 
         if (!action || !reaction) {
-            return { error: 'Invalid action or reaction' };
+            return { action: null, error: 'Invalid action or reaction' };
         }
         let newAction = new mongoose.models.Action({
             user: userId,
@@ -88,7 +88,7 @@ module.exports = class ServicesManager {
             await ctx.next()
             return {action: ctx.actionData, error: null};
         } catch (e) {
-            return {error: e.message};
+            return {action: null, error: e.message};
         }
     }
 
