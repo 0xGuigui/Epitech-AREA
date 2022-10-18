@@ -85,9 +85,8 @@ module.exports = class ServicesManager {
             reactionType: payload.reactionType,
             data: {},
         })
-        let ctx = new CreateActionContext(newAction, action, reaction)
+        let ctx = new CreateActionContext(newAction, payload, action, reaction)
 
-        ctx.addEnvVariables(payload)
         try {
             await ctx.next()
             return {action: ctx.actionData, error: null};
