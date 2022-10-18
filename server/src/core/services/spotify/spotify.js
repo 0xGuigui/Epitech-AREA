@@ -25,14 +25,16 @@ async function getAccessToken(refresh_token) {
 	return await response.json()
 }
 
-async function pauseMusic(access_token) {
+async function pauseMusic(ctx) {
+	const accessToken = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${access_token}`
+			'Authorization': `Bearer ${accessToken.access_token}`
 		}
 	})
+	await ctx.next()
 }
 
 async function resumeOrPlayMusic(access_token) {
@@ -108,56 +110,44 @@ async function getMyPlaylists(access_token) {
 	return playlists
 }
 
-async function createToken(payload) {
-	const code = payload.code
-	const refresh_token = await getRefreshToken(code)
+async function createToken(ctx) {
+	if (!ctx.env.spotifyRefreshToken) {
+		const refreshToken = await getRefreshToken(ctx.payload.code)
 
-	return {
-		refresh_token: refresh_token.refresh_token
+		ctx.setActionData('spotify_refresh_token', refreshToken.refresh_token)
 	}
+	await ctx.next()
 }
 
 module.exports = (area, servicesManager) => {
-	// Disable spotify service for now
-	return
-	let spotifyService = new Service('Spotify', "no desc")
-	let onPlaylistChange = new Action('onPlaylistChange', 'When a playlist you own has changed', false)
-	let pauseMusic = new Reaction('pauseMusic', 'Pause your music')
+	let spotifyService = new Service('Spotify', "Spotify - control your music")
+	let playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
+		.on('create', async (ctx) => {
+			const refreshToken = await getRefreshToken(ctx.payload.spotify_code)
+			const access_token = await getAccessToken(refreshToken.refresh_token)
+			const playlist = (await getMyPlaylists(access_token.access_token))
+				.find(p => p.name === ctx.payload.playlistName)
 
-	pauseMusic.setFunction('onCreate', createToken).setFunction('onTrigger', async (action) => {
-		const accessToken = await getAccessToken(action.data.refresh_token)
-		const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': `Bearer ${accessToken.access_token}`
+			ctx.setActionData('spotify_refresh_token', refreshToken.refresh_token)
+			ctx.setActionData('spotify_playlist_name', ctx.payload.playlistName)
+			ctx.setActionData('spotify_playlist_snapshot_id', playlist.snapshot_id)
+			await ctx.next({spotifyRefreshToken: refreshToken.refresh_token})
+		})
+		.on('trigger', async (ctx) => {
+			const access_token = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
+			const playlist = (await getMyPlaylists(access_token.access_token))
+				.find(p => p.name === ctx.getActionData('spotify_playlist_name'))
+
+			if (playlist.snapshot_id !== ctx.getActionData('spotify_playlist_snapshot_id')) {
+				ctx.setActionData('spotify_playlist_snapshot_id', playlist.snapshot_id)
+				await ctx.next()
 			}
 		})
-	})
+	let pauseMusicReaction = new Reaction('pauseMusic', 'pause your music when your action is triggered')
+		.on('create', createToken)
+		.on('trigger', pauseMusic)
 
-	onPlaylistChange.setFunction('onCreate', async (payload) => {
-		const code = payload.code
-		const playlistName = payload.playlistName
-		const refreshToken = await getRefreshToken(code)
-		const access_token = await getAccessToken(refreshToken.refresh_token)
-
-		const playlists = await getMyPlaylists(access_token.access_token)
-		const playlist = playlists.find(e => e.name === playlistName)
-		return {
-			refresh_token: refreshToken.refresh_token,
-			playlistName: playlistName,
-			snapshot_id: playlist.snapshot_id
-		}
-	}).setFunction('onTrigger', async (action, reaction) => {
-		const access_token = await getAccessToken(action.data.refresh_token)
-
-		const playlists = await getMyPlaylists(access_token.access_token)
-		const playlist = playlists.find(e => e.name === action.data.playlistName)
-		if (playlist.snapshot_id !== action.data.snapshot_id)
-			reaction.onTrigger(action)
-	})
-
-	spotifyService.addAction(onPlaylistChange)
-	spotifyService.addReaction(pauseMusic)
+	spotifyService.addAction(playlistChangeAction)
+	spotifyService.addReaction(pauseMusicReaction)
 	servicesManager.addService(spotifyService)
 }

@@ -71,8 +71,9 @@ class ActionContext {
 }
 
 class CreateActionContext extends ActionContext {
-    constructor(actionData, action, reaction) {
+    constructor(actionData, payload, action, reaction) {
         super("create", actionData, action, reaction);
+        this.payload = payload;
         // We set dirty as true to force the context to save the new action
         super.dirty();
     }
