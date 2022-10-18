@@ -1,4 +1,5 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
+const Joi = require('joi')
 
 module.exports = (area, servicesManager) => {
     let testService = new Service('testService')
@@ -17,6 +18,9 @@ module.exports = (area, servicesManager) => {
             // This will be available through ctx.env
             await ctx.next({test: 'test'})
         })
+    testAction.validationSchema = Joi.object().keys({
+        test: Joi.string().required()
+    }).unknown(true)
     let testReaction = new Reaction('testReaction')
         .on('create', async (ctx) => {
             // Calling next() here will end the context and save/update the action

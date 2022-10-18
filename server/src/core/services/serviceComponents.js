@@ -2,6 +2,7 @@ class ServiceComponent {
     constructor(componentName, description) {
         this.name = componentName;
         this.description = description;
+        this.validationSchema = null;
     }
 
     on(event, func) {

@@ -3,6 +3,7 @@ const cron = require("cron");
 const fs = require("fs");
 const mongoose = require("mongoose");
 const {TriggerActionContext, CreateActionContext} = require('./actionContext')
+const joi = require('joi')
 
 module.exports = class ServicesManager {
     constructor(area) {
@@ -73,6 +74,10 @@ module.exports = class ServicesManager {
 
         if (!action || !reaction) {
             return { action: null, error: 'Invalid action or reaction' };
+        }
+        console.log(action.validationSchema?.validate(payload).error, reaction.validationSchema?.validate(payload).error)
+        if (action.validationSchema?.validate(payload).error || reaction.validationSchema?.validate(payload).error) {
+            return { action: null, error: 'Invalid payload' };
         }
         let newAction = new mongoose.models.Action({
             user: userId,
