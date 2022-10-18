@@ -29,8 +29,9 @@ class Reaction extends ServiceComponent {
 }
 
 class Service {
-    constructor(serviceName) {
+    constructor(serviceName, serviceDescription = serviceName) {
         this.name = serviceName;
+        this.description = serviceDescription;
         this.actions = [];
         this.reactions = [];
     }
@@ -42,6 +43,16 @@ class Service {
         } else {
             throw new Error("The action must be an instance of Action");
         }
+    }
+
+    addActions(actions) {
+        actions.forEach(action => this.addAction(action));
+        return this;
+    }
+
+    addReactions(reactions) {
+        reactions.forEach(reaction => this.addReaction(reaction));
+        return this;
     }
 
     addReaction(reaction) {

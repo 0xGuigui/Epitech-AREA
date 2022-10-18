@@ -18,9 +18,6 @@ module.exports = (area, servicesManager) => {
             // This will be available through ctx.env
             await ctx.next({test: 'test'})
         })
-    testAction.validationSchema = Joi.object().keys({
-        test: Joi.string().required()
-    }).unknown(true)
     let testReaction = new Reaction('testReaction')
         .on('create', async (ctx) => {
             // Calling next() here will end the context and save/update the action
@@ -30,6 +27,9 @@ module.exports = (area, servicesManager) => {
             await ctx.next()
         })
 
+    testAction.validationSchema = Joi.object().keys({
+        test: Joi.string().required()
+    }).unknown(true)
     testService.addAction(testAction)
     testService.addReaction(testReaction)
     servicesManager.addService(testService)
