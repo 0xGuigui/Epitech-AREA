@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
-const config = require('../../../config')
+const config = require('../../config')
 
 module.exports = (area) => {
     // parse application/x-www-form-urlencoded

@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const {checkUserIdValidity, checkActionIdValidity} = require('../../../utils/checkIdValidity')
+const {getUsers} = require('../../controllers/users')
 
 module.exports = (area) => {
     const router = express.Router()
@@ -13,20 +14,7 @@ module.exports = (area) => {
         next()
     })
 
-    router.get('/', async (req, res) => {
-        let page = req.query.page || 1
-
-        if (page < 1) {
-            page = 1
-        }
-        let users = await mongoose
-            .model("User")
-            .find()
-            .skip((page - 1) * 10)
-            .limit(10)
-            .exec()
-        res.json({users: users})
-    })
+    router.get('/', getUsers)
 
     router.get('/search/:searchParam', async (req, res) => {
         let searchParam = req.params.searchParam

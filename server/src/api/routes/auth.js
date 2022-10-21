@@ -1,11 +1,12 @@
+require('../models/joi/authSchemas')
 const jwt = require('jsonwebtoken')
-const payloadValidator = require('../../utils/payloadValidator')
 const {hashPassword, comparePassword} = require('../../utils/passwordHashing')
+const {loginSchema, registerSchema, sendResetPasswordEmailSchema, resetPasswordSchema} = require('../models/joi/authSchemas')
+const {validatePayload, setTargets} = require('../middlewares/dynamic')
 const mongoose = require('mongoose')
-const authValidators = require('../models/validationModels')
 
 module.exports = (area) => {
-    area.app.post('/register', ...authValidators.registerValidator, payloadValidator, async (req, res) => {
+    area.app.post('/register', validatePayload(registerSchema), async (req, res) => {
         new mongoose.models.User({
             username: req.body.username,
             email: req.body.email,
@@ -44,7 +45,7 @@ module.exports = (area) => {
         })
     })
 
-    area.app.post('/login', ...authValidators.loginValidator, payloadValidator, async (req, res) => {
+    area.app.post('/login', validatePayload(loginSchema), async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
 
         if (!user || !await comparePassword(req.body.password, user.password)) {
@@ -95,7 +96,7 @@ module.exports = (area) => {
         })
     })
 
-    area.app.post('/reset-password', ...authValidators.sendResetPasswordEmailValidator, payloadValidator, async (req, res) => {
+    area.app.post('/reset-password', validatePayload(sendResetPasswordEmailSchema), async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
 
         if (user) {
@@ -113,7 +114,7 @@ module.exports = (area) => {
         return res.status(200).json({message: 'Processed'})
     })
 
-    area.app.get('/reset-password/:token', ...authValidators.resetPasswordValidator, payloadValidator, (req, res) => {
+    area.app.get('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
         jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Invalid token'})
