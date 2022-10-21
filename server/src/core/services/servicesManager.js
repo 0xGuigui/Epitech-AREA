@@ -22,7 +22,7 @@ module.exports = class ServicesManager {
         })
 
         // Start cron job to update all non-webhook actions
-        this.cronJob = new cron.CronJob('*/10 * * * * *', async () => {
+        new cron.CronJob('*/10 * * * * *', async () => {
             let actionIds = await mongoose
                 .model('Action')
                 .find({webhook: false, error: null})

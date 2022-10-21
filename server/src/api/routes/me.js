@@ -1,32 +1,17 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const {createActionValidator} = require('../models/validationModels')
-const payloadValidator = require('../../utils/payloadValidator')
+const {validatePayload} = require('../middlewares/dynamic')
+const {setOptions} = require('../middlewares/dynamic')
 const {checkActionIdValidity} = require('../../utils/checkIdValidity')
-const authValidators = require("../models/validationModels");
 const {comparePassword, hashPassword} = require("../../utils/passwordHashing");
+const {updatePasswordSchema} = require("../models/joi/authSchemas");
+const {createActionSchema} = require("../models/joi/actionSchemas");
+const {getUser} = require("../controllers/users");
 
 module.exports = (area) => {
     const router = express.Router()
 
-    router.get('/', (req, res) => {
-        let userId = req.jwt.userId
-
-        mongoose.models.User.findById(userId).exec().then((user) => {
-            if (user) {
-                return res.json({
-                    user: {
-                        id: user._id,
-                        username: user.username,
-                        email: user.email,
-                        admin: user.admin,
-                        createdAt: user.createdAt,
-                    }
-                })
-            }
-            return res.status(500).json({message: 'Internal server error'})
-        })
-    })
+    router.get('/', setOptions({userIdLocation: "jwt"}), getUser)
 
     router.route('/actions')
         .get(async (req, res) => {
@@ -37,7 +22,7 @@ module.exports = (area) => {
 
             res.json({actions: actions || []})
         })
-        .post(...createActionValidator, payloadValidator, async (req, res) => {
+        .post(validatePayload(createActionSchema), async (req, res) => {
             let {error, action} = await area.servicesManager.createAction(req.jwt.userId, req.body)
 
             if (error) {
@@ -96,7 +81,7 @@ module.exports = (area) => {
         return res.status(200).json({action: action})
     })
 
-    router.post('/update-password', ...authValidators.updatePasswordValidator, payloadValidator, async (req, res) => {
+    router.post('/update-password', validatePayload(updatePasswordSchema), async (req, res) => {
         let user = await mongoose.models.User.findById(req.jwt.userId).exec()
 
         if (!user) {

@@ -21,7 +21,7 @@ class AREA {
         this.servicesManager = new ServicesManager(this)
 
         // Load all middlewares and routes
-        dynamicLoader(this, path.join(__dirname, 'api/middlewares'))
+        dynamicLoader(this, path.join(__dirname, 'api/middlewares'), ['dynamic.js'])
         dynamicLoader(this, path.join(__dirname, 'api/routes'))
 
         // Load db models
