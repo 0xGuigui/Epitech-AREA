@@ -2,16 +2,20 @@ const express = require('express')
 const mongoose = require('mongoose')
 const {validatePayload} = require('../middlewares/dynamic')
 const {setOptions} = require('../middlewares/dynamic')
-const {checkActionIdValidity} = require('../../utils/checkIdValidity')
 const {comparePassword, hashPassword} = require("../../utils/passwordHashing");
 const {updatePasswordSchema} = require("../models/joi/authSchemas");
 const {createActionSchema} = require("../models/joi/actionSchemas");
-const {getUser} = require("../controllers/users");
+const {getUser, updateUser, deleteUser} = require("../controllers/users");
 
 module.exports = (area) => {
     const router = express.Router()
 
-    router.get('/', setOptions({userIdLocation: "jwt"}), getUser)
+    router.use(setOptions({userIdLocation: "jwt"}))
+
+    router.route('/')
+        .get(getUser)
+        .put(updateUser)
+        .delete(setOptions({areaInstance: area}), deleteUser)
 
     router.route('/actions')
         .get(async (req, res) => {
@@ -32,7 +36,7 @@ module.exports = (area) => {
         })
 
     router.route('/actions/:actionId')
-        .get(checkActionIdValidity, async (req, res) => {
+        .get(async (req, res) => {
             let action = await mongoose
                 .model("Action")
                 .findById(req.params.actionId)
@@ -43,11 +47,11 @@ module.exports = (area) => {
             }
             return res.json({action: action})
         })
-        .put(checkActionIdValidity, (req, res) => {
+        .put((req, res) => {
             // TODO: Update action, we have to check every informations, delete the old action and create a new one
             res.send('Not implemented')
         })
-        .delete(checkActionIdValidity, async (req, res) => {
+        .delete(async (req, res) => {
             let action = await mongoose
                 .model("Action")
                 .findByIdAndRemove(req.params.actionId)
@@ -59,7 +63,7 @@ module.exports = (area) => {
             return res.json({message: 'Action deleted'})
         })
 
-    router.post('/actions/:actionId/execute', checkActionIdValidity, async (req, res) => {
+    router.post('/actions/:actionId/execute', async (req, res) => {
         let action = await mongoose
             .model('Action')
             .findById(req.params.actionId)
@@ -72,7 +76,7 @@ module.exports = (area) => {
         return res.status(200).json({action: actionData})
     })
 
-    router.post('/actions/:actionId/retry', checkActionIdValidity, async (req, res) => {
+    router.post('/actions/:actionId/retry', async (req, res) => {
         let action = await mongoose
             .model('Action')
             .findByIdAndUpdate(req.params.actionId, {$unset: {error: 1}}, {new: true})
