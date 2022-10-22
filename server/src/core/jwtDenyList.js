@@ -11,6 +11,9 @@ module.exports = class JwtDenyList {
     }
 
     addDeniedUser(userId) {
+        if (typeof userId !== 'string') {
+            throw new Error('userId must be a string')
+        }
         this.jwtDenyList.push([userId, Date.now() / 1000])
     }
 
@@ -19,6 +22,9 @@ module.exports = class JwtDenyList {
     }
 
     isTokenDenied(userId, tokenIssuedAt) {
+        if (typeof userId !== 'string') {
+            throw new Error('userId must be a string')
+        }
         if (this.jwtGlobalDenyRule) {
             return tokenIssuedAt <= this.jwtGlobalDenyRule
         }

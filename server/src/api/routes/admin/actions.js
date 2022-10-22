@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId
-const {checkActionIdValidity} = require('../../../utils/checkIdValidity')
 
 module.exports = (area) => {
     const router = express.Router()
@@ -53,7 +52,7 @@ module.exports = (area) => {
     })
 
     router.route('/:actionId')
-        .get(checkActionIdValidity, async (req, res) => {
+        .get(async (req, res) => {
             let action = await mongoose
                 .model("Action")
                 .findById(req.params.actionId)
@@ -64,11 +63,11 @@ module.exports = (area) => {
             }
             return res.json({action: action})
         })
-        .put(checkActionIdValidity, async (req, res) => {
+        .put(async (req, res) => {
             // TODO: Update action, we have to check every informations, delete the old action and create a new one
             res.send('Not implemented')
         })
-        .delete(checkActionIdValidity, async (req, res) => {
+        .delete(async (req, res) => {
             let action = await mongoose
                 .model("Action")
                 .findByIdAndDelete(req.params.actionId)
