@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 const {validatePayload} = require('../middlewares/dynamic')
 const {createActionSchema} = require('../models/joi/actionSchemas')
+const {checkAreaInstance} = require("../middlewares/others");
 
 let purgeAction = (action) => {
     action.__v = undefined
@@ -21,6 +23,34 @@ module.exports.getActions = async (req, res) => {
             return purgeAction(action)
         })
     })
+}
+
+module.exports.getAction = async (req, res) => {
+    let action = await mongoose
+        .model("Action")
+        .findOne({
+            _id: req.params.actionId
+        })
+        .exec()
+
+    if (!action) {
+        return res.status(404).json({message: 'Action not found'})
+    }
+    return res.json({action: purgeAction(action)})
+}
+
+module.exports.deleteAction = async (req, res) => {
+    let action = await mongoose
+        .model("Action")
+        .findOneAndDelete({
+            _id: req.params.actionId
+        })
+        .exec()
+
+    if (!action) {
+        return res.status(404).json({message: 'Action not found'})
+    }
+    return res.json({message: 'Action deleted'})
 }
 
 module.exports.getUserActions = async (req, res) => {
@@ -84,12 +114,7 @@ module.exports.deleteUserAction = async (req, res) => {
     return res.json({message: 'Action deleted'})
 }
 
-module.exports.createUserAction = [validatePayload(createActionSchema), async (req, res) => {
-    // IMPORTANT: user needs to be added to the denied list
-    if (!req.areaInstance) {
-        console.error(`Missing areaInstance in req for action creation`)
-        return res.status(500).json({message: 'Internal server error'})
-    }
+module.exports.createUserAction = [validatePayload(createActionSchema), checkAreaInstance, async (req, res) => {
     let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.params.userId
     let {error, action} = await req.areaInstance.servicesManager.createAction(userId, req.body)
 
@@ -98,3 +123,25 @@ module.exports.createUserAction = [validatePayload(createActionSchema), async (r
     }
     return res.status(201).json({action: purgeAction(action)})
 }]
+
+module.exports.searchAction = async (req, res) => {
+    let searchParam = req.params.searchParam
+    let orQuery = [
+        {actionType: searchParam},
+        {reactionType: searchParam},
+        ...(ObjectId.isValid(searchParam) ? [{user: searchParam}] : []),
+        ...(ObjectId.isValid(searchParam) ? [{_id: searchParam}] : []),
+    ]
+    let actions = await mongoose
+        .model("Action")
+        .find({
+            $or: orQuery
+        })
+        .exec()
+
+    return res.json({
+        actions: actions.map(action => {
+            return purgeAction(action)
+        })
+    })
+}

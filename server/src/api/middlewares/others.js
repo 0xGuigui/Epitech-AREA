@@ -4,3 +4,10 @@ module.exports.isAdmin = (req, res, next) => {
     }
     next()
 }
+
+module.exports.checkAreaInstance = (req, res, next) => {
+    if (!req.areaInstance) {
+        return res.status(500).json({message: 'Internal server error'})
+    }
+    next()
+}

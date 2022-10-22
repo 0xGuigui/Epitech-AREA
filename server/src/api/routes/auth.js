@@ -2,7 +2,7 @@ require('../models/joi/authSchemas')
 const jwt = require('jsonwebtoken')
 const {hashPassword, comparePassword} = require('../../utils/passwordHashing')
 const {loginSchema, registerSchema, sendResetPasswordEmailSchema, resetPasswordSchema} = require('../models/joi/authSchemas')
-const {validatePayload, setTargets} = require('../middlewares/dynamic')
+const {validatePayload} = require('../middlewares/dynamic')
 const mongoose = require('mongoose')
 
 module.exports = (area) => {
