@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
+const {comparePassword, hashPassword} = require("../../utils/passwordHashing");
+const {validatePayload} = require("../middlewares/dynamic");
+const {updatePasswordSchema} = require("../models/joi/authSchemas");
+const {checkAreaInstance} = require("../middlewares/others");
 
-let purge_user = (user) => {
+let purgeUser = (user) => {
     user.password = user.__v = undefined
     return user
 }
@@ -16,7 +20,7 @@ module.exports.getUsers = async (req, res) => {
 
     return res.json({
         users: users.map(user => {
-            return purge_user(user)
+            return purgeUser(user)
         })
     })
 }
@@ -25,7 +29,7 @@ module.exports.searchUser = async (req, res) => {
     let searchParam = req.params.searchParam
     let orQuery = [
         {email: searchParam},
-        {username: searchParam},
+        {username: {$regex: searchParam, $options: 'i'}},
         ...(mongoose.Types.ObjectId.isValid(searchParam) ? [{_id: searchParam}] : []),
     ]
     let user = await mongoose
@@ -37,7 +41,7 @@ module.exports.searchUser = async (req, res) => {
     if (!user) {
         return res.status(404).json({message: 'User not found'})
     }
-    return res.json({user: purge_user(user)})
+    return res.json({user: purgeUser(user)})
 }
 
 module.exports.getUser = async (req, res) => {
@@ -50,7 +54,7 @@ module.exports.getUser = async (req, res) => {
     if (!user) {
         return res.status(404).json({message: 'User not found'})
     }
-    return res.json({user: purge_user(user)})
+    return res.json({user: purgeUser(user)})
 }
 
 module.exports.updateUser = async (req, res) => {
@@ -72,16 +76,10 @@ module.exports.updateUser = async (req, res) => {
     if (!user) {
         return res.status(404).json({message: 'User not found'})
     }
-    return res.json({user: purge_user(user)})
+    return res.json({user: purgeUser(user)})
 }
 
-module.exports.deleteUser = async (req, res) => {
-    // IMPORTANT: user needs to be added to the denied list
-    if (!req.areaInstance) {
-        console.error(`Missing areaInstance in req for user deletion`)
-        return res.status(500).json({message: 'Internal server error'})
-    }
-
+module.exports.deleteUser = [checkAreaInstance, async (req, res) => {
     let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.params.userId
     let user = await mongoose
         .model("User")
@@ -93,4 +91,23 @@ module.exports.deleteUser = async (req, res) => {
     }
     req.areaInstance.jwtDenyList.addDeniedUser(user.id)
     return res.json({message: 'User deleted'})
-}
+}]
+
+module.exports.updateUserPassword = [validatePayload(updatePasswordSchema), checkAreaInstance, async (req, res) => {
+    let user = await mongoose
+        .model("User")
+        .findById(req.jwt.userId)
+        .exec()
+
+    if (!user) {
+        throw new Error('User no longer exists')
+    }
+    let passwordMatch = await comparePassword(req.body.password, user.password)
+    if (!passwordMatch) {
+        return res.status(401).json({message: 'Invalid credentials'})
+    }
+    user.password = await hashPassword(req.body.newPassword)
+    await user.save()
+    req.areaInstance.jwtDenyList.addDeniedUser(user.id)
+    return res.json({message: 'Password updated'})
+}]
