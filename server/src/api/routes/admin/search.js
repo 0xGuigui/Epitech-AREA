@@ -1,7 +1,8 @@
 const express = require('express')
-const {searchUser} = require("../../controllers/users");
-const {searchAction} = require("../../controllers/actions");
-const {isAdmin} = require("../../middlewares/others");
+require('express-async-errors')
+const {searchUser} = require("../../controllers/users")
+const {searchAction} = require("../../controllers/actions")
+const {isAdmin} = require("../../middlewares/others")
 
 module.exports = (area) => {
     const router = express.Router()

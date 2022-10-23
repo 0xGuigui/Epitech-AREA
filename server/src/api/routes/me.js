@@ -1,4 +1,5 @@
 const express = require('express')
+require('express-async-errors')
 const mongoose = require('mongoose')
 const {setOptions} = require('../middlewares/dynamic')
 const {getUser, updateUser, deleteUser, updateUserPassword} = require("../controllers/users");

@@ -1,6 +1,7 @@
-const {isAdmin} = require("../../middlewares/others");
-const express = require("express");
-const {getActions, getAction, deleteAction} = require("../../controllers/actions");
+const express = require("express")
+require('express-async-errors')
+const {isAdmin} = require("../../middlewares/others")
+const {getActions, getAction, deleteAction} = require("../../controllers/actions")
 
 module.exports = (area) => {
     const router = express.Router()
@@ -8,10 +9,10 @@ module.exports = (area) => {
 
     router
         .use(isAdmin)
-    router.route('/')
-        .get(getActions)
     router
         .use('/:actionId', actionRouter)
+    router.route('/')
+        .get(getActions)
 
     actionRouter.route('/')
         .get(getAction)

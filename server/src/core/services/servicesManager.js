@@ -43,6 +43,10 @@ module.exports = class ServicesManager {
         this.services.push(service);
     }
 
+    getServices() {
+        return this.services;
+    }
+
     getService(serviceName) {
         return this.services.find(service => service.name === serviceName);
     }
