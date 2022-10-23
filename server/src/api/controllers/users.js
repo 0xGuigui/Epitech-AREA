@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
-const {comparePassword, hashPassword} = require("../../utils/passwordHashing");
-const {validatePayload} = require("../middlewares/dynamic");
-const {updatePasswordSchema} = require("../models/joi/authSchemas");
-const {checkAreaInstance} = require("../middlewares/others");
+const {comparePassword, hashPassword} = require("../../utils/passwordHashing")
+const {validatePayload} = require("../middlewares/dynamic")
+const {updatePasswordSchema} = require("../models/joi/authSchemas")
+const {checkAreaInstance} = require("../middlewares/others")
 
 let purgeUser = (user) => {
     user.password = user.__v = undefined

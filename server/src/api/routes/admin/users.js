@@ -1,4 +1,5 @@
 const express = require('express')
+require('express-async-errors')
 const {isAdmin} = require('../../middlewares/others')
 const {checkId, setOptions} = require('../../middlewares/dynamic')
 const {getUsers, getUser, updateUser, deleteUser} = require('../../controllers/users')
