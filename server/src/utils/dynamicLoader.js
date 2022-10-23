@@ -1,6 +1,17 @@
 const fs = require('fs');
 const pathBuilder = require('path');
 
+let loadFile = (area, filepath) => {
+    if (!filepath.endsWith('.js')) {
+        return
+    }
+    let fileContent = require(filepath);
+
+    if (typeof fileContent === 'function') {
+        fileContent(area);
+    }
+}
+
 let dynamicLoader = (area, path, excluded = []) => {
     let absolutePath = path[0] === '/' ? path : pathBuilder.join(__dirname, path);
 
@@ -15,15 +26,12 @@ let dynamicLoader = (area, path, excluded = []) => {
         if (stat && stat.isDirectory()) {
             dynamicLoader(area, filePath);
         } else {
-            if (file.endsWith('.js')) {
-                let fileContent = require(filePath);
-
-                if (typeof fileContent === 'function') {
-                    fileContent(area);
-                }
-            }
+            loadFile(area, filePath);
         }
     })
 }
 
-module.exports = {dynamicLoader}
+module.exports = {
+    dynamicLoader,
+    loadFile
+}
