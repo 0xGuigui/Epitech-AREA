@@ -4,9 +4,10 @@ const {hashPassword, comparePassword} = require('../../utils/passwordHashing')
 const {loginSchema, registerSchema, sendResetPasswordEmailSchema, resetPasswordSchema} = require('../models/joi/authSchemas')
 const {validatePayload} = require('../middlewares/dynamic')
 const mongoose = require('mongoose')
+const wrap = require('async-middleware').wrap
 
 module.exports = (area) => {
-    area.app.post('/register', validatePayload(registerSchema), async (req, res) => {
+    area.app.post('/register', validatePayload(registerSchema), wrap(async (req, res) => {
         new mongoose.models.User({
             username: req.body.username,
             email: req.body.email,
@@ -29,9 +30,9 @@ module.exports = (area) => {
             }
             return res.status(500).send(err)
         })
-    })
+    }))
 
-    area.app.get('/register/:token', async (req, res) => {
+    area.app.get('/register/:token', wrap(async (req, res) => {
         jwt.verify(req.params.token, area.config.jwtSecret, {}, (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Invalid token'})
@@ -43,9 +44,9 @@ module.exports = (area) => {
                 return res.status(200).json({message: 'User verified'})
             })
         })
-    })
+    }))
 
-    area.app.post('/login', validatePayload(loginSchema), async (req, res) => {
+    area.app.post('/login', validatePayload(loginSchema), wrap(async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
 
         if (!user || !await comparePassword(req.body.password, user.password)) {
@@ -72,14 +73,14 @@ module.exports = (area) => {
             });
             res.status(200).send({token: accessToken})
         })
-    })
+    }))
 
     area.app.post('/refresh', (req, res) => {
         if (!req.cookies.jwt) {
             return res.status(401).json({message: 'Unauthorized'})
         }
 
-        jwt.verify(req.cookies.jwt, area.config.jwtRefreshSecret, {}, async (err, decoded) => {
+        jwt.verify(req.cookies.jwt, area.config.jwtRefreshSecret, {}, wrap(async (err, decoded) => {
             if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
                 return res.status(401).json({message: 'Unauthorized'});
             }
@@ -93,10 +94,10 @@ module.exports = (area) => {
                 expiresIn: '5m'
             }, null);
             return res.json({token: accessToken});
-        })
+        }))
     })
 
-    area.app.post('/reset-password', validatePayload(sendResetPasswordEmailSchema), async (req, res) => {
+    area.app.post('/reset-password', validatePayload(sendResetPasswordEmailSchema), wrap(async (req, res) => {
         let user = await mongoose.models.User.findOne({email: req.body.email}).exec()
 
         if (user) {
@@ -112,10 +113,10 @@ module.exports = (area) => {
             )
         }
         return res.status(200).json({message: 'Processed'})
-    })
+    }))
 
     area.app.get('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
-        jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
+        jwt.verify(req.params.token, area.config.jwtSecret, {}, wrap(async (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Invalid token'})
             }
@@ -128,6 +129,6 @@ module.exports = (area) => {
                 area.jwtDenyList.addDeniedUser(decoded.id)
                 return res.status(200).json({message: 'Password reset'})
             })
-        })
+        }))
     })
 }

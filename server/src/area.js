@@ -2,7 +2,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 const express = require('express')
 const config = require('./config')
-const {dynamicLoader} = require('./utils/dynamicLoader')
+const {dynamicLoader, loadFile} = require('./utils/dynamicLoader')
 const {hashPassword} = require('./utils/passwordHashing')
 const JwtDenyList = require('./core/jwtDenyList')
 const MailSender = require('./core/mailSender')
@@ -21,8 +21,11 @@ class AREA {
         this.servicesManager = new ServicesManager(this)
 
         // Load all middlewares and routes
-        dynamicLoader(this, path.join(__dirname, 'api/middlewares'), ['dynamic.js', 'others.js'])
+        dynamicLoader(this, path.join(__dirname, 'api/middlewares'), ['dynamic.js', 'others.js', 'error.js'])
         dynamicLoader(this, path.join(__dirname, 'api/routes'))
+
+        // Load error handlers
+        loadFile(this, path.join(__dirname, 'api/middlewares/error.js'))
 
         // Load db models
         dynamicLoader(this, path.join(__dirname, 'api/models/mongodb'))
