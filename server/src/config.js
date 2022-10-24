@@ -21,7 +21,11 @@ module.exports = {
     mailUser: process.env.MAIL_USER || undefined,
     mailPass: process.env.MAIL_PASS || undefined,
     // ID tokens to authenticate with APIs
+    riotToken: process.env.RIOT_TOKEN,
     spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
     spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI
+    spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
+    discordClientId: process.env.DISCORD_CLIENT_ID,
+    discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
+    discordRedirectUri: process.env.DISCORD_REDIRECT_URI
 }
