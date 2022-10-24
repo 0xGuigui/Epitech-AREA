@@ -1,14 +1,16 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 const {Buffer} = require("buffer");
+const config = require("../../../config")
+const {spotifyClientId} = require("../../../config");
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://accounts.spotify.com/api/token`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Basic ' + (Buffer.from(clientId + ':' + clientSecret).toString('base64'))
+			'Authorization': 'Basic ' + (Buffer.from(config.spotifyClientId + ':' + config.spotifyClientSecret).toString('base64'))
 		},
-		body: `code=${code}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${clientId}`
+		body: `code=${code}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(config.spotifyRedirectUri)}&client_id=${config.spotifyClientId}`
 	})
 	return await response.json()
 }
@@ -18,9 +20,9 @@ async function getAccessToken(refresh_token) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Basic ' + (Buffer.from(clientId + ':' + clientSecret).toString('base64'))
+			'Authorization': 'Basic ' + (Buffer.from(config.spotifyClientId + ':' + config.spotifyClientSecret).toString('base64'))
 		},
-		body: `grant_type=refresh_token&client_id=${clientId}&refresh_token=${refresh_token}`
+		body: `grant_type=refresh_token&client_id=${spotifyClientId}&refresh_token=${refresh_token}`
 	})
 	return await response.json()
 }
@@ -31,50 +33,58 @@ async function pauseMusic(ctx) {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${accessToken.access_token}`
+			'Authorization': `Bearer ${accessToken}`
 		}
 	})
 	await ctx.next()
 }
 
-async function resumeOrPlayMusic(access_token) {
+async function resumeOrPlayMusic(ctx) {
+	const accessToken = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${access_token}`
+			'Authorization': `Bearer ${accessToken}`
 		}
 	})
+	await ctx.next()
 }
 
-async function nextMusic(access_token) {
+async function nextMusic(ctx) {
+	const accessToken = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/next`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${access_token}`
+			'Authorization': `Bearer ${accessToken}`
 		}
 	})
+	await ctx.next()
 }
 
-async function previousMusic(access_token) {
+async function previousMusic(ctx) {
+	const accessToken = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/previous`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${access_token}`
+			'Authorization': `Bearer ${accessToken}`
 		}
 	})
+	await ctx.next()
 }
 
-async function loopMusic(access_token) {
+async function loopMusic(ctx) {
+	const accessToken = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/repeat?state=track`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${access_token}`
+			'Authorization': `Bearer ${accessToken}`
 		}
 	})
+	await ctx.next()
 }
 
 async function getMe(access_token) {
@@ -112,7 +122,7 @@ async function getMyPlaylists(access_token) {
 
 async function createToken(ctx) {
 	if (!ctx.env.spotifyRefreshToken) {
-		const refreshToken = await getRefreshToken(ctx.payload.code)
+		const refreshToken = await getRefreshToken(ctx.payload.spotify_code)
 
 		ctx.setActionData('spotify_refresh_token', refreshToken.refresh_token)
 	}
@@ -120,16 +130,16 @@ async function createToken(ctx) {
 }
 
 module.exports = (area, servicesManager) => {
-	let spotifyService = new Service('Spotify', "Spotify - control your music")
-	let playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
+	const spotifyService = new Service('Spotify', "Spotify - control your music")
+	const playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
 		.on('create', async (ctx) => {
 			const refreshToken = await getRefreshToken(ctx.payload.spotify_code)
 			const access_token = await getAccessToken(refreshToken.refresh_token)
 			const playlist = (await getMyPlaylists(access_token.access_token))
-				.find(p => p.name === ctx.payload.playlistName)
+				.find(p => p.name === ctx.payload.playlist_name)
 
 			ctx.setActionData('spotify_refresh_token', refreshToken.refresh_token)
-			ctx.setActionData('spotify_playlist_name', ctx.payload.playlistName)
+			ctx.setActionData('spotify_playlist_name', ctx.payload.playlist_name)
 			ctx.setActionData('spotify_playlist_snapshot_id', playlist.snapshot_id)
 			await ctx.next({spotifyRefreshToken: refreshToken.refresh_token})
 		})
@@ -143,11 +153,29 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	let pauseMusicReaction = new Reaction('pauseMusic', 'pause your music when your action is triggered')
+	const pauseMusicReaction = new Reaction('pauseMusic', 'pause your music when your action is triggered')
 		.on('create', createToken)
 		.on('trigger', pauseMusic)
+	const playOrResumeReaction = new Reaction('playOrResume', 'play or resume your music when your action is triggered')
+		.on('create', createToken)
+		.on('trigger', resumeOrPlayMusic)
+	const nextMusicReaction = new Reaction('nextMusic', 'skip your current music when your action is triggered')
+		.on('create', createToken)
+		.on('trigger', nextMusic)
+	const previousMusicReaction = new Reaction('previousMusic', 'go to previous music when your action is triggered')
+		.on('create', createToken)
+		.on('trigger', previousMusic)
+	const loopMusicReaction = new Reaction('loopMusic', 'loop your current music when your action is triggered')
+		.on('create', createToken)
+		.on('trigger', loopMusic)
 
 	spotifyService.addAction(playlistChangeAction)
+
 	spotifyService.addReaction(pauseMusicReaction)
+	spotifyService.addReaction(playOrResumeReaction)
+	spotifyService.addReaction(nextMusicReaction)
+	spotifyService.addReaction(previousMusicReaction)
+	spotifyService.addReaction(loopMusicReaction)
+
 	servicesManager.addService(spotifyService)
 }
