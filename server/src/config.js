@@ -20,4 +20,8 @@ module.exports = {
     mailService: process.env.MAIL_SERVICE || 'gmail',
     mailUser: process.env.MAIL_USER || undefined,
     mailPass: process.env.MAIL_PASS || undefined,
+    // ID tokens to authenticate with APIs
+    spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
+    spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI
 }
