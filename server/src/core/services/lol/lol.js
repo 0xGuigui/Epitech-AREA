@@ -4,7 +4,7 @@ const config = require('../../../config')
 async function getRankById(id) {
 	const response = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${id}`, {
 		headers: {
-			"X-Riot-Token": config.RIOT_TOKEN
+			"X-Riot-Token": config.riotToken
 		}
 	})
 
@@ -14,7 +14,7 @@ async function getRankById(id) {
 async function getAccountInfoByName(name) {
 	const response = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}`, {
 		headers: {
-			"X-Riot-Token": config.RIOT_TOKEN,
+			"X-Riot-Token": config.riotToken,
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		mode: "cors"
@@ -26,7 +26,7 @@ async function getAccountInfoByName(name) {
 async function getAccountInfoByPuuid(puuid) {
 	const response = await fetch(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`, {
 		headers: {
-			"X-Riot-Token": config.RIOT_TOKEN,
+			"X-Riot-Token": config.riotToken,
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		mode: "cors"
@@ -38,7 +38,7 @@ async function getAccountInfoByPuuid(puuid) {
 async function getMatchesIdByPuuid(puuid, offset, rankedOnly = false) {
 	const response = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?${rankedOnly ? 'queue=420&' : ''}start=${offset}&count=20`, {
 		headers: {
-			"X-Riot-Token": config.RIOT_TOKEN,
+			"X-Riot-Token": config.riotToken,
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
 	})
@@ -48,7 +48,7 @@ async function getMatchesIdByPuuid(puuid, offset, rankedOnly = false) {
 async function getMatchById(matchId) {
 	const response = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}`, {
 		headers: {
-			"X-Riot-Token": config.RIOT_TOKEN,
+			"X-Riot-Token": config.riotToken,
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
 	})
@@ -63,7 +63,7 @@ async function getLastMatch(summonerPuuid) {
 async function getRotation() {
 	const rotation = await fetch('https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations', {
 		headers: {
-			"X-Riot-Token": config.RIOT_TOKEN,
+			"X-Riot-Token": config.riotToken,
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		mode: "cors"
