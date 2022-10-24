@@ -36,32 +36,26 @@ class Service {
         this.reactions = [];
     }
 
-    addAction(action) {
-        if (action instanceof Action) {
-            this.actions.push(action);
-            return this;
-        } else {
-            throw new Error("The action must be an instance of Action");
-        }
+    addAction(...actions) {
+        actions.forEach(action => {
+            if (action instanceof Action) {
+                this.actions.push(action);
+                return this;
+            } else {
+                throw new Error("The action must be an instance of Action");
+            }
+        })
     }
 
-    addActions(actions) {
-        actions.forEach(action => this.addAction(action));
-        return this;
-    }
-
-    addReactions(reactions) {
-        reactions.forEach(reaction => this.addReaction(reaction));
-        return this;
-    }
-
-    addReaction(reaction) {
-        if (reaction instanceof Reaction) {
-            this.reactions.push(reaction);
-            return this;
-        } else {
-            throw new Error("The reaction must be an instance of Reaction");
-        }
+    addReaction(...reactions) {
+        reactions.forEach(reaction => {
+            if (reaction instanceof Reaction) {
+                this.reactions.push(reaction);
+                return this;
+            } else {
+                throw new Error("The reaction must be an instance of Reaction");
+            }
+        })
     }
 
     getAction(actionName) {

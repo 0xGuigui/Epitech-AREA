@@ -73,14 +73,15 @@ async function getRotation() {
 
 module.exports = (area, servicesManager) => {
 	const lolService = new Service('League of Legends', 'League of Legends')
+
 	const levelUpAction = new Action('levelUp', 'when you level up in game')
-		.on('create', async (ctx) => {
+		.on('create', async ctx => {
 			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
 			ctx.setActionData('lol_puuid', playerData.puuid)
 			ctx.setActionData('lol_level', playerData.level)
 			await ctx.next()
 		})
-		.on('trigger', async (ctx) => {
+		.on('trigger', async ctx => {
 			const playerData = await getAccountInfoByPuuid(ctx.getActionData('lol_puuid'))
 			if (playerData.level !== ctx.getActionData('lol_level')) {
 				ctx.setActionData('lol_level', playerData.level)
@@ -88,13 +89,13 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 	const nameChangeAction = new Action('nameChange', 'when you change your name')
-		.on('create', async (ctx) => {
+		.on('create', async ctx => {
 			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
 			ctx.setActionData('lol_puuid', playerData.puuid)
 			ctx.setActionData('lol_name', playerData.name)
 			await ctx.next()
 		})
-		.on('trigger', async (ctx) => {
+		.on('trigger', async ctx => {
 			const playerData = await getAccountInfoByPuuid(ctx.getActionData('lol_puuid'))
 			if (playerData.name !== ctx.getActionData('lol_name')) {
 				ctx.setActionData('lol_name', playerData.name)
@@ -102,7 +103,7 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 	const rankChangeAction = new Action('rankChange', 'when you go up or down a rank/division')
-		.on('create', async (ctx) => {
+		.on('create', async ctx => {
 			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
 			const rankData = await getRankById(playerData.id)
 			const rank = rankData.find(e => e.queueType === ctx.playload.queueType)
@@ -112,7 +113,7 @@ module.exports = (area, servicesManager) => {
 			ctx.setActionData('lol_tier', rank.tier)
 			await ctx.next()
 		})
-		.on('trigger', async (ctx) => {
+		.on('trigger', async ctx => {
 			const rankData = await getRankById(ctx.getActionData('lol_id'))
 			const rank = rankData.find(e => e.queueType === ctx.getActionData('lol_queue_type'))
 			if (rank.rank !== ctx.getActionData('lol_rank') || rank.tier !== ctx.getActionData('lol_tier')) {
@@ -129,7 +130,7 @@ module.exports = (area, servicesManager) => {
 			ctx.setActionData('lol_match_id', lastMatch.matchId)
 			await ctx.next()
 		})
-		.on('trigger', async (ctx) => {
+		.on('trigger', async ctx => {
 			const lastMatch = await getLastMatch(ctx.getActionData('lol_puuid'))
 			if (lastMatch.matchId !== ctx.getActionData('lol_match_id')) {
 				ctx.setActionData('lol_match_id', lastMatch.matchId)
@@ -137,29 +138,30 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 	const newRotationAction = new Action('newRotation', 'when new champions are available')
-		.on('create', async (ctx) => {
+		.on('create', async ctx => {
 			const rotationData = await getRotation()
 			let rotation = ""
-			rotationData.freeChampionIds.forEach((e) => rotation += e.toString())
+			rotationData.freeChampionIds.forEach(e => rotation += e.toString())
 			ctx.setActionData('lol_rotation', rotation)
 			await ctx.next()
 		})
-		.on('trigger', async (ctx) => {
+		.on('trigger', async ctx => {
 			const rotationData = await getRotation()
 			let rotation = ""
-			rotationData.freeChampionIds.forEach((e) => rotation += e.toString())
+			rotationData.freeChampionIds.forEach(e => rotation += e.toString())
 			if (rotation !== ctx.getActionData('lol_rotation')) {
 				ctx.setActionData('lol_rotation', rotation)
 				await ctx.next()
 			}
 		})
 
-
-	servicesManager.addAction(levelUpAction)
-	servicesManager.addAction(nameChangeAction)
-	servicesManager.addAction(rankChangeAction)
-	servicesManager.addAction(newGameAction)
-	servicesManager.addAction(newRotationAction)
+	servicesManager.addAction(
+		levelUpAction,
+		nameChangeAction,
+		rankChangeAction,
+		newGameAction,
+		newRotationAction
+	)
 
 	servicesManager.addService(lolService)
 }
