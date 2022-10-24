@@ -131,8 +131,9 @@ async function createToken(ctx) {
 
 module.exports = (area, servicesManager) => {
 	const spotifyService = new Service('Spotify', "Spotify - control your music")
+
 	const playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
-		.on('create', async (ctx) => {
+		.on('create', async ctx => {
 			const refreshToken = await getRefreshToken(ctx.payload.spotify_code)
 			const access_token = await getAccessToken(refreshToken.refresh_token)
 			const playlist = (await getMyPlaylists(access_token.access_token))
@@ -143,7 +144,7 @@ module.exports = (area, servicesManager) => {
 			ctx.setActionData('spotify_playlist_snapshot_id', playlist.snapshot_id)
 			await ctx.next({spotifyRefreshToken: refreshToken.refresh_token})
 		})
-		.on('trigger', async (ctx) => {
+		.on('trigger', async ctx => {
 			const access_token = await getAccessToken(ctx.getActionData('spotify_refresh_token'))
 			const playlist = (await getMyPlaylists(access_token.access_token))
 				.find(p => p.name === ctx.getActionData('spotify_playlist_name'))
@@ -153,6 +154,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
+
 	const pauseMusicReaction = new Reaction('pauseMusic', 'pause your music when your action is triggered')
 		.on('create', createToken)
 		.on('trigger', pauseMusic)
@@ -171,11 +173,13 @@ module.exports = (area, servicesManager) => {
 
 	spotifyService.addAction(playlistChangeAction)
 
-	spotifyService.addReaction(pauseMusicReaction)
-	spotifyService.addReaction(playOrResumeReaction)
-	spotifyService.addReaction(nextMusicReaction)
-	spotifyService.addReaction(previousMusicReaction)
-	spotifyService.addReaction(loopMusicReaction)
+	spotifyService.addReaction(
+		pauseMusicReaction,
+		playOrResumeReaction,
+		nextMusicReaction,
+		previousMusicReaction,
+		loopMusicReaction
+	)
 
 	servicesManager.addService(spotifyService)
 }
