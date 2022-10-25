@@ -107,7 +107,7 @@ module.exports = (area) => {
 
         if (user) {
             let verifyToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
-            let redirectUrl = 'http://' + req.get('host') + '/reset-password/' + verifyToken
+            let redirectUrl = 'http://localhost:8081/reset-password/' + verifyToken
 
             area.mailSender.sendMail(
                 user.email,
@@ -120,7 +120,7 @@ module.exports = (area) => {
         return res.status(200).json({message: 'Processed'})
     })
 
-    area.app.get('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
+    area.app.post('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
         jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Invalid token'})

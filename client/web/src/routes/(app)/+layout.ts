@@ -1,10 +1,10 @@
-import * as store from '../store'
+import * as store from '../../store'
 
 // Must be true to avoid undefined localStorage
 export const ssr = false;
 
 export function load() {
-    let accessToken: string | null = localStorage.getItem('accessToken')
+    const accessToken: string | null = localStorage.getItem('accessToken')
 
     if (accessToken) {
         store.loggedIn.set(true)
