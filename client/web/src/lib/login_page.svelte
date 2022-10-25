@@ -41,12 +41,13 @@
     <Hint for="password" on="required">Mandatory field</Hint>
     <input bind:value={password} type="password" name="password" placeholder="enter your password" style="margin-bottom: 8px" use:validators={[required]} />
 
-    <button on:click={(e) => {
+    <button on:click={(e) =>  {
     e.preventDefault();
     doPost();
+    window.location.href = '/main_page';
     console.log(mail);
     console.log(password);
-  }} disabled={!$form.valid}>Login</button>
+  }} disabled={!$form.valid} on:click|preventDefault >Login</button>
 </form>
 
 <style>

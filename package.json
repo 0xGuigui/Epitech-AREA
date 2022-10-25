@@ -2,6 +2,7 @@
   "name": "B-DEV-500-LIL-5-1-area-guilhem.jehanno",
   "version": "1.0.0",
   "dependencies": {
+    "svelte": "^3.51.0",
     "svelte-routing": "^1.6.0",
     "svelte-use-form": "^2.4.3"
   }

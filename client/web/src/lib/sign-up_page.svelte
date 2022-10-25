@@ -68,9 +68,10 @@
         <button on:click={(e) => {
         e.preventDefault();
         doPost();
+        window.location.href = '/main_page';
         console.log(mail);
         console.log(password);
-       }} disabled={!$form.valid} on:click|preventDefault>Submit</button>
+       }} disabled={!$form.valid} on:click|preventDefault >Submit</button>
     </form>
 </main>
 
