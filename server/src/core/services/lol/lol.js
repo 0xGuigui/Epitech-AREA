@@ -155,7 +155,7 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 
-	servicesManager.addAction(
+	lolService.addAction(
 		levelUpAction,
 		nameChangeAction,
 		rankChangeAction,
