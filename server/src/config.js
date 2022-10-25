@@ -22,13 +22,20 @@ module.exports = {
     mailPass: process.env.MAIL_PASS || undefined,
     // ID tokens to authenticate with APIs
     riotToken: process.env.RIOT_TOKEN,
+
     spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
     spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
+
     discordClientId: process.env.DISCORD_CLIENT_ID,
     discordClientSecret: process.env.DISCORD_CLIENT_SECRET,
     discordRedirectUri: process.env.DISCORD_REDIRECT_URI,
+
     redditClientId: process.env.REDDIT_CLIENT_ID,
     redditClientSecret: process.env.REDDIT_CLIENT_SECRET,
-    redditRedirectUri: process.env.REDDIT_REDIRECT_URI
+    redditRedirectUri: process.env.REDDIT_REDIRECT_URI,
+
+    twitchClientId: process.env.TWITCH_CLIENT_ID,
+    twitchClientSecret: process.env.TWITCH_CLIENT_SECRET,
+    twitchRedirectUri: process.env.TWITCH_REDIRECT_URI
 }
