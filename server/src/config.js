@@ -23,6 +23,8 @@ module.exports = {
     // ID tokens to authenticate with APIs
     riotToken: process.env.RIOT_TOKEN,
 
+    steamToken: process.env.STEAM_TOKEN,
+
     spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
     spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI,
