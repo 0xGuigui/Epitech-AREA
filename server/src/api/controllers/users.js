@@ -89,6 +89,10 @@ module.exports.deleteUser = [checkAreaInstance, async (req, res) => {
     if (!user) {
         return res.status(404).json({message: 'User not found'})
     }
+    await mongoose
+        .model("Action")
+        .deleteMany({userId: userId})
+        .exec()
     req.areaInstance.jwtDenyList.addDeniedUser(user.id)
     return res.json({message: 'User deleted'})
 }]

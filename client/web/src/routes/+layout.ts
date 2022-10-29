@@ -1,4 +1,4 @@
-import * as store from '../../store'
+import * as store from '../store'
 
 // Must be true to avoid undefined localStorage
 export const ssr = false;
