@@ -1,15 +1,18 @@
 import { StyleSheet, View } from 'react-native';
-import WelcomePage from './src/welcome_page';
+import Login from './src/login';
 import { useEffect, useState } from "react";
 import { NativeRouter, Route, Routes } from "react-router-native";
+import MainPage from "./src/mainPage";
 
 export default function App() {
+  const [userInfo, setUserInfo] = useState({})
 
   return (
     <NativeRouter>
       <View style={styles.app}>
         <Routes>
-          <Route exact path="/" element={<WelcomePage />} />
+          <Route exact path="/" element={<Login />} />
+          <Route path="/" element={<MainPage userInfo={userInfo} />} />
         </Routes>
       </View>
     </NativeRouter>
