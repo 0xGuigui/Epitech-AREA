@@ -14,6 +14,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-new_app-new_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-new_app-new_appTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		C6BA9DF3E0E04CC0A3D2794C /* GothamBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95105ABCE6874503B79093FA /* GothamBold.ttf */; };
+		EBD90E9118344E288946427F /* GothamLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFC99330A52D489390EC4C06 /* GothamLight.ttf */; };
+		A95CAE3A544F4C8CAB27D12C /* GothamMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11E5FBE7CC5B407AA8276B43 /* GothamMedium.ttf */; };
+		511C0568B2C649E897FD98B3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FADD85D99AD40CD91652A7B /* Minecraft.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = new_app/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-new_app-new_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-new_app-new_appTests.release.xcconfig"; path = "Target Support Files/Pods-new_app-new_appTests/Pods-new_app-new_appTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		95105ABCE6874503B79093FA /* GothamBold.ttf */ = {isa = PBXFileReference; name = "GothamBold.ttf"; path = "../assets/fonts/GothamBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EFC99330A52D489390EC4C06 /* GothamLight.ttf */ = {isa = PBXFileReference; name = "GothamLight.ttf"; path = "../assets/fonts/GothamLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		11E5FBE7CC5B407AA8276B43 /* GothamMedium.ttf */ = {isa = PBXFileReference; name = "GothamMedium.ttf"; path = "../assets/fonts/GothamMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2FADD85D99AD40CD91652A7B /* Minecraft.ttf */ = {isa = PBXFileReference; name = "Minecraft.ttf"; path = "../assets/fonts/Minecraft.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +130,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				EA73A28919A74474B34191E8 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +156,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		EA73A28919A74474B34191E8 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				95105ABCE6874503B79093FA /* GothamBold.ttf */,
+				EFC99330A52D489390EC4C06 /* GothamLight.ttf */,
+				11E5FBE7CC5B407AA8276B43 /* GothamMedium.ttf */,
+				2FADD85D99AD40CD91652A7B /* Minecraft.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +265,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				C6BA9DF3E0E04CC0A3D2794C /* GothamBold.ttf in Resources */,
+				EBD90E9118344E288946427F /* GothamLight.ttf in Resources */,
+				A95CAE3A544F4C8CAB27D12C /* GothamMedium.ttf in Resources */,
+				511C0568B2C649E897FD98B3 /* Minecraft.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

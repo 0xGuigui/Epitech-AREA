@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/GothamBold.ttf",
+      "sha1": "ac5ba291bf8464df67a38f6054d25be7c2e0307f"
+    },
+    {
+      "path": "assets/fonts/GothamLight.ttf",
+      "sha1": "c44d6c4bde608e1d76b27a1587da83225af4ca4f"
+    },
+    {
+      "path": "assets/fonts/GothamMedium.ttf",
+      "sha1": "74c87f67010f63777e33c5114c76b1fc67e4ae5b"
+    },
+    {
+      "path": "assets/fonts/Minecraft.ttf",
+      "sha1": "adeaf75e88666e1987255be09e7bcc452bb4722d"
+    }
+  ]
+}
