@@ -1,9 +1,0 @@
-version: "Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)"
-options: "2d872bde10f4f2488b18968ff40006b3eae9be57b38bf0c848920772ff735074"
-build_start_time: [1664968688, 731349945]
-build_end_time: [1664968688, 754983901]
-inputs:
-  ? "/Users/guilh/Documents/Epitech/Tek3/DEV/B-DEV-500-LIL-5-1-area-guilhem.jehanno/client/app/macos/Flutter/GeneratedPluginRegistrant.swift"
-  : !private [1664968677, 901882648]
-  "/Users/guilh/Documents/Epitech/Tek3/DEV/B-DEV-500-LIL-5-1-area-guilhem.jehanno/client/app/macos/Runner/AppDelegate.swift": !private [1663169498, 0]
-  "/Users/guilh/Documents/Epitech/Tek3/DEV/B-DEV-500-LIL-5-1-area-guilhem.jehanno/client/app/macos/Runner/MainFlutterWindow.swift": !private [1663169498, 0]

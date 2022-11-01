@@ -1,107 +1,142 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {useEffect, useState} from 'react';
-import { Button, IconButton, Stack, Pressable } from "@react-native-material/core";
-import {Provider, TextInput} from 'react-native-paper';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import {Link, redirect, useLinkPressHandler, useNavigate} from "react-router-native";
+import { Pressable } from "@react-native-material/core";
+import {Button, TextInput, Switch, IconButton} from 'react-native-paper';
 const logo = require('./assets/logo/logo.png')
+const googleLogo = require('./assets/fonts/Google.ttf')
+
 
 
 export default function Login({ setUserInfo }) {
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  })
+	const [isDarkTheme, setIsDarkTheme] = useState(true);
+	const [form, setForm] = useState({
+		email: "",
+		password: ""
+	})
+	const navigate = useNavigate()
 
-  return (
-    <View style={styles.loginSection}>
-      <Image source={logo} style={styles.logo}/>
-      <Text style={styles.loginWelcome}>AREA Project</Text>
-      {/*<Provider theme={isDarkTheme ? DarkTheme : DefaultTheme}>*/}
-      {/*  <View*/}
-      {/*      style={[*/}
-      {/*        styles.container,*/}
-      {/*        {*/}
-      {/*          backgroundColor: isDarkTheme*/}
-      {/*              ? DarkTheme.colors.background*/}
-      {/*              : DefaultTheme.colors.background,*/}
-      {/*        },*/}
-      {/*      ]}>*/}
-      {/*    <Switch value={isDarkTheme} onValueChange={setIsDarkTheme} />*/}
-      {/*    <TextInput placeholder="placeholder" label="Label" mode="outlined" />*/}
-      {/*  </View>*/}
-      {/*</Provider>*/}
-      <TextInput variant="outlined"
-                 label="Email"
-                 onChangeText={e => setForm({...form, email: e})}
-                 style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: '#212123'}}
-                 inputStyle={{color: 'white'}} //texte
-                 inputContainerStyle={{backgroundColor: '#212123'}}
-                 placeholder="example@example.com"
-      />
-      <TextInput mode="outlined"
-                 label="Password"
-                 style={{ marginLeft: 16, marginRight: 16, marginTop: 10}}
-                 inputContainterStyle={{backgroundColor: '#212123'}}
-                 inputStyle={{color: 'white'}}
-                 onChangeText={e => setForm({...form, password: e})}
-                 placeholder="********"
-      />
-      <Button title="Connect" style={styles.registerButton} onClick={() => {
-        // TODO check infos valides
-        setUserInfo(form)
-      }}/>
-      <Button title="Register" style={{...styles.registerButton, marginTop: '4%'}}/>
-      <Pressable style={styles.forgotSection} onPress={() => {
-        console.log(form)
-      }}>
-        <Text style={styles.forgot}>forgot password ?</Text>
-      </Pressable>
-    </View>
-  );
+	return (
+		<View style={styles.loginSection}>
+			<IconButton
+				icon="cog"
+				iconColor="white"
+				size={24}
+				style={styles.settingsButton}
+				onPress={() => {}} />
+			<Image source={logo} style={styles.logo}/>
+			<Text style={styles.loginWelcome}>AREA Project</Text>
+			<TextInput
+				mode="flat"
+				color='#9a5373'
+				label="Email"
+				onChangeText={e => setForm({...form, email: e})}
+				style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: 'white', trailingContainerStyle: 'white'}}
+				placeholder="example@example.com"
+			/>
+			<TextInput
+				mode="flat"
+				color='#9a5373'
+				label="Password"
+				onChangeText={e => setForm({...form, email: e})}
+				style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#212123'}}
+				placeholder="*********"
+				secureTextEntry
+			/>
+			<Pressable style={styles.forgotSection} onPress={() => {
+
+			}}>
+				<Text style={styles.forgot}>forgot password ?</Text>
+			</Pressable>
+			<Button
+				mode="contained"
+				style={styles.button}
+				buttonColor="#9a5373"
+				theme={{
+					roundness: 1,
+				}}
+				onPress={() => {
+
+				}}>
+				CONNECT
+			</Button>
+			<Button
+				mode="contained"
+				style={styles.button}
+				buttonColor="#9a5373"
+				theme={{
+					roundness: 1,
+				}}
+				onPress={() => {
+
+				}}>
+				REGISTER
+			</Button>
+			<Button
+				mode="contained"
+			        icon={({ size }) => (
+				        <Image
+					        source={require('./assets/icons/google.png')}
+					        style={{ width: size, height: size, borderRadius: size / 2 }}
+				        />
+			        )}
+				theme={{
+					roundness: 1,
+				}}
+			        onPress={() => {}}
+					buttonColor="#4285F4"
+			        style={styles.button}
+				>
+				Sign in with Google
+			</Button>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  logo: {
-    top: 50,
-    width: 150,
-    height: 150,
-    marginLeft: 'auto',
-    marginRight: 'auto'
+	logo: {
+		top: 50,
+		width: 150,
+		height: 150,
+		marginLeft: 'auto',
+		marginRight: 'auto'
 
-  },
-  loginSection: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    width: '100%',
-    height: '100%',
-  },
-  loginWelcome: {
-    fontSize: 40,
-    fontWeight: '600',
-    textAlign: 'center',
-    color: 'white',
-    marginTop: 60,
-  },
-  emailInput: {
-    marginTop: 100
-  },
-  forgotSection: {
-    position: 'absolute',
-    bottom: 10,
-    left: 0,
-    right: 0,
-  },
-  forgot: {
-    textAlign: 'center',
-    fontSize: 15,
-  },
-  registerButton: {
-    width: '75%',
-    backgroundColor: '#9a5373',
-    marginLeft: '12.5%',
-    marginRight: '12.5%',
-    marginTop: '10%',
-  }
+	},
+	loginSection: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		bottom: 0,
+		right: 0,
+		width: '100%',
+		height: '100%',
+	},
+	loginWelcome: {
+		fontSize: 40,
+		fontWeight: '600',
+		textAlign: 'center',
+		color: 'white',
+		marginTop: 60,
+	},
+	forgotSection: {
+		marginTop: 10,
+		height: 40,
+		justifyContent: 'center'
+	},
+	forgot: {
+		textAlign: 'center',
+		fontSize: 15,
+		color: 'grey'
+	},
+	button: {
+		width: '75%',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		marginTop: '4%'
+	},
+	settingsButton: {
+		marginRight: '2%',
+		marginLeft:'auto',
+		marginTop: '8%',
+	}
 });
