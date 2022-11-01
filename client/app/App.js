@@ -2,20 +2,26 @@ import { StyleSheet, View } from 'react-native';
 import Login from './src/login';
 import { useEffect, useState } from "react";
 import { NativeRouter, Route, Routes } from "react-router-native";
-import MainPage from "./src/mainPage";
+import AppComponent from "./src/AppComponent";
 
 export default function App() {
   const [userInfo, setUserInfo] = useState({})
 
+  useEffect(() => {
+    // TODO getUserInfo et si good alors history.push('/')
+    // if (userInfo.email)
+
+  }, [userInfo])
+
   return (
-    <NativeRouter>
-      <View style={styles.app}>
-        <Routes>
-          <Route exact path="/" element={<Login />} />
-          <Route path="/" element={<MainPage userInfo={userInfo} />} />
-        </Routes>
-      </View>
-    </NativeRouter>
+      <NativeRouter>
+        <View style={styles.app}>
+          <Routes>
+            <Route exact path="/" element={<Login setUserInfo={setUserInfo} />} />
+            <Route path="*" element={<AppComponent userInfo={userInfo} />} />
+          </Routes>
+        </View>
+      </NativeRouter>
   );
 }
 

@@ -1,8 +1,12 @@
 import AppFooter from "./footer";
-import {Route, Routes} from "react-router-native";
+import {Route, Routes, useLocation} from "react-router-native";
 import MainPage from './mainPage'
 
 export default function AppComponent({ userInfo }) {
+	const location = useLocation()
+
+	console.log(location.pathname)
+
 	return (
 		<>
 			<Routes>
