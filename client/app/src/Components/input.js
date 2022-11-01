@@ -3,7 +3,7 @@ import {StyleSheet, Text, TextInput, View} from "react-native";
 export default function Input({style, onChange, onChangeText, label, placeholder, value, defaultValue, secureTextEntry, inputStyle, labelStyle}) {
 	return (
 		<View style={{...styles.inputContainer, ...style}}>
-			<Text style={{...styles.inputLabel, ...labelStyle}}>{label || ""}</Text>
+			{label && <Text style={{...styles.inputLabel, ...labelStyle}}>{label || ""}</Text>}
 			<TextInput style={styles.input} defaultValue={""} value={value} placeholder={placeholder} onChange={onChange} onChangeText={onChangeText} secureTextEntry={secureTextEntry}/>
 		</View>
 	)
