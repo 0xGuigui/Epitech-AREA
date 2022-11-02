@@ -107,7 +107,7 @@ module.exports = (area) => {
 
         if (user) {
             let verifyToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
-            let redirectUrl = 'http://localhost:8081/reset-password/' + verifyToken
+            let redirectUrl = `${req.get('host')}/reset-password/` + verifyToken
 
             area.mailSender.sendMail(
                 user.email,
