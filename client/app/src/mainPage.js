@@ -1,6 +1,21 @@
-import {StyleSheet, Text, View} from "react-native";
+import {BackHandler, StyleSheet, Text, View} from "react-native";
+import {useNavigate} from "react-router-native";
+import {useEffect} from "react";
 
-export default function mainPage() {
+export default function mainPage({userInfo}) {
+	const navigate = useNavigate()
+
+	const backAction = async () => {
+		navigate('/login')
+	}
+
+	useEffect(() => {
+		BackHandler.addEventListener("hardwareBackPress", backAction);
+
+		return () =>
+			BackHandler.removeEventListener("hardwareBackPress", backAction);
+	}, [])
+
 	return (
 		<View style={styles.mainSection}>
 			<Text style={styles.text}>Hello</Text>
@@ -18,7 +33,7 @@ const styles = StyleSheet.create({
 		top: 0,
 		left: 0,
 		right: 0,
-		fontSize: 500,
-		color: 'white'
+		fontSize: 50,
+		color: '#14e8c2'
 	}
 });
