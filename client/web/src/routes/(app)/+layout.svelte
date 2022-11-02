@@ -1,11 +1,9 @@
 <script>
-    import "../../app.css";
-    import Header from "$lib/blocks/Header.svelte";
-    import Footer from "$lib/blocks/Footer.svelte";
+	import "../../app.css";
+	import Header from "$lib/blocks/Header.svelte";
+	import Footer from "$lib/blocks/Footer.svelte";
 </script>
 
-<div>
-    <Header />
-    <slot />
-    <Footer />
-</div>
+<Header />
+<slot />
+<Footer />
