@@ -5,8 +5,22 @@ import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, Switch, IconButton} from 'react-native-paper';
 const logo = require('./assets/logo/logo.png')
 const googleLogo = require('./assets/fonts/Google.ttf')
+const { serverUrl } = require('../config')
 
-
+async function logUser(form) {
+	const response = await fetch(`${serverUrl}/login`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(form)
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
 
 export default function Login({ setUserInfo }) {
 	const [isDarkTheme, setIsDarkTheme] = useState(true);
@@ -23,13 +37,17 @@ export default function Login({ setUserInfo }) {
 				iconColor="white"
 				size={24}
 				style={styles.settingsButton}
-				onPress={() => {}} />
+				onPress={() => {
+					navigate('/settings')
+				}} />
 			<Image source={logo} style={styles.logo}/>
 			<Text style={styles.loginWelcome}>AREA Project</Text>
 			<TextInput
 				mode="flat"
 				color='#9a5373'
 				label="Email"
+				keyboardType='email-address'
+				autoCapitalize='none'
 				onChangeText={e => setForm({...form, email: e})}
 				style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: 'white', trailingContainerStyle: 'white'}}
 				placeholder="example@example.com"
@@ -38,7 +56,8 @@ export default function Login({ setUserInfo }) {
 				mode="flat"
 				color='#9a5373'
 				label="Password"
-				onChangeText={e => setForm({...form, email: e})}
+				autoCapitalize='none'
+				onChangeText={e => setForm({...form, password: e})}
 				style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#212123'}}
 				placeholder="*********"
 				secureTextEntry
@@ -55,8 +74,11 @@ export default function Login({ setUserInfo }) {
 				theme={{
 					roundness: 1,
 				}}
-				onPress={() => {
-
+				onPress={async () => {
+					const log = await logUser(form)
+					if (log.status !== 200) {
+						alert(log.message)
+					}
 				}}>
 				CONNECT
 			</Button>
