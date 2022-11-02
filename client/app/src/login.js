@@ -3,24 +3,10 @@ import { useEffect, useState } from 'react';
 import {Link, redirect, useLinkPressHandler, useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, Switch, IconButton} from 'react-native-paper';
+import {getMe, logUser} from "./Services/server";
 const logo = require('./assets/logo/logo.png')
 const googleLogo = require('./assets/fonts/Google.ttf')
 const { serverUrl } = require('../config')
-
-async function logUser(form) {
-	const response = await fetch(`${serverUrl}/login`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(form)
-	})
-	const json = await response.json()
-	return {
-		status: response.status,
-		...json
-	}
-}
 
 export default function Login({ setUserInfo }) {
 	const [isDarkTheme, setIsDarkTheme] = useState(true);
@@ -32,85 +18,89 @@ export default function Login({ setUserInfo }) {
 
 	return (
 		<View style={styles.loginSection}>
-			<IconButton
-				icon="cog"
-				iconColor="white"
-				size={24}
-				style={styles.settingsButton}
-				onPress={() => {
-					navigate('/settings')
-				}} />
-			<Image source={logo} style={styles.logo}/>
-			<Text style={styles.loginWelcome}>AREA Project</Text>
-			<TextInput
-				mode="flat"
-				color='#9a5373'
-				label="Email"
-				keyboardType='email-address'
-				autoCapitalize='none'
-				onChangeText={e => setForm({...form, email: e})}
-				style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: 'white', trailingContainerStyle: 'white'}}
-				placeholder="example@example.com"
-			/>
-			<TextInput
-				mode="flat"
-				color='#9a5373'
-				label="Password"
-				autoCapitalize='none'
-				onChangeText={e => setForm({...form, password: e})}
-				style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#212123'}}
-				placeholder="*********"
-				secureTextEntry
-			/>
-			<Pressable style={styles.forgotSection} onPress={() => {
-
-			}}>
-				<Text style={styles.forgot}>forgot password ?</Text>
-			</Pressable>
-			<Button
-				mode="contained"
-				style={styles.button}
-				buttonColor="#9a5373"
-				theme={{
-					roundness: 1,
-				}}
-				onPress={async () => {
-					const log = await logUser(form)
-					if (log.status !== 200) {
-						alert(log.message)
-					}
-				}}>
-				CONNECT
-			</Button>
-			<Button
-				mode="contained"
-				style={styles.button}
-				buttonColor="#9a5373"
-				theme={{
-					roundness: 1,
-				}}
-				onPress={() => {
+			<View>
+				<IconButton
+					icon="cog"
+					iconColor="white"
+					size={24}
+					style={styles.settingsButton}
+					onPress={() => {
+						navigate('/settings')
+					}} />
+				<Image source={logo} style={styles.logo}/>
+				<Text style={styles.loginWelcome}>AREA Project</Text>
+				<TextInput
+					mode="flat"
+					color='#9a5373'
+					label="Email"
+					keyboardType='email-address'
+					autoCapitalize='none'
+					onChangeText={e => setForm({...form, email: e})}
+					style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: 'white', trailingContainerStyle: 'white'}}
+					placeholder="example@example.com"
+				/>
+				<TextInput
+					mode="flat"
+					color='#9a5373'
+					label="Password"
+					autoCapitalize='none'
+					onChangeText={e => setForm({...form, password: e})}
+					style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#212123'}}
+					placeholder="*********"
+					secureTextEntry
+				/>
+				<Pressable style={styles.forgotSection} onPress={() => {
 
 				}}>
-				REGISTER
-			</Button>
-			<Button
-				mode="contained"
-			        icon={({ size }) => (
-				        <Image
-					        source={require('./assets/icons/google.png')}
-					        style={{ width: size, height: size, borderRadius: size / 2 }}
-				        />
-			        )}
-				theme={{
-					roundness: 1,
-				}}
-			        onPress={() => {}}
+					<Text style={styles.forgot}>forgot password ?</Text>
+				</Pressable>
+				<Button
+					mode="contained"
+					style={styles.button}
+					buttonColor="#9a5373"
+					theme={{
+						roundness: 1,
+					}}
+					onPress={async () => {
+						const log = await logUser(form)
+						if (log.status !== 200)
+							return alert(log.message)
+						const me = await getMe(log.token)
+						setUserInfo(me.user)
+						navigate('/')
+					}}>
+					CONNECT
+				</Button>
+				<Button
+					mode="contained"
+					style={styles.button}
+					buttonColor="#9a5373"
+					theme={{
+						roundness: 1,
+					}}
+					onPress={() => {
+						navigate('/register')
+					}}>
+					REGISTER
+				</Button>
+				<Button
+					mode="contained"
+					icon={({ size }) => (
+						<Image
+							source={require('./assets/icons/google.png')}
+							style={{ width: size, height: size, borderRadius: size / 2 }}
+						/>
+					)}
+					theme={{
+						roundness: 1,
+					}}
+					onPress={() => {}}
 					buttonColor="#4285F4"
-			        style={styles.button}
+					style={styles.button}
 				>
-				Sign in with Google
-			</Button>
+					Sign in with Google
+				</Button>
+			</View>
 		</View>
 	);
 }

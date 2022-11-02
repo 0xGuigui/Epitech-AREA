@@ -1,10 +1,23 @@
 import AppFooter from "./footer";
-import {Route, Routes, useLocation} from "react-router-native";
+import {Route, Routes, useLocation, useNavigate} from "react-router-native";
 import MainPage from './mainPage'
+import {useEffect} from "react";
+import {BackHandler} from "react-native";
 
 export default function AppComponent({ userInfo }) {
 	const location = useLocation()
+	const navigate = useNavigate()
 
+	const backAction = async () => {
+		navigate('/login')
+	}
+
+	useEffect(() => {
+		BackHandler.addEventListener("hardwareBackPress", backAction);
+
+		return () =>
+			BackHandler.removeEventListener("hardwareBackPress", backAction);
+	}, [])
 	console.log(location.pathname)
 
 	return (
