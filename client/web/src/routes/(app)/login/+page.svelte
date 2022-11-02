@@ -14,7 +14,9 @@
 </script>
 
 <section class="h-[100vh] w-[100vw] area-fade2 flex justify-center items-center">
-    <div class="shadow-2xl w-[350px] h-[500px] backdrop-blur-sm bg-white/30 rounded-3xl">
+    <div
+        data-aos="fade-up"
+        class="shadow-2xl w-[350px] h-[500px] backdrop-blur-sm bg-white/30 rounded-3xl">
         <form class="flex flex-col justify-center items-center h-full text-white" on:submit={handleSubmit}>
             <div class="">
                 <label class="block font-bold" for="name">Username</label>

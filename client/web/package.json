@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"aos": "^2.3.4",
 		"svelte-forms-lib": "^2.0.1"
 	}
 }
