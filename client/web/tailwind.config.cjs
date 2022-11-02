@@ -10,7 +10,10 @@ module.exports = {
 					'purple': '#695690',
 					'red': '#e02527',
 					'header': '#262729',
-					'button': '#6b727d'
+					'button': '#6b727d',
+					'blue2': '#4B67C6',
+					'purple2': '#4B67C6',
+					'red2': '#FF3F41'
 				}
 			}
 		}
