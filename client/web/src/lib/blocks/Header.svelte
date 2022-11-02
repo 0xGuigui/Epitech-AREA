@@ -11,7 +11,7 @@
 
 <svelte:window bind:scrollY/>
 
-<section class="bg-area-header py-3 shadow-xl flex justify-center items-center fixed top-O w-full transition-all duration-1000 px-5"
+<section class="bg-area-header py-3 shadow-xl flex justify-center items-center fixed top-O w-full transition-all duration-250 px-5"
         class:-translate-y-full={scrollY >= 300 && direction === 'down'}>
     <div class="flex justify-between items-center w-full">
         <a href="/" class="flex items-center">
