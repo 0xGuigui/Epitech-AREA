@@ -17,3 +17,9 @@ body {
 .area-fade {
     background-image: linear-gradient(to right top, #3a529e, #47529b, #515399, #5a5496, #615593, #715294, #814f93, #914a8f, #b03b83, #c9286c, #da194e, #e02527);
 }
+.area-fade2 {
+    background-image: linear-gradient(to right top, #3a519e, #3a519e, #3a519e, #3a519e, #3a519e, #534ea0, #694ba0, #7d469d, #a5388f, #c42878, #d8235a, #e03637);
+}
+.area-fade3 {
+    background-image: linear-gradient(to bottom, #373636, #3b3a3a, #3f3e3f, #434343, #474747, #4a4a4a, #4d4d4d, #505050, #525252, #555555, #575757, #5a5a5a);
+}

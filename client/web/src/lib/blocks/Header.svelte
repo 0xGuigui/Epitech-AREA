@@ -19,10 +19,10 @@
             <span class="text-xl font-bold dark:text-white">AREA</span>
         </a>
         <div class="flex items-center lg:order-2 text-white">
-            <a href="./src/routes/(app)/login/+page.svelte"
+            <a href="/login"
                class="font-bold mr-2 py-2 px-6 bg-area-button hover:bg-area-blue hover:scale-110 transition-all duration-150 rounded-lg">Log
                 in</a>
-            <a href="./src/routes/(app)/register/+page.svelte"
+            <a href="/register"
                class="font-bold ml-2 py-2 px-6 bg-area-button hover:bg-area-blue hover:scale-110 transition-all duration-150 rounded-lg">Register</a>
             <button>
                 <span></span>
