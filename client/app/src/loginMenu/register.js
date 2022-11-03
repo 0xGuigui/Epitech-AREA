@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {BackHandler, StyleSheet, Text, View} from "react-native";
 import {useNavigate} from "react-router-native";
-import {logUser, registerUser} from "./Services/server";
+import {logUser, registerUser} from "../services/server";
 import {Button, IconButton, TextInput} from "react-native-paper";
-import {isEmail} from './utils'
+import {isEmail} from '../utils'
 
 export default function Register() {
 	const [form, setForm] = useState({
@@ -117,7 +117,7 @@ export default function Register() {
 						const response = await registerUser(form)
 						if (response.status !== 200)
 							return alert(response.message)
-						alert('An email has been sent for email verification')
+						alert('An email has been sent for verification')
 						navigate('/login')
 					}}>
 					REGISTER

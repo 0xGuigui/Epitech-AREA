@@ -1,13 +1,14 @@
 import {StyleSheet, View} from 'react-native';
-import Login from './login';
-import Settings from './settings'
+import Login from './loginMenu/login';
+import Settings from './loginMenu/settings'
 import { useEffect, useState } from "react";
 import {Route, Routes, useNavigate} from "react-router-native";
-import AppComponent from "./AppComponent";
-import {getMe, refreshToken} from "./Services/server";
-import Register from "./register";
+import Main from "./main";
+import {getMe, refreshToken} from "./services/server";
+import Register from "./loginMenu/register";
+import Forgot from "./loginMenu/forgot";
 
-export default function App() {
+export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
 	const navigate = useNavigate()
 
@@ -16,9 +17,10 @@ export default function App() {
 		if (token.status === 200) {
 			const me = await getMe(token.token)
 			if (me.status === 200) {
-				navigate('/main')
+				return navigate('/main')
 			}
 		}
+		navigate('/login')
 	}
 
 	useEffect(() => {
@@ -28,10 +30,11 @@ export default function App() {
 	return (
 		<View style={styles.app}>
 			<Routes>
-				<Route exact path='/login' element={<Login setUserInfo={setUserInfo} />} />
-				<Route exact path='/register' element={<Register />} />
+				<Route path='/login' element={<Login setUserInfo={setUserInfo} />} />
+				<Route path='/register' element={<Register />} />
+				<Route path='/forgot' element={<Forgot />} />
 				<Route exact path="/settings" element={<Settings userInfo={userInfo} />} />
-				<Route path="*" element={<AppComponent userInfo={userInfo} />} />
+				<Route path="*" element={<Main userInfo={userInfo} />} />
 			</Routes>
 		</View>
 	);
