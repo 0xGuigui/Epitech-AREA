@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import {Link, redirect, useLinkPressHandler, useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, Switch, IconButton} from 'react-native-paper';
-import {getMe, logUser} from "./Services/server";
-const logo = require('./assets/logo/logo.png')
-const googleLogo = require('./assets/fonts/Google.ttf')
-const { serverUrl } = require('../config')
+import {getMe, logUser} from "../services/server";
+const logo = require('../assets/logo/logo.png')
+const googleLogo = require('../assets/fonts/Google.ttf')
+const { serverUrl } = require('../../config')
 
 export default function Login({ setUserInfo }) {
 	const [isDarkTheme, setIsDarkTheme] = useState(true);
@@ -50,7 +50,7 @@ export default function Login({ setUserInfo }) {
 					secureTextEntry
 				/>
 				<Pressable style={styles.forgotSection} onPress={() => {
-
+					navigate('/forgot')
 				}}>
 					<Text style={styles.forgot}>forgot password ?</Text>
 				</Pressable>
@@ -87,7 +87,7 @@ export default function Login({ setUserInfo }) {
 					mode="contained"
 					icon={({ size }) => (
 						<Image
-							source={require('./assets/icons/google.png')}
+							source={require('../assets/icons/google.png')}
 							style={{ width: size, height: size, borderRadius: size / 2 }}
 						/>
 					)}

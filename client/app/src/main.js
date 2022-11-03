@@ -4,7 +4,7 @@ import MainPage from './mainPage'
 import {useEffect} from "react";
 import {BackHandler} from "react-native";
 
-export default function AppComponent({ userInfo }) {
+export default function Main({ userInfo }) {
 	const location = useLocation()
 	const navigate = useNavigate()
 

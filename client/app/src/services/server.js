@@ -44,6 +44,21 @@ async function refreshToken() {
 	}
 }
 
+async function resetPassword(email) {
+	const response = await fetch(`${serverUrl}/reset-password`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({email})
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 async function getMe(token) {
 	const response = await fetch(`${serverUrl}/me`, {
 		headers: {
@@ -61,5 +76,6 @@ module.exports = {
 	logUser,
 	registerUser,
 	refreshToken,
+	resetPassword,
 	getMe
 }
