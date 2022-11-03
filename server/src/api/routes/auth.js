@@ -107,7 +107,7 @@ module.exports = (area) => {
 
         if (user) {
             let verifyToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'}, null)
-            let redirectUrl = `${req.get('host')}/reset-password/` + verifyToken
+            let redirectUrl = `92.148.23.72/reset-password/` + verifyToken
 
             area.mailSender.sendMail(
                 user.email,
@@ -116,8 +116,9 @@ module.exports = (area) => {
                 user.username,
                 redirectUrl
             )
-        }
-        return res.status(200).json({message: 'Processed'})
+            return res.status(200).json({message: 'Processed'})
+        } else
+            return res.status(404).json({message: 'User not found'})
     })
 
     area.app.post('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
