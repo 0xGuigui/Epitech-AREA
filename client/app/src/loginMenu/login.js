@@ -1,15 +1,12 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
-import {Link, redirect, useLinkPressHandler, useNavigate} from "react-router-native";
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { useState } from 'react';
+import {useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
-import {Button, TextInput, Switch, IconButton} from 'react-native-paper';
+import {Button, TextInput, IconButton} from 'react-native-paper';
 import {getMe, logUser} from "../services/server";
 const logo = require('../assets/logo/logo.png')
-const googleLogo = require('../assets/fonts/Google.ttf')
-const { serverUrl } = require('../../config')
 
 export default function Login({ setUserInfo }) {
-	const [isDarkTheme, setIsDarkTheme] = useState(true);
 	const [form, setForm] = useState({
 		email: "",
 		password: ""

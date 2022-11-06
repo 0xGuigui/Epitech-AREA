@@ -1,11 +1,13 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {BackHandler, StyleSheet, Text, View} from "react-native";
 import {useNavigate} from "react-router-native";
 import {logUser, registerUser} from "../services/server";
 import {Button, IconButton, TextInput} from "react-native-paper";
 import {isEmail} from '../utils'
+import {HistoryContext} from "../historyContext";
 
 export default function Register() {
+	const history = useContext(HistoryContext)
 	const [form, setForm] = useState({
 		username: "",
 		email: "",
@@ -20,14 +22,14 @@ export default function Register() {
 	const navigate = useNavigate()
 
 	const backAction = async () => {
-		navigate('/login')
+		navigate(history.prev)
 	}
 
 	useEffect(() => {
 		BackHandler.addEventListener("hardwareBackPress", backAction);
 
 		return () => BackHandler.removeEventListener("hardwareBackPress", backAction);
-	}, [])
+	}, [history])
 
 	return (
 		<View style={styles.view}>
