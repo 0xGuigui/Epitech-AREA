@@ -94,7 +94,7 @@ class AREA {
         }).exec()
         logger.debug("Admin user created, check your .env for credentials")
 
-        return this.app.listen(process.env.AREA_SERVER_PORT, callback)
+        return this.app.listen(process.env.PORT || process.env.AREA_SERVER_PORT, callback)
     }
 }
 

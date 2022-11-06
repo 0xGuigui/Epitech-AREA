@@ -19,11 +19,12 @@ services:
       - .env
     environment:
       - NODE_ENV=production
+      - PORT=3000
     volumes:
       - ./server:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - ${AREA_SERVER_PORT:?err}:${AREA_SERVER_PORT:?err}
+      - ${AREA_SERVER_PORT:?err}:3000
     depends_on:
       - mongodb
 
@@ -33,6 +34,6 @@ services:
     volumes:
       - ./client/web:/usr/src/app
     ports:
-      - ${AREA_WEB_CLIENT_PORT:?err}:${AREA_WEB_CLIENT_PORT:?err}
+      - ${AREA_WEB_CLIENT_PORT:?err}:3000
     depends_on:
       - area-server
