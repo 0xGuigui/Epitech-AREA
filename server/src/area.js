@@ -70,15 +70,21 @@ class AREA {
     }
 
     async connectToDB() {
-        return await mongoose.connect(this.config.dbURL, {
-            useNewUrlParser: true, useUnifiedTopology: true,
+        let mongoHost = process.env.NODE_ENV === "production" ? "area-mongo" : "localhost"
+        let mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${mongoHost}:${process.env.AREA_MONGO_PORT}`
+
+        logger.info(`Connecting to MongoDB at ${mongoUrl}`)
+        await mongoose.connect(mongoUrl, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         })
+        logger.success("Connected to MongoDB")
     }
 
     async start(callback) {
         let adminUserData = {
-            password: await hashPassword(this.config.adminPassword),
-            email: this.config.adminEmail,
+            password: await hashPassword(process.env.ADMIN_PASSWORD),
+            email: process.env.ADMIN_EMAIL,
             verified: true,
             admin: true,
         }
@@ -87,9 +93,9 @@ class AREA {
         await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
             upsert: true, setDefaultsOnInsert: true
         }).exec()
-        console.log(`To connect to the admin panel, use the following credentials:\n\tmail: ${this.config.adminEmail}\n\tpassword: ${this.config.adminPassword}\n`)
+        logger.debug("Admin user created, check your .env for credentials")
 
-        return this.app.listen(this.config.port, callback)
+        return this.app.listen(process.env.AREA_SERVER_PORT, callback)
     }
 }
 

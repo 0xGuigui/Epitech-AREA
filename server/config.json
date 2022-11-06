@@ -1,5 +1,16 @@
 {
   "baseConfig": [
-    "AREA_SERVER_PORT"
+    {
+      "name": "ADMIN_EMAIL",
+      "default": "admin@admin.admin"
+    },
+    {
+      "name": "ADMIN_PASSWORD",
+      "default": "admin"
+    },
+    "AREA_SERVER_PORT",
+    "MONGO_INITDB_ROOT_USERNAME",
+    "MONGO_INITDB_ROOT_PASSWORD",
+    "AREA_MONGO_PORT"
   ]
 }
