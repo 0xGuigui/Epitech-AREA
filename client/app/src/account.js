@@ -1,4 +1,4 @@
-export default function Account({userInfo}) {
+export default function Account({userInfo, setUserInfo}) {
 
 
 	return (

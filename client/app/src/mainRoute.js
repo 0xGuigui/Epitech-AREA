@@ -1,14 +1,14 @@
 import AppFooter from "./footer/footer";
 import {Route, Routes, useLocation, useNavigate} from "react-router-native";
-import MainPage from './mainPage'
+import MainPage from './mainPage/mainPage'
 import Account from "./account";
 
-export default function Main({ userInfo }) {
+export default function MainRoute({ userInfo, setUserInfo }) {
 	return (
 		<>
 			<Routes>
 				<Route path="/main" element={<MainPage userInfo={userInfo} />} />
-				<Route path="/account" element={<Account userInfo={userInfo}/>} />
+				<Route path="/account" element={<Account userInfo={userInfo} setUserInfo={setUserInfo}/>} />
 			</Routes>
 			<AppFooter userInfo={userInfo} />
 		</>

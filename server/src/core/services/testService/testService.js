@@ -10,7 +10,7 @@ module.exports = (area, servicesManager) => {
             await ctx.next()
         })
         .on('trigger', async (ctx) => {
-            // You can update stored variables
+            // You can update stored variablesch
             ctx.setActionData('triggerCount', ctx.getActionData('triggerCount') + 1)
 
             // If everything is ok, call next(), here the reactionTrigger

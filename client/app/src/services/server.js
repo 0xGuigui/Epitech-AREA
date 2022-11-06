@@ -72,10 +72,24 @@ async function getMe(token) {
 	}
 }
 
+async function getActions(token, page = 1) {
+	const response = await fetch(`${serverUrl}/me/actions?page=${page}`, {
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
 	refreshToken,
 	resetPassword,
-	getMe
+	getMe,
+	getActions
 }

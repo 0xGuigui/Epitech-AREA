@@ -3,7 +3,7 @@ import Login from './loginMenu/login';
 import Settings from './loginMenu/settings'
 import { useEffect, useState } from "react";
 import {Route, Routes, useLocation, useNavigate} from "react-router-native";
-import Main from "./main";
+import MainRoute from "./mainRoute";
 import {getMe, refreshToken} from "./services/server";
 import Register from "./loginMenu/register";
 import Forgot from "./loginMenu/forgot";
@@ -38,7 +38,7 @@ export default function Index() {
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
 					<Route exact path="/settings" element={<Settings userInfo={userInfo} />} />
-					<Route path="*" element={<Main userInfo={userInfo} />} />
+					<Route path="*" element={<MainRoute userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>
 		</HistoryProvider>
