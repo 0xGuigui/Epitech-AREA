@@ -1,15 +1,28 @@
 import {BackHandler, StyleSheet, Text, View} from "react-native";
 import {useNavigate} from "react-router-native";
-import {useContext, useEffect} from "react";
-import {HistoryContext} from "./historyContext";
+import {useContext, useEffect, useState} from "react";
+import {HistoryContext} from "../historyContext";
+import {getActions, getMe, refreshToken} from "../services/server";
 
 export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
 	const history = useContext(HistoryContext)
+	const [actions, setActions] = useState([])
 
 	const backAction = async () => {
 		navigate(history.prev)
 	}
+
+	const getUserActions = async () => {
+		const token = await refreshToken()
+		token.status !== 200 && navigate('/login')
+		const actions = await getActions(token.token)
+		actions.status !== 200 && navigate('/login')
+	}
+
+	useEffect(() => {
+		getUserActions()
+	}, [])
 
 	useEffect(() => {
 		BackHandler.addEventListener("hardwareBackPress", backAction);
@@ -20,7 +33,7 @@ export default function mainPage({userInfo}) {
 
 	return (
 		<View style={styles.mainSection}>
-			<Text style={styles.text}>Hello</Text>
+			<Text style={styles.text}>My Actions</Text>
 		</View>
 	)
 }
@@ -31,11 +44,11 @@ const styles = StyleSheet.create({
 		height: '100%',
 	},
 	text: {
-		bottom: 0,
-		top: 0,
-		left: 0,
-		right: 0,
-		fontSize: 50,
-		color: '#14e8c2'
+		fontSize: 40,
+		marginTop: '10%',
+		marginBottom: '10%',
+		marginRight: 'auto',
+		marginLeft: '3%',
+		color: '#FFFFFF'
 	}
 });
