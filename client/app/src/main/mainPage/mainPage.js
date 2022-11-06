@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import {HistoryContext} from "../../historyContext";
 import {getActions, getMe, refreshToken} from "../../services/server";
 import {Pressable} from "@react-native-material/core";
+import ActionDisplay from "./actionDisplay";
 
 export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
@@ -19,6 +20,7 @@ export default function mainPage({userInfo}) {
 		token.status !== 200 && navigate('/login')
 		const actions = await getActions(token.token)
 		actions.status !== 200 && navigate('/login')
+		setActions([...actions.actions, ...actions.actions, ...actions.actions, ...actions.actions])
 	}
 
 	useEffect(() => {
@@ -37,9 +39,11 @@ export default function mainPage({userInfo}) {
 			<Text style={styles.text}>My Actions</Text>
 			{actions.length > 0 ?
 				<View style={styles.actionsContainer}>
-					{actions.map(e => {
-
-					})}
+					{actions.map((e, i) =>
+						<>
+							<ActionDisplay key={i} action={e} style={styles.actions} textStyle={styles.actionsText} />
+						</>
+					)}
 				</View>
 				:
 				<View style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto', marginTop: '70%'}}>
@@ -67,8 +71,28 @@ const styles = StyleSheet.create({
 		color: '#FFFFFF'
 	},
 	actionsContainer: {
-		display: 'flex',
+		width: '100%',
+		flex: 1,
 		flexDirection: 'row',
-		width: '100%'
+		flexWrap: 'wrap',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	actions: {
+		width: '45%',
+		height: '20%',
+		borderWidth: 2,
+		borderRadius: 20,
+		borderColor: 'white',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		marginTop: '3%'
+	},
+	actionsText: {
+		color: 'white',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		marginTop: 'auto',
+		marginBottom: 'auto'
 	}
 });

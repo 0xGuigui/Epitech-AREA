@@ -1,14 +1,14 @@
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
+import {Pressable} from "@react-native-material/core";
 
-export default function ActionDisplay({action, style}) {
+export default function ActionDisplay({action, style, textStyle}) {
 
 
 	return (
-		<View style={{...style}}>
-		</View>
+		<Pressable style={{...style}}>
+			<Text style={{...textStyle}}>
+				{action.name}
+			</Text>
+		</Pressable>
 	)
 }
-
-const styles = StyleSheet.create({
-
-});
