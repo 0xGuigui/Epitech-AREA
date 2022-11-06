@@ -1,5 +1,5 @@
 const {Service, Action, Reaction} = require("../serviceComponents");
-const config = require('../../../config')
+const config = require('../../../../config')
 
 async function getRankById(id) {
 	const response = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${id}`, {
