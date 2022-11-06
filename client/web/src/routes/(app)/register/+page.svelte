@@ -107,7 +107,7 @@
                         <small data-aos="fade-right" data-aos-duration="500" class="block flex justify-center text-red-600 font-semibold">{$errors.confirmPassword}</small>
                     {/if}
                 </div>
-            <button class="flex font-bold justify-center my-10 w-full h-14 hover:bg-area-header bg-gray-500 text-white rounded-xl hover:scale-105 transition-all items-center" type="submit">Submit</button>
+            <button class="flex font-bold justify-center my-7 w-64 h-14 hover:bg-area-header bg-gray-500 text-white rounded-xl hover:scale-105 transition-all items-center" type="submit">Submit</button>
         </form>
     </div>
 </section>
