@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 	view: {
 		width: '100%',
 		height: '100%',
-		backgroundColor: '#212123',
+		backgroundColor: '#121313',
 	},
 	subView: {
 		marginTop: 'auto',
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
 	backButton: {
 		marginLeft: '2%',
 		marginRight:'auto',
-		marginTop: '8%'
+		marginTop: '12%'
 	},
 	errorText: {
 		color: '#d51c1c',

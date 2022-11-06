@@ -38,7 +38,7 @@ export default function Index() {
 					<Route path='/login' element={<Login setUserInfo={setUserInfo} />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
-					<Route exact path="/settings" element={<SettingsRoutes userInfo={userInfo}/>} />
+					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>
@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
 	app: {
 		width: '100%',
 		height: '100%',
-		backgroundColor: '#212123',
+		backgroundColor: '#121313',
 	}
 });
