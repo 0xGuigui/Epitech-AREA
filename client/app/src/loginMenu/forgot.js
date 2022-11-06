@@ -26,7 +26,7 @@ export default function Forgot() {
 	return (
 		<View style={styles.view}>
 			<IconButton
-				icon="arrow-left-bottom"
+				icon="arrow-left-thick"
 				iconColor="white"
 				size={24}
 				style={styles.backButton}
