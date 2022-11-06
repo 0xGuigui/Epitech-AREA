@@ -3,6 +3,7 @@ import {Route, Routes, useLocation, useNavigate} from "react-router-native";
 import MainPage from './mainPage/mainPage'
 import Account from "./account";
 import CreateArea from "./createArea/create";
+import ServerSelector from "../loginMenu/serverSelector";
 
 export default function MainRoute({ userInfo, setUserInfo }) {
 	return (

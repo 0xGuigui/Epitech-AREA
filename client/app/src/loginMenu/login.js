@@ -146,6 +146,6 @@ const styles = StyleSheet.create({
 	settingsButton: {
 		marginRight: '2%',
 		marginLeft:'auto',
-		marginTop: '8%',
+		marginTop: '15%',
 	}
 });

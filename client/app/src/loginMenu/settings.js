@@ -25,7 +25,8 @@ export default function Settings() {
 	return (
 		<View style={{ backgroundColor: colors.background }}>
 			<Appbar.Header theme={DarkTheme}>
-				<Appbar.Action icon="menu" color={'white'} onPress={() => {}} />
+				{/*<Appbar.Action icon="menu" color={'white'} onPress={() => {}} />*/}
+				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => { navigate('/login') }} />
 				<Appbar.Content title="Settings" titleStyle={{color: 'white'}} />
 			</Appbar.Header>
 			<ScrollView>
@@ -38,27 +39,34 @@ export default function Settings() {
 				{/*	textColor='#FFFFFF'*/}
 				{/*	onPress={() => console.log('Pressed')}>*/}
 				{/*</Button>*/}
-				<Divider/>
 				<Text
-					style={styles.clickableText} onPress={() => console.log("Coucou")}>
-					Platform
+					style={{...styles.titleText, paddingTop: 5}}>
+					Generals
 				</Text>
-				<Divider/>
+				<Divider />
 				<Text
-					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					style={styles.clickableText} onPress={() => navigate('/server')}>
 					Configure server
 				</Text>
-				<Divider/>
 				<Text
-					style={styles.clickableText} onPress={() => console.log("Coucou")}>
-					Keep me logged in
+					style={styles.titleText}>
+					Services
 				</Text>
 				<Divider/>
 				<Text
 					style={styles.clickableText} onPress={() => console.log("Coucou")}>
-					Reset Password
+					Enable/Disable services
+				</Text>
+				<Divider />
+				<Text
+					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					Connect to a service
 				</Text>
 				<Divider/>
+				<Text
+					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					Disconnect from a service
+				</Text>
 				<Text style={styles.endOfScroll}>
 				</Text>
 			</ScrollView>
@@ -76,7 +84,7 @@ const DarkTheme = {
 		primary: '#9a5373',
 		accent: '#f1c40f',
 		background: '#2c3e50',
-		surface: '#303038',
+		surface: '#121313',
 		text: '#ecf0f1',
 		textColor: '#ecf0f1',
 		disabled: '#ecf0f1',
@@ -92,15 +100,21 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		margin: 0,
 		padding: 20,
-		backgroundColor: "#303038",
+		backgroundColor: "#1e1f1f",
 		color: 'white'
-	},
-	scrollBackgroundColor: {
-		backgroundColor: "#303038",
 	},
 	endOfScroll: {
 		padding: Platform.OS === 'ios' ? 100 : 50,
-		color: "#303038",
-		backgroundColor: "#303038",
-	}
+		color: "#121313",
+		backgroundColor: "#121313",
+	},
+	titleText: {
+		color: '#dfdfde',
+		fontSize: 20,
+		textAlign: 'left',
+		backgroundColor: "#121313",
+		paddingTop: 75,
+		paddingBottom: 20,
+		padding: 20,
+	},
 });
