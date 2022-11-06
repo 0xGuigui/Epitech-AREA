@@ -1,16 +1,14 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
-const {Buffer} = require("buffer");
-const config = require("../../../../config")
-const {spotifyClientId} = require("../../../../config");
+const {Buffer} = require("buffer")
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://accounts.spotify.com/api/token`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Basic ' + (Buffer.from(config.spotifyClientId + ':' + config.spotifyClientSecret).toString('base64'))
+			'Authorization': 'Basic ' + (Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
 		},
-		body: `code=${code}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(config.spotifyRedirectUri)}&client_id=${config.spotifyClientId}`
+		body: `code=${code}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(process.env.SPOTIFY_REDIRECT_URI)}&client_id=${process.env.SPOTIFY_CLIENT_ID}`
 	})
 	return await response.json()
 }
@@ -20,9 +18,9 @@ async function getAccessToken(refresh_token) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Basic ' + (Buffer.from(config.spotifyClientId + ':' + config.spotifyClientSecret).toString('base64'))
+			'Authorization': 'Basic ' + (Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
 		},
-		body: `grant_type=refresh_token&client_id=${spotifyClientId}&refresh_token=${refresh_token}`
+		body: `grant_type=refresh_token&client_id=${process.env.SPOTIFY_CLIENT_ID}&refresh_token=${refresh_token}`
 	})
 	return await response.json()
 }

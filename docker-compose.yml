@@ -13,11 +13,15 @@ services:
 
   area-server:
     build: server
+    command: node server.js
     container_name: area-server
     env_file:
       - .env
     environment:
       - NODE_ENV=production
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - ${AREA_SERVER_PORT:?err}:${AREA_SERVER_PORT:?err}
     depends_on:

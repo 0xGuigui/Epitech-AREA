@@ -1,14 +1,13 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
-const config = require("../../../../config")
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://www.reddit.com/api/v1/access_token`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `basic ${Buffer.from(config.redditClientId + ':' + config.redditClientSecret).toString('base64')}`
+			'Authorization': `basic ${Buffer.from(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_CLIENT_SECRET).toString('base64')}`
 		},
-		body: `grant_type=authorization_code&code=${code}&redirect_uri=${config.redditRedirectUri}`
+		body: `grant_type=authorization_code&code=${code}&redirect_uri=${process.env.REDDIT_REDIRECT_URI}`
 	})
 	return await response.json()
 }
@@ -18,7 +17,7 @@ async function getAccessToken(refresh_token) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `basic ${Buffer.from(config.redditClientId + ':' + config.redditClientSecret).toString('base64')}`
+			'Authorization': `basic ${Buffer.from(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_CLIENT_SECRET).toString('base64')}`
 		},
 		body: `grant_type=refresh_token&refresh_token=${refresh_token}`
 	})

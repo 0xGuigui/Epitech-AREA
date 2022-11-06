@@ -1,13 +1,14 @@
 const logger = require('node-color-log')
+const path = require('path')
 
 module.exports.initEnv = () => {
-    require('dotenv').config({ path: '../../.env' })
+    require('dotenv').config({ path: path.join(__dirname, '../../.env') })
 }
 
 module.exports.checkEnvConfig = (config, exitOnError) => {
     let errors = []
 
-    Object.entries(config).forEach(([key, value]) => {
+    Object.entries(config).forEach(([_, value]) => {
         let matched = false;
 
         if (typeof value === 'object' && value.name && value.default) {
