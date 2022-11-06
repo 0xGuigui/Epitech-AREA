@@ -12,7 +12,7 @@
 <svelte:window bind:scrollY/>
 
 <section class="bg-area-header py-3 shadow-xl flex justify-center items-center fixed top-O w-full transition-all duration-250 px-5"
-        class:-translate-y-full={scrollY >= 300 && direction === 'down'}>
+        class:-translate-y-full={scrollY >= 10 && direction === 'down'}>
     <div class="flex justify-between items-center w-full">
         <a href="/" class="flex items-center">
             <img src="./logo-area.png" class="mr-2 h-6 sm:h-8 hover:scale-110 duration-150" alt="area_logo"/>
