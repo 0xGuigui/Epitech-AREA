@@ -1,5 +1,5 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
-const config = require('../../../config')
+const config = require('../../../../config')
 
 async function getId(profileUrl) {
 	const profileId = profileUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:steamcommunity.com\/(?:profiles|id)\/)([a-zA-Z0-9]+)/)

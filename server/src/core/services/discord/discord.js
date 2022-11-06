@@ -1,5 +1,5 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
-const config = require("../../../config")
+const config = require("../../../../config")
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://discord.com/api/oauth2/token`, {
