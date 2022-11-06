@@ -1,6 +1,6 @@
 import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, IconButton} from 'react-native-paper';
-import {getMe, logUser} from "../services/server";
+import {getMe, logUser} from "../../services/server";
 import { Appbar, MD3DarkTheme, MD3LightTheme, Divider } from 'react-native-paper';
 import {ScrollView, useColorScheme, BackHandler, Animated, Platform, View, Text, StyleSheet, Image} from "react-native";
 import { useNavigate } from "react-router-native";

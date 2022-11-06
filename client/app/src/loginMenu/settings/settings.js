@@ -45,7 +45,7 @@ export default function Settings() {
 				</Text>
 				<Divider />
 				<Text
-					style={styles.clickableText} onPress={() => navigate('/server')}>
+					style={styles.clickableText} onPress={() => navigate('/settings/server')}>
 					Configure server
 				</Text>
 				<Text
