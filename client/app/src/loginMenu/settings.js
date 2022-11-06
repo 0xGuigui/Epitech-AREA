@@ -1,29 +1,13 @@
 import * as React from 'react';
-import {Appbar, MD3DarkTheme, MD3LightTheme, withTheme, List, MD3Colors} from 'react-native-paper';
-import {FlatList, ScrollView, Text, useColorScheme, View, StyleSheet, BackHandler} from "react-native";
-import {Colors} from "react-native/Libraries/NewAppScreen";
+import { Appbar, MD3DarkTheme, MD3LightTheme, Divider } from 'react-native-paper';
+import {ScrollView, Text, useColorScheme, View, StyleSheet, BackHandler, Animated, Platform} from "react-native";
 import { useNavigate } from "react-router-native";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
-const Section = ({children, title}) => {
-	const isDarkMode = useColorScheme() === 'dark';
-	return (
-		<View style={styles.sectionContainer}>
-			<Text
-				style={[
-					styles.sectionTitle,
-					{
-						color: isDarkMode ? Colors.white : Colors.black,
-					},
-				]}>
-				{title}
-			</Text>
-		</View>
-	);
-};
+export const isAndroid = Platform.OS === 'android';
+export const isIOS = Platform.OS === 'ios';
 
-
-export default function Settings({userInfo}) {
+export default function Settings() {
 	let theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
 	const navigate = useNavigate();
 	const { colors } = theme;
@@ -37,6 +21,7 @@ export default function Settings({userInfo}) {
 		return () =>
 			BackHandler.removeEventListener("hardwareBackPress", backAction);
 	}, [])
+
 	return (
 		<View style={{ backgroundColor: colors.background }}>
 			<Appbar.Header theme={DarkTheme}>
@@ -44,63 +29,38 @@ export default function Settings({userInfo}) {
 				<Appbar.Content title="Settings" titleStyle={{color: 'white'}} />
 			</Appbar.Header>
 			<ScrollView>
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Back" onPress={() => {*/}
-				{/*	navigate('/');*/}
-				{/*}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
-				{/*<Section title="Server Settings" onPress={() => {}}/>*/}
+				{/*<Button*/}
+				{/*	mode="text"*/}
+				{/*	buttonColor="#303038"*/}
+				{/*	theme={{*/}
+				{/*		roundness: 0,*/}
+				{/*	}}*/}
+				{/*	textColor='#FFFFFF'*/}
+				{/*	onPress={() => console.log('Pressed')}>*/}
+				{/*</Button>*/}
+				<Divider/>
+				<Text
+					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					Platform
+				</Text>
+				<Divider/>
+				<Text
+					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					Configure server
+				</Text>
+				<Divider/>
+				<Text
+					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					Keep me logged in
+				</Text>
+				<Divider/>
+				<Text
+					style={styles.clickableText} onPress={() => console.log("Coucou")}>
+					Reset Password
+				</Text>
+				<Divider/>
+				<Text style={styles.endOfScroll}>
+				</Text>
 			</ScrollView>
 
 		</View>
@@ -127,11 +87,20 @@ const DarkTheme = {
 };
 
 const styles = StyleSheet.create({
-	sectionContainer: {
-		marginTop: 25,
-		paddingHorizontal: 20,
-	},
-	sectionTitle: {
+	clickableText: {
+		textAlign: 'left',
 		fontSize: 14,
+		margin: 0,
+		padding: 20,
+		backgroundColor: "#303038",
+		color: 'white'
 	},
+	scrollBackgroundColor: {
+		backgroundColor: "#303038",
+	},
+	endOfScroll: {
+		padding: Platform.OS === 'ios' ? 100 : 50,
+		color: "#303038",
+		backgroundColor: "#303038",
+	}
 });
