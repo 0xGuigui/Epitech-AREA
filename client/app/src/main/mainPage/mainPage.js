@@ -1,8 +1,9 @@
 import {BackHandler, StyleSheet, Text, View} from "react-native";
 import {useNavigate} from "react-router-native";
 import {useContext, useEffect, useState} from "react";
-import {HistoryContext} from "../historyContext";
-import {getActions, getMe, refreshToken} from "../services/server";
+import {HistoryContext} from "../../historyContext";
+import {getActions, getMe, refreshToken} from "../../services/server";
+import {Pressable} from "@react-native-material/core";
 
 export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
@@ -34,6 +35,20 @@ export default function mainPage({userInfo}) {
 	return (
 		<View style={styles.mainSection}>
 			<Text style={styles.text}>My Actions</Text>
+			{actions.length > 0 ?
+				<View style={styles.actionsContainer}>
+					{actions.map(e => {
+
+					})}
+				</View>
+				:
+				<View style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto', marginTop: '70%'}}>
+					<Text style={{color: 'white', fontSize: 20, marginLeft: 'auto', marginRight: 'auto'}}>No actions found</Text>
+					<Pressable onPress={() => navigate('/create')}>
+						<Text style={{color: '#107dc7', fontSize: 20, marginLeft: 'auto', marginRight: 'auto', textDecorationLine: 'underline'}}>Create one</Text>
+					</Pressable>
+				</View>
+			}
 		</View>
 	)
 }
@@ -50,5 +65,10 @@ const styles = StyleSheet.create({
 		marginRight: 'auto',
 		marginLeft: '3%',
 		color: '#FFFFFF'
+	},
+	actionsContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		width: '100%'
 	}
 });
