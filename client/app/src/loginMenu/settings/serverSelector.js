@@ -1,10 +1,8 @@
-import { Pressable } from "@react-native-material/core";
-import {Button, TextInput, IconButton} from 'react-native-paper';
-import {getMe, logUser} from "../../services/server";
-import { Appbar, MD3DarkTheme, MD3LightTheme, Divider } from 'react-native-paper';
-import {ScrollView, useColorScheme, BackHandler, Animated, Platform, View, Text, StyleSheet, Image} from "react-native";
+import {Button, TextInput} from 'react-native-paper';
+import { Appbar, MD3LightTheme } from 'react-native-paper';
+import {BackHandler, View} from "react-native";
 import { useNavigate } from "react-router-native";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
 import {isIpDomain, isPort} from "../../utils";
 
