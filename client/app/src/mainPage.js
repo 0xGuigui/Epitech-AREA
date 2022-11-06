@@ -1,12 +1,14 @@
 import {BackHandler, StyleSheet, Text, View} from "react-native";
 import {useNavigate} from "react-router-native";
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
+import {HistoryContext} from "./historyContext";
 
 export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
+	const history = useContext(HistoryContext)
 
 	const backAction = async () => {
-		navigate('/login')
+		navigate(history.prev)
 	}
 
 	useEffect(() => {
@@ -14,7 +16,7 @@ export default function mainPage({userInfo}) {
 
 		return () =>
 			BackHandler.removeEventListener("hardwareBackPress", backAction);
-	}, [])
+	}, [history])
 
 	return (
 		<View style={styles.mainSection}>
