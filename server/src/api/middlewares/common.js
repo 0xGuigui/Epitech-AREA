@@ -2,7 +2,6 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
-const config = require('../../../config')
 
 module.exports = (area) => {
     // parse application/x-www-form-urlencoded
@@ -30,7 +29,7 @@ module.exports = (area) => {
             return res.status(401).json({message: 'No token provided'})
         }
         const rawToken = token.split(' ')[1]
-        jwt.verify(rawToken, config.jwtAccessSecret, {}, (err, decoded) => {
+        jwt.verify(rawToken, process.env.JWT_ACCESS_SECRET, {}, (err, decoded) => {
             if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
                 return res.status(401).json({message: 'Unauthorized'})
             }

@@ -10,7 +10,7 @@ module.exports = class MailSender {
     templates = {}
     failedEmails = {}
 
-    constructor(config = {}) {
+    constructor() {
         let templatesDir = path.join(__dirname, '../../mailTemplates');
 
         fs.readdirSync(templatesDir).forEach(file => {
@@ -20,10 +20,10 @@ module.exports = class MailSender {
         })
 
         this.transporter = nodemailer.createTransport({
-            service: config.mailService,
+            service: process.env.MAIL_SERVICE,
             auth: {
-                user: config.mailUser,
-                pass: config.mailPass
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_PASSWORD
             }
         })
 

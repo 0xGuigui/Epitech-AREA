@@ -8,9 +8,44 @@
       "name": "ADMIN_PASSWORD",
       "default": "admin"
     },
+    {
+      "name": "MAIL_SERVICE",
+      "default": "gmail"
+    },
+    "MAIL_USER",
+    "MAIL_PASSWORD",
     "AREA_SERVER_PORT",
     "MONGO_INITDB_ROOT_USERNAME",
     "MONGO_INITDB_ROOT_PASSWORD",
-    "AREA_MONGO_PORT"
+    "AREA_MONGO_PORT",
+    "JWT_SECRET",
+    "JWT_ACCESS_SECRET",
+    "JWT_REFRESH_SECRET"
+  ],
+  "Steam": [
+    "STEAM_TOKEN"
+  ],
+  "Discord": [
+    "DISCORD_CLIENT_ID",
+    "DISCORD_CLIENT_SECRET",
+    "DISCORD_REDIRECT_URI"
+  ],
+  "Twitch": [
+    "TWITCH_CLIENT_ID",
+    "TWITCH_CLIENT_SECRET",
+    "TWITCH_REDIRECT_URI"
+  ],
+  "Spotify": [
+    "SPOTIFY_CLIENT_ID",
+    "SPOTIFY_CLIENT_SECRET",
+    "SPOTIFY_REDIRECT_URI"
+  ],
+  "League of Legends": [
+    "RIOT_TOKEN"
+  ],
+  "Reddit": [
+    "REDDIT_CLIENT_ID",
+    "REDDIT_CLIENT_SECRET",
+    "REDDIT_REDIRECT_URI"
   ]
 }

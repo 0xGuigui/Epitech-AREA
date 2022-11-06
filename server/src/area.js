@@ -37,35 +37,34 @@ class AREA {
         this.jwtDenyList = new JwtDenyList()
 
         // Instantiate email sender
-        // @TODO: update with new config
-        this.mailSender = new MailSender({})
+        this.mailSender = new MailSender()
     }
 
     checkConfig() {
+        let config = require('../config.json')
         let serviceCount = 0
         let erroredServicesCount = 0
 
-        configLoader.checkEnvConfig(require('../config.json').baseConfig, true);
+        configLoader.checkEnvConfig(config.baseConfig, true);
         logger.success("Server environment variables successfully loaded")
         this.servicesManager.getServices().forEach(service => {
             serviceCount++
-            if (service.envConfig) {
-                let errors = configLoader.checkEnvConfig(service.envConfig, false);
+            if (config[service.name]) {
+                let errors = configLoader.checkEnvConfig(config[service.name], false);
 
                 if (errors.length > 0) {
                     service.disable()
                     erroredServicesCount++
                     logger.warn(`${service.name} service has been disabled because of missing variables:`)
-                    errors.forEach(error => console.log(error))
-                    process.exit(1)
+                    errors.forEach(error => logger.warn(error))
                 }
             }
         })
 
         if (erroredServicesCount > 0) {
-            logger.warn(`${erroredServicesCount} service(s) have been disabled because of missing variables.`)
+            logger.warn(`${erroredServicesCount} service(s) out of ${serviceCount} have been disabled because of missing variables.`)
         } else {
-            logger.info(`${serviceCount} services out of ${serviceCount} have been loaded.`)
+            logger.info(`${serviceCount} services out of ${serviceCount} have been loaded`)
         }
     }
 
