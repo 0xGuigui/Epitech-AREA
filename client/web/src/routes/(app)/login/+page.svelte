@@ -1,10 +1,8 @@
 <script>
     import config from "../../../config.js"
     import {createForm} from "svelte-forms-lib";
-    import * as yup from "yup";
 
-    const makeRequest = () => new Promise(resolve => setTimeout(resolve, 1000));
-
+    let errs = {};
     async function logUser(form) {
         const response = await fetch(`${config.serverUrl}/login`, {
             method: 'POST',
@@ -26,7 +24,6 @@
             password: ""
         },
         validate: values => {
-            let errs = {};
             if (values.email === "") {
                 errs["email"] = "Email is required";
             }
