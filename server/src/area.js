@@ -1,7 +1,7 @@
 const path = require('path')
 const mongoose = require('mongoose')
 const express = require('express')
-const config = require('./config')
+const config = require('../config')
 const {dynamicLoader, loadFile} = require('./utils/dynamicLoader')
 const {hashPassword} = require('./utils/passwordHashing')
 const JwtDenyList = require('./core/jwtDenyList')
@@ -38,12 +38,11 @@ class AREA {
     }
 
     checkConfig() {
-        if (!this.config.jwtAccessSecret || !this.config.jwtRefreshSecret || !this.config.jwtSecret) {
-            throw new Error('Missing JWT secret/s')
-        }
-        if (!this.config.mailUser || !this.config.mailPass) {
-            throw new Error('Missing mail credential/s')
-        }
+        Object.entries(this.config).forEach(([key, value]) => {
+            if (value === undefined) {
+                throw new Error(`Missing config field: ${key}`)
+            }
+        })
     }
 
     async connectToDB() {

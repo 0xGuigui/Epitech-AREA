@@ -1,14 +1,47 @@
 <script>
+    import config from "../../../config.js"
     import {createForm} from "svelte-forms-lib";
+    import * as yup from "yup";
 
-    const {form, handleChange, handleSubmit} = createForm({
+    const makeRequest = () => new Promise(resolve => setTimeout(resolve, 1000));
+
+    async function logUser(form) {
+        const response = await fetch(`${config.serverUrl}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(form)
+        })
+        const json = await response.json()
+        return {
+            status: response.status,
+            ...json
+        }
+    }
+    localStorage.setItem('JWT_tokens', JSON.stringify('value'));
+    const {form, errors, handleChange, handleSubmit} = createForm({
         initialValues: {
-            title: "",
-            name: "",
-            email: ""
+            email: "",
+            password: ""
         },
-        onSubmit: values => {
-            alert(JSON.stringify(values));
+        validate: values => {
+            let errs = {};
+            if (values.email === "") {
+                errs["email"] = "Email is required";
+            }
+            if (values.password === "") {
+                errs["password"] = "Password is required";
+            }
+            return errs;
+        },
+        onSubmit: async values => {
+            const response = await logUser(values);
+            if (response.status === 401)
+                errs["email"] = "Email or password is invalid";
+            else
+                window.location="/";
+            console.log(response);
         }
     });
 </script>
@@ -17,26 +50,35 @@
     <div
         data-aos="fade-up"
         class="shadow-2xl w-[350px] h-[500px] backdrop-blur-sm bg-white/30 rounded-3xl">
-        <form class="flex flex-col justify-center items-center h-full text-white" on:submit={handleSubmit}>
-            <div class="">
-                <label class="block font-bold" for="name">Username</label>
-                <input
-                        id="name"
-                        name="name"
-                        on:change={handleChange}
-                        bind:value={$form.name}
-                />
-            </div>
-            <div class="my-5">
-                <label class="block font-bold" for="email">Email</label>
-                <input
-                        id="email"
-                        name="email"
-                        on:change={handleChange}
-                        bind:value={$form.email}
-                />
-            </div>
-            <button class="font-bold my-5 mr-2 py-2 px-6 bg-area-button hover:bg-area-blue hover:scale-110 transition-all duration-150 rounded-lg" type="submit">Submit</button>
+        <form class="flex flex-col justify-center items-center h-full" on:submit={handleSubmit}>
+            <h1 class="flex my-5 justify-center text-4xl font-bold text-white">Login</h1>
+                <div class="">
+                    <label class="block font-bold text-white" for="email">Email</label>
+                    <input class="rounded shadow-2xl"
+                            id="email"
+                            name="email"
+                            on:change={handleChange}
+                            bind:value={$form.email}
+                    />
+                    {#if $errors.email}
+                        <small data-aos="fade-right" data-aos-duration="500" class="block flex justify-center text-red-600 font-semibold">{$errors.email}</small>
+                    {/if}
+                </div>
+                <div class="my-5">
+                    <label class="block font-bold text-white" for="password">Password</label>
+                    <input class="rounded"
+                            id="password"
+                            name="password"
+                            on:change={handleChange}
+                            bind:value={$form.password}
+                            type="password"
+                    />
+                    {#if $errors.password}
+                        <small data-aos="fade-right" data-aos-duration="500" class="block flex justify-center text-red-600 font-semibold">{$errors.password}</small>
+                    {/if}
+                    <a class="block flex justify-center my-0.5 font-bold text-area-header hover:underline" href="/">Forgot password</a>
+                </div>
+            <button class="font-bold my-5 mr-2 py-2 px-6 bg-area-button hover:bg-area-header hover:scale-110 transition-all duration-150 rounded-lg text-white" type="submit">Submit</button>
         </form>
     </div>
 </section>

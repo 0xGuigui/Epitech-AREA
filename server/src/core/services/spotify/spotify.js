@@ -1,7 +1,7 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 const {Buffer} = require("buffer");
-const config = require("../../../config")
-const {spotifyClientId} = require("../../../config");
+const config = require("../../../../config")
+const {spotifyClientId} = require("../../../../config");
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://accounts.spotify.com/api/token`, {
