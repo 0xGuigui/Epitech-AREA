@@ -38,7 +38,7 @@ module.exports = (area) => {
     })
 
     area.app.get('/register/:token', async (req, res) => {
-        jwt.verify(req.params.token, area.config.jwtSecret, {}, (err, decoded) => {
+        jwt.verify(req.params.token, process.env.JWT_SECRET, {}, (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Invalid token'})
             }
@@ -65,15 +65,15 @@ module.exports = (area) => {
             username: req.body.username,
             admin: user.admin
         }
-        let accessToken = jwt.sign(payload, area.config.jwtAccessSecret, {expiresIn: '5m'}, null)
+        let accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '5m'}, null)
 
-        jwt.sign(payload, area.config.jwtRefreshSecret, {expiresIn: '3h'}, (err, refreshToken) => {
+        jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: '3h'}, (err, refreshToken) => {
             if (err) {
                 return res.status(500).send({error: 'Internal server error'})
             }
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
-                secure: area.config.env === 'production',
+                secure: process.env.NODE_ENV === 'production',
                 maxAge: 3 * 60 * 60 * 1000
             });
             res.status(200).send({token: accessToken})
@@ -85,7 +85,7 @@ module.exports = (area) => {
             return res.status(401).json({message: 'Unauthorized'})
         }
 
-        jwt.verify(req.cookies.jwt, area.config.jwtRefreshSecret, {}, async (err, decoded) => {
+        jwt.verify(req.cookies.jwt, process.env.JWT_REFRESH_SECRET, {}, async (err, decoded) => {
             if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
                 return res.status(401).json({message: 'Unauthorized'});
             }
@@ -95,7 +95,7 @@ module.exports = (area) => {
                 userId: user.id,
                 username: user.username,
                 admin: user.admin,
-            }, area.config.jwtAccessSecret, {
+            }, process.env.JWT_ACCESS_SECRET, {
                 expiresIn: '5m'
             }, null);
             return res.json({token: accessToken});
@@ -122,7 +122,7 @@ module.exports = (area) => {
     })
 
     area.app.post('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
-        jwt.verify(req.params.token, area.config.jwtSecret, {}, async (err, decoded) => {
+        jwt.verify(req.params.token, process.env.JWT_SECRET, {}, async (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Invalid token'})
             }

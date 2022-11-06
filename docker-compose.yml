@@ -26,8 +26,6 @@ services:
   area-web-client:
     build: client/web
     container_name: area-web-client
-    env_file:
-      - .env
     volumes:
       - ./client/web:/usr/src/app
     ports:
