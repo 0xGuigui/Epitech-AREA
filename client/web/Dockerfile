@@ -1,19 +1,11 @@
-FROM node:14-alpine
+FROM node:19
 
-# Maintainer: Guilhem Jéhanno <guilhem.jeh@gmail.com>
+WORKDIR /usr/src/app
 
-# Create app directory
-WORKDIR /client_web
+COPY package.json package-lock.json ./
 
-# Install app dependencies
-COPY package*.json ./
-
-RUN npm install
-
-# Bundle app source
+RUN npm ci
 COPY . .
+RUN npm run build
 
-EXPOSE 8081
-ENV HOST=0.0.0.0
-
-CMD [ "npm", "run", "build" ]
+CMD npm rebuild esbuild && npm run dev -- --host

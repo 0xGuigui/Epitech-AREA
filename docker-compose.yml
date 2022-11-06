@@ -1,35 +1,33 @@
-version: "3.7"
+version: ^3.8
+
 services:
-#  server:
-#    build: server/
-#    image: server:tag
-#    container_name: server
-#    command: "node index.js"
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - "mongo"
-#
-#  mongo:
-#    image: "mongo"
-#    container_name: mongo
-#    ports:
-#      - "27017:27017"
+  mongodb:
+    image: mongo:4.4.6
+    container_name: area-mongo
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
 
-  client_mobile:
-    build: client/app/
-    image: client_mobile:tag
-    container_name: client_mobile
-    command: "flutter build apk"
+  area-server:
+    build: server
+    container_name: area-server
+    env_file:
+      - .env
+    ports:
+      - ${AREA_SERVER_PORT}:${AREA_SERVER_PORT}
+    depends_on:
+      - mongodb
 
-#  client_web:
-#    build: client/web/
-#    image: client_web:tag
-#    container_name: client_web
-#    command: "npm run dev --port 8081"
-#    ports:
-#      - "8081:8081"
-#    environment:
-#      - NODE_ENV=development
-#      - PORT=8081
-#      - HOST=0.0.0.0
+  area-web-client:
+    build: client/web
+    container_name: area-web-client
+    env_file:
+      - .env
+    volumes:
+      - ./client/web:/usr/src/app
+    ports:
+      - ${AREA_WEB_CLIENT_PORT}:${AREA_WEB_CLIENT_PORT}
+    depends_on:
+      - area-server
