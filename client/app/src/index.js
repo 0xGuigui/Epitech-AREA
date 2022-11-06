@@ -1,13 +1,14 @@
 import {StyleSheet, View} from 'react-native';
 import Login from './loginMenu/login';
-import Settings from './loginMenu/settings'
+import Settings from './loginMenu/settings/settings'
 import { useEffect, useState } from "react";
 import {Route, Routes, useLocation, useNavigate} from "react-router-native";
-import MainRoute from "./main/mainRoute";
+import MainRoutes from "./main/mainRoutes";
 import {getMe, refreshToken} from "./services/server";
 import Register from "./loginMenu/register";
 import Forgot from "./loginMenu/forgot";
 import {HistoryProvider} from "./historyContext";
+import SettingsRoutes from "./loginMenu/settings/settingsRoutes";
 
 export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
@@ -37,8 +38,8 @@ export default function Index() {
 					<Route path='/login' element={<Login setUserInfo={setUserInfo} />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
-					<Route exact path="/settings" element={<Settings userInfo={userInfo} />} />
-					<Route path="*" element={<MainRoute userInfo={userInfo} setUserInfo={setUserInfo} />} />
+					<Route exact path="/settings" element={<SettingsRoutes userInfo={userInfo}/>} />
+					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>
 		</HistoryProvider>
