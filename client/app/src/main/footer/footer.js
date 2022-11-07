@@ -27,7 +27,7 @@ export default function AppFooter() {
 		<View style={styles.footerContainer}>
 			{buttonsConfig.map((e, i) => {
 				return (
-					<View key={i} style={{...styles.buttonView, backgroundColor: location.pathname === e.path ? '#3b3b3d' : 'transparent'}}>
+					<View key={i} style={{...styles.buttonView, backgroundColor: location.pathname === e.path ? '#2e2e31' : 'transparent'}}>
 						<IconButton
 							key={i}
 							iconColor='white'
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '10%',
 		position: 'absolute',
-		backgroundColor: '#212123',
+		backgroundColor: '#121313',
 		bottom: 0,
 		left: 0,
 		right: 0,

@@ -4,7 +4,6 @@ import {useLocation, useNavigate} from "react-router-native";
 export const HistoryContext = createContext()
 
 export const HistoryProvider = ({ children }) => {
-	const navigate = useNavigate()
 	const location = useLocation()
 	const [history, setHistory] = useState({
 		path: location.pathname,
