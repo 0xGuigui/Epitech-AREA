@@ -181,7 +181,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newCommentAction = new Action('newSaved', 'new comment by you')
+	const newCommentAction = new Action('newComment', 'new comment by you')
 		.on('create', async ctx => {
 			const refreshTokenData = await getRefreshToken(ctx.payload.reddit_code)
 			const commentListData = await getComments(refreshTokenData.access_token)
@@ -199,7 +199,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newPostAction = new Action('newSaved', 'new post by you')
+	const newPostAction = new Action('newPost', 'new post by you')
 		.on('create', async ctx => {
 			const refreshTokenData = await getRefreshToken(ctx.payload.reddit_code)
 			const postListData = await getPosts(refreshTokenData.access_token)
