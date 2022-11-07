@@ -114,6 +114,8 @@ module.exports = (area, servicesManager) => {
 		return refreshTokenData.refresh_token
 	})
 
+	redditService.setCheckToken(async token => await getAccessToken(token))
+
 	const avatarChangeAction = new Action('avatarChange', 'when you change your avatar')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])

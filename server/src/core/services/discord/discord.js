@@ -75,7 +75,8 @@ async function saveRefreshToken(refresh_token, userId, serviceName, ctx) {
 		.findById(userId)
 		.exec()
 	user.data[serviceName] = refresh_token
-	ctx.actionData.user.data[discordService.name] = refresh_token
+	if (ctx)
+		ctx.actionData.user.data[discordService.name] = refresh_token
 	await user.save()
 }
 
@@ -85,6 +86,13 @@ module.exports = (area, servicesManager) => {
 	discordService.setAuthentification(async (code) => {
 		const refreshData = await getRefreshToken(code)
 		return refreshData.refresh_token
+	})
+
+	discordService.checkToken(async (token, userId) => {
+		const accessTokenData = await getAccessToken(token)
+		if (accessTokenData?.refresh_token)
+			await saveRefreshToken(accessTokenData?.refresh_token, userId, discordService.name)
+		return accessTokenData
 	})
 
 	const avatarChangeAction = new Action('avatarChange', 'when you change your avatar')

@@ -37,6 +37,7 @@ class Service {
         this.actions = [];
         this.reactions = [];
         this.authenticate = (code) => null
+        this.checkToken = (token) => null
     }
 
     addAction(...actions) {
@@ -72,6 +73,12 @@ class Service {
     setAuthentification(authFunction) {
         if (authFunction instanceof Function) {
             this.authenticate = authFunction
+        }
+    }
+
+    setCheckToken(checkFunction) {
+        if (checkFunction instanceof Function) {
+            this.checkToken = checkFunction
         }
     }
 

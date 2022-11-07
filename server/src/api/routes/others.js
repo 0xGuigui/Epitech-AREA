@@ -48,8 +48,28 @@ module.exports = (area) => {
             return res.status(404).json({message: 'Service not found'})
         }
 
+        let user = await mongoose
+            .model("User")
+            .findById(userId)
+            .exec()
+
         if (!user) {
             return res.status(404).json({message: 'User not found'})
+        }
+
+        user.data[req.params.service] = service.authenticate(req.params.code)
+        await user.save()
+
+        return res.json({message: 'Processed'})
+    })
+
+    area.app.get('/oauth2/:service/check-token', async (req, res) => {
+        let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.params.userId
+
+        const service = area.serviceManager.getService(req.params.service)
+
+        if (!service) {
+            return res.status(404).json({message: 'Service not found'})
         }
 
         let user = await mongoose
@@ -57,9 +77,12 @@ module.exports = (area) => {
             .findById(userId)
             .exec()
 
-        user.data[req.params.service] = service.authenticate(req.params.code)
-        await user.save()
+        if (!user) {
+            return res.status(404).json({message: 'User not found'})
+        }
 
-        return res.json({message: 'Processed'})
+        if (service.checkToken(user.data[req.params.service]))
+            return res.json({message: 'Valid token'})
+        res.status(498).json({message: 'Invalid token'})
     })
 }
