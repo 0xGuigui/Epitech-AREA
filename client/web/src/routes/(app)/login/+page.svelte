@@ -1,6 +1,7 @@
 <script>
     import config from "../../../config.js"
     import {createForm} from "svelte-forms-lib";
+    import {loggedIn} from "../../../store.ts";
 
     let errs = {};
     async function logUser(form) {
@@ -34,10 +35,12 @@
         },
         onSubmit: async values => {
             const response = await logUser(values);
-            if (response.status === 401)
+            if (response.status === 401) {
                 errs["email"] = "Email or password is invalid";
-            else
-                window.location="/";
+            } else {
+                loggedIn.update(n => true);
+                window.location = "/";
+            }
             console.log(response);
         }
     });
