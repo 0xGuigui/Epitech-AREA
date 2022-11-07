@@ -32,6 +32,7 @@ export default function Login({ setUserInfo }) {
 					label="Email"
 					keyboardType='email-address'
 					autoCapitalize='none'
+					activeUnderlineColor='#9a5373'
 					onChangeText={e => setForm({...form, email: e})}
 					style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: 'white', trailingContainerStyle: 'white'}}
 					placeholder="example@example.com"
@@ -41,6 +42,7 @@ export default function Login({ setUserInfo }) {
 					color='#9a5373'
 					label="Password"
 					autoCapitalize='none'
+					activeUnderlineColor='#9a5373'
 					onChangeText={e => setForm({...form, password: e})}
 					style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#212123'}}
 					placeholder="*********"

@@ -3,8 +3,16 @@ import {Route, Routes, useLocation, useNavigate} from "react-router-native";
 import MainPage from './mainPage/mainPage'
 import Account from "./account";
 import CreateArea from "./createArea/create";
+import {useEffect} from "react";
 
 export default function MainRoutes({ userInfo, setUserInfo }) {
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (!(userInfo?._id))
+			navigate('/login')
+	}, [userInfo])
+
 	return (
 		<>
 			<Routes>
