@@ -1,6 +1,5 @@
 import {Route, Routes, useLocation} from "react-router-native";
 import Settings from "./settings";
-import ServerSelector from "./serverSelector";
 import {useContext, useEffect, useState} from "react";
 import {HistoryContext} from "../../historyContext";
 
@@ -19,7 +18,6 @@ export default function SettingsRoutes({userInfo}) {
 	return (
 		<Routes>
 			<Route exact path='/' element={<Settings prevHistory={prevHistory} />} />
-			<Route path='/server' element={<ServerSelector />} />
 		</Routes>
 	)
 }
