@@ -9,7 +9,6 @@ export const HistoryProvider = ({ children }) => {
 	const [history, setHistory] = useState({
 		path: location.pathname,
 		prev: '/',
-		prevPrev: '/..',
 	})
 
 	useEffect(() => {
