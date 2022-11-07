@@ -1,5 +1,4 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
-const config = require("../../../../config")
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://id.twitch.tv/oauth2/token`, {
@@ -8,11 +7,11 @@ async function getRefreshToken(code) {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		body: new URLSearchParams({
-			client_id: config.twitchClientId,
-			client_secret: config.twitchClientSecret,
+			client_id: process.env.TWITCH_CLIENT_ID,
+			client_secret: process.env.TWITCH_CLIENT_SECRET,
 			code,
 			grant_type: 'authorization_code',
-			redirect_uri: config.twitchRedirectUri
+			redirect_uri: process.env.TWITCH_REDIRECT_URI
 		})
 	})
 	return await response.json()
@@ -25,8 +24,8 @@ async function getAccessToken(refresh_token) {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		body: new URLSearchParams({
-			client_id: config.twitchClientId,
-			client_secret: config.twitchClientSecret,
+			client_id: process.env.TWITCH_CLIENT_ID,
+			client_secret: process.env.TWITCH_CLIENT_SECRET,
 			grant_type: 'refresh_token',
 			refresh_token
 		})
@@ -38,7 +37,7 @@ async function getUserByName(access_token, name) {
 	const response = await fetch(`https://api.twitch.tv/helix/users?login=${name}`, {
 		headers: {
 			'Authorization': `Bearer ${access_token}`,
-			'Client-Id': config.twitchClientId
+			'Client-Id': process.env.TWITCH_CLIENT_ID
 		}
 	})
 	return await response.json()
@@ -48,7 +47,7 @@ async function getMe(access_token) {
 	const response = await fetch(`https://api.twitch.tv/helix/users`, {
 		headers: {
 			'Authorization': `Bearer ${access_token}`,
-			'Client-Id': config.twitchClientId
+			'Client-Id': process.env.TWITCH_CLIENT_ID
 		}
 	})
 	return await response.json()
@@ -64,7 +63,7 @@ async function sendWhisperByName(access_token, name, message) {
 		headers: {
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${access_token}`,
-			'Client-Id': config.twitchClientId
+			'Client-Id': process.env.TWITCH_CLIENT_ID
 		},
 		body: JSON.stringify({
 			message
@@ -78,7 +77,7 @@ async function changeMyDescription(access_token, description = "") {
 		headers: {
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${access_token}`,
-			'Client-Id': config.twitchClientId
+			'Client-Id': process.env.TWITCH_CLIENT_ID
 		}
 	})
 }

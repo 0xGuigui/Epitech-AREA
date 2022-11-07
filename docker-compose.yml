@@ -1,33 +1,39 @@
-version: ^3.8
+version: "3.8"
 
 services:
   mongodb:
     image: mongo:4.4.6
     container_name: area-mongo
     restart: always
-    env_file:
-      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?err}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?err}
     ports:
-      - 27017:27017
+      - ${AREA_MONGO_PORT:?err}:${AREA_MONGO_PORT:?err}
 
   area-server:
     build: server
+    command: node server.js
     container_name: area-server
     env_file:
       - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - ${AREA_SERVER_PORT}:${AREA_SERVER_PORT}
+      - ${AREA_SERVER_PORT:?err}:3000
     depends_on:
       - mongodb
 
   area-web-client:
     build: client/web
     container_name: area-web-client
-    env_file:
-      - .env
     volumes:
       - ./client/web:/usr/src/app
     ports:
-      - ${AREA_WEB_CLIENT_PORT}:${AREA_WEB_CLIENT_PORT}
+      - ${AREA_WEB_CLIENT_PORT:?err}:3000
     depends_on:
       - area-server
