@@ -1,5 +1,5 @@
-import {Button, TextInput, Checkbox, Text, Switch} from 'react-native-paper';
-import { Appbar, MD3LightTheme } from 'react-native-paper';
+import {Button, TextInput, Text, Switch} from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 import { Alert, BackHandler, View } from "react-native";
 import { useNavigate } from "react-router-native";
 import { useEffect, useState } from "react";
@@ -9,11 +9,13 @@ import { HistoryContext } from "../../historyContext";
 import { DarkTheme } from "../../../config";
 
 export default function Settings() {
+	const global = require('../../../config')
+	const parsedIP = global.serverUrl.split(':')[1].split('//')[1]
+	const parsedPort = global.serverUrl.split(':')[2]
 	const { history } = React.useContext(HistoryContext);
-	const [formIP, setFormIP] = useState("92.148.23.72");
-	const [formPort, setFormPort] = useState("8080");
+	const [formIP, setFormIP] = useState(parsedIP)
+	const [formPort, setFormPort] = useState(parsedPort)
 	const navigate = useNavigate();
-	const [checked, setChecked] = React.useState(false);
 	const createAlert = (title, message) => {
 		Alert.alert(
 			title,
@@ -40,7 +42,7 @@ export default function Settings() {
 	return (
 		<View style={{backgroundColor: "#121313"}}>
 			<Appbar.Header theme={DarkTheme}>
-				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => { navigate('/settings') }} />
+				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => { navigate('/login') }} />
 				<Appbar.Content title="Server Settings" titleStyle={{color: 'white'}} />
 			</Appbar.Header>
 			<TextInput
@@ -48,6 +50,7 @@ export default function Settings() {
 				mode="flat"
 				defaultValue={formIP}
 				keyboardType="url"
+				autoCapitalize='none'
 				style={{margin: 10}}
 				activeUnderlineColor='#9a5373'
 				value={formIP}
@@ -56,8 +59,8 @@ export default function Settings() {
 			<TextInput
 				label="Port"
 				mode="flat"
-				defaultValue={formPort}
-				value={formPort}
+				defaultValue={parsedPort}
+				value={parsedPort}
 				keyboardType="numeric"
 				style={{margin: 10}}
 				activeUnderlineColor='#9a5373'
@@ -76,10 +79,25 @@ export default function Settings() {
 				}}
 				onPress={() => {
 					if (isIpDomain(formIP) && isPort(formPort) || formIP === "localhost") {
-						console.log("IP: " + formIP + " Port: " + formPort);
+						fetch(`http${isSwitchOn ? 's' : ''}://${formIP}:${formPort}/about.json`)
+							.then(res => {
+								if (res.status === 200) {
+									global.serverUrl = (isSwitchOn ? "https://" : "http://") + formIP + ":" + formPort;
+									console.log(global.serverUrl);
+									navigate('/login')
+									createAlert("Success", "Server settings saved");
+								} else {
+									createAlert("Error", "Server not found");
+								}
+							})
+							.catch(() => {
+								createAlert("Error", "Server not found");
+							}
+						);
 					} else {
-						createAlert("Error", "Invalid IP or Port");
+						createAlert("Error", "Invalid IP or port");
 					}
+
 				}}>
 				Save
 			</Button>

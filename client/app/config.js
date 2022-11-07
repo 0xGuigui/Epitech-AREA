@@ -1,5 +1,5 @@
 const {MD3LightTheme} = require("react-native-paper");
-module.exports = {
+module.exports = process.globals = {
 	"defaultServerUrl": "http://92.148.23.72:8080",
 	"serverUrl": "http://92.148.23.72:8080",
 	"DarkTheme": {
