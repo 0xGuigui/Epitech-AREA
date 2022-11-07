@@ -8,13 +8,13 @@ import { HistoryContext } from "../../historyContext";
 export const isAndroid = Platform.OS === 'android';
 export const isIOS = Platform.OS === 'ios';
 
-export default function Settings() {
+export default function Settings({prevHistory}) {
 	let theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
 	const navigate = useNavigate();
 	const history = React.useContext(HistoryContext);
 	const { colors } = theme;
 	const backAction = async () => {
-		navigate('/login')
+		navigate(prevHistory)
 	}
 
 	useEffect(() => {
@@ -30,10 +30,10 @@ export default function Settings() {
 				{/*<Appbar.Action icon="menu" color={'white'} onPress={() => {}} />*/}
 				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => {
 					if (history.prev === '/serverSelector') {
-						navigate(history.prevPrev)
+						navigate(prevHistory)
 					}
 					else {
-						navigate(history.prev)
+						navigate(prevHistory)
 					}
 				}} />
 				<Appbar.Content title="Settings" titleStyle={{color: 'white'}} />
