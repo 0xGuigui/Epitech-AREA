@@ -23,3 +23,7 @@ module.exports.updatePasswordSchema = joi.object({
     password: joi.string().required(),
     newPassword: joi.string().required(),
 }).unknown(true);
+
+module.exports.oauthSchema = joi.object({
+    code: joi.string().required()
+})

@@ -36,6 +36,7 @@ class Service {
         this.description = serviceDescription;
         this.actions = [];
         this.reactions = [];
+        this.authenticate = (code) => null
     }
 
     addAction(...actions) {
@@ -66,6 +67,12 @@ class Service {
 
     getReaction(reactionName) {
         return this.reactions.find(reaction => reaction.name === reactionName);
+    }
+
+    setAuthentification(authFunction) {
+        if (authFunction instanceof Function) {
+            this.authenticate = authFunction
+        }
     }
 
     enable() {

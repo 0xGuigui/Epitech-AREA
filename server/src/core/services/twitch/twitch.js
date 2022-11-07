@@ -85,18 +85,20 @@ async function changeMyDescription(access_token, description = "") {
 module.exports = (area, servicesManager) => {
 	const twitchService = new Service('Twitch', 'Twitch - We saved you a seat in chat')
 
+	twitchService.setAuthentification(async (code) => {
+		const refreshTokenData = await getRefreshToken(ctx.payload.twitch_code)
+		return refreshTokenData.refresh_token
+	})
+
 	const newProfileImageAction = new Action('newProfileImage', 'when you change your profile image')
 		.on('create', async ctx => {
-			const refreshTokenData = await getRefreshToken(ctx.payload.twitch_code)
-			const me = await getMe(refreshTokenData.access_token)
-			ctx.setActionData('twitch_refresh_token', refreshTokenData.refresh_token)
+			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
+			const me = await getMe(accessTokenData.access_token)
 			ctx.setActionData('twitch_profile_image', me.data[0].profile_image_url)
-			await ctx.next({
-				'twitch_refresh_token': refreshTokenData.refresh_token
-			})
+			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.getActionData('twitch_refresh_token'))
+			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
 			const me = await getMe(accessTokenData.access_token)
 			if (me.data[0].profile_image_url !== ctx.getActionData('twitch_profile_image')) {
 				ctx.setActionData('twitch_profile_image', me.data[0].profile_image_url)
@@ -105,16 +107,13 @@ module.exports = (area, servicesManager) => {
 		})
 	const newOfflineImageAction = new Action('newOfflineImage', 'when you change your offline image')
 		.on('create', async ctx => {
-			const refreshTokenData = await getRefreshToken(ctx.payload.twitch_code)
-			const me = await getMe(refreshTokenData.access_token)
-			ctx.setActionData('twitch_refresh_token', refreshTokenData.refresh_token)
+			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
+			const me = await getMe(accessTokenData.access_token)
 			ctx.setActionData('twitch_offline_image', me.data[0].offline_image_url)
-			await ctx.next({
-				'twitch_refresh_token': refreshTokenData.refresh_token
-			})
+			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.getActionData('twitch_refresh_token'))
+			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
 			const me = await getMe(accessTokenData.access_token)
 			if (me.data[0].offline_image_url !== ctx.getActionData('twitch_offline_image')) {
 				ctx.setActionData('twitch_offline_image', me.data[0].offline_image_url)
@@ -124,32 +123,22 @@ module.exports = (area, servicesManager) => {
 
 	const sendWhisperReaction = new Reaction('sendWhisper', 'sends a whisper to someone')
 		.on('create', async ctx => {
-			if (!ctx.env.twitch_refresh_token) {
-				const refreshTokenData = await getRefreshToken(ctx.payload.twitch_code)
-
-				ctx.setActionData('twitch_refresh_token', refreshTokenData.refresh_token)
-			}
 			ctx.setActionData('twitch_send_to', ctx.payload.twitch_send_to)
 			ctx.setActionData('twitch_message', ctx.payload.twitch_message)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.getActionData('twitch_refresh_token'))
+			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
 			await sendWhisperByName(accessTokenData.access_token, ctx.getActionData('twitch_send_to'), ctx.getActionData('twitch_message'))
 			await ctx.next()
 		})
 	const changeDescriptionReaction = new Reaction('changeDescription', 'change your description')
 		.on('create', async ctx => {
-			if (!ctx.env.twitch_refresh_token) {
-				const refreshTokenData = await getRefreshToken(ctx.payload.twitch_code)
-
-				ctx.setActionData('twitch_refresh_token', refreshTokenData.refresh_token)
-			}
 			ctx.setActionData('twitch_new_description', ctx.payload.new_description)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.getActionData('twitch_refresh_token'))
+			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
 			await changeMyDescription(accessTokenData.access_token, ctx.getActionData('twitch_new_description'))
 			await ctx.next()
 		})

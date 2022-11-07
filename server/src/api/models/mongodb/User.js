@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Mixed = mongoose.Schema.Types.Mixed;
 
 let userSchema = new mongoose.Schema({
     username: {
@@ -23,7 +24,8 @@ let userSchema = new mongoose.Schema({
     admin: {
         type: Boolean,
         default: false,
-    }
+    },
+    data: Mixed
 });
 
 module.exports = (area) => {
