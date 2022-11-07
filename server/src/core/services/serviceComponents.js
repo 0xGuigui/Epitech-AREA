@@ -29,6 +29,8 @@ class Reaction extends ServiceComponent {
 }
 
 class Service {
+    #disabled = false
+
     constructor(serviceName, serviceDescription = serviceName) {
         this.name = serviceName;
         this.description = serviceDescription;
@@ -64,6 +66,14 @@ class Service {
 
     getReaction(reactionName) {
         return this.reactions.find(reaction => reaction.name === reactionName);
+    }
+
+    enable() {
+        this.#disabled = false;
+    }
+
+    disable() {
+        this.#disabled = true;
     }
 }
 

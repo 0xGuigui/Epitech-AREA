@@ -1,0 +1,15 @@
+{
+  "name": "area",
+  "scripts": {
+    "docker:start": "docker-compose up --build -d",
+    "docker:stop": "docker-compose down",
+    "docker:restart": "docker-compose restart",
+    "dev:server": "node server/server.js",
+    "dev:web-client": "cd client/web && npm run dev",
+    "dev:app-client": "cd client/app && npm run start",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web-client\" \"npm run dev:app-client\""
+  },
+  "dependencies": {
+    "concurrently": "^7.5.0"
+  }
+}
