@@ -1,5 +1,4 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
-const config = require("../../../../config")
 
 async function getRefreshToken(code) {
 	const response = await fetch(`https://discord.com/api/oauth2/token`, {
@@ -8,9 +7,9 @@ async function getRefreshToken(code) {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		body: new URLSearchParams({
-			client_id: config.discordClientId,
-			client_secret: config.discordClientSecret,
-			redirect_uri: config.discordRedirectUri,
+			client_id: process.env.DISCORD_CLIENT_ID,
+			client_secret: process.env.DISCORD_CLIENT_SECRET,
+			redirect_uri: process.env.DISCORD_REDIRECT_URI,
 			code,
 			grant_type: 'authorization_code'
 		})
@@ -25,8 +24,8 @@ async function getAccessToken(refresh_token) {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		body: new URLSearchParams({
-			client_id: config.discordClientId,
-			client_secret: config.discordClientSecret,
+			client_id: process.env.DISCORD_CLIENT_ID,
+			client_secret: process.env.DISCORD_CLIENT_SECRET,
 			grant_type: 'refresh_token',
 			refresh_token
 		})

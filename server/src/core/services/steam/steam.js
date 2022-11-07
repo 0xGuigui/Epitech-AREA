@@ -1,9 +1,8 @@
-const {Service, Action, Reaction} = require('../serviceComponents')
-const config = require('../../../../config')
+const {Service, Action} = require('../serviceComponents')
 
 async function getId(profileUrl) {
 	const profileId = profileUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:steamcommunity.com\/(?:profiles|id)\/)([a-zA-Z0-9]+)/)
-	const response = await fetch(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${config.steamToken}&vanityurl=${profileId[1]}`)
+	const response = await fetch(`http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.STEAM_TOKEN}&vanityurl=${profileId[1]}`)
 	const json = await response.json()
 	return json.response.steamid
 }
@@ -25,12 +24,12 @@ async function getGameNews(appId) {
 }
 
 async function getUserStatsByGame(steamId, appId) {
-	const response = await fetch(`http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=${appId}&key=${config.steamToken}&steamid=${steamId}`)
+	const response = await fetch(`http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid=${appId}&key=${process.env.STEAM_TOKEN}&steamid=${steamId}`)
 	return await response.json()
 }
 
 async function getOwnedGames(steamId) {
-	const response = await fetch(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${config.steamToken}&steamid=${steamId}`)
+	const response = await fetch(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${process.env.STEAM_TOKEN}&steamid=${steamId}`)
 	const json = await response.json()
 	return json.response
 }
