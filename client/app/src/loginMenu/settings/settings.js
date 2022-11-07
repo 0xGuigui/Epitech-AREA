@@ -1,20 +1,30 @@
-import * as React from 'react';
-import { Appbar, MD3DarkTheme, MD3LightTheme, Divider } from 'react-native-paper';
-import { ScrollView, Text, useColorScheme, View, StyleSheet, BackHandler, Animated, Platform } from "react-native";
+import {Button, TextInput, Checkbox, Text, Switch} from 'react-native-paper';
+import { Appbar, MD3LightTheme } from 'react-native-paper';
+import { Alert, BackHandler, View } from "react-native";
 import { useNavigate } from "react-router-native";
 import { useEffect, useState } from "react";
+import * as React from "react";
+import { isIpDomain, isPort } from "../../utils";
 import { HistoryContext } from "../../historyContext";
+import { DarkTheme } from "../../../config";
 
-export const isAndroid = Platform.OS === 'android';
-export const isIOS = Platform.OS === 'ios';
-
-export default function Settings({prevHistory}) {
-	let theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
+export default function Settings() {
+	const { history } = React.useContext(HistoryContext);
+	const [formIP, setFormIP] = useState("92.148.23.72");
+	const [formPort, setFormPort] = useState("8080");
 	const navigate = useNavigate();
-	const history = React.useContext(HistoryContext);
-	const { colors } = theme;
+	const [checked, setChecked] = React.useState(false);
+	const createAlert = (title, message) => {
+		Alert.alert(
+			title,
+			message,
+			[
+				{ text: "OK", onPress: () => console.log("OK Pressed") }
+			]
+		);
+	}
 	const backAction = async () => {
-		navigate(prevHistory)
+		navigate(history.prev)
 	}
 
 	useEffect(() => {
@@ -24,107 +34,55 @@ export default function Settings({prevHistory}) {
 			BackHandler.removeEventListener("hardwareBackPress", backAction);
 	}, [])
 
-	return (
-		<View style={{ backgroundColor: colors.background }}>
-			<Appbar.Header theme={DarkTheme}>
-				{/*<Appbar.Action icon="menu" color={'white'} onPress={() => {}} />*/}
-				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => {
-					if (history.prev === '/serverSelector') {
-						navigate(prevHistory)
-					}
-					else {
-						navigate(prevHistory)
-					}
-				}} />
-				<Appbar.Content title="Settings" titleStyle={{color: 'white'}} />
-			</Appbar.Header>
-			<ScrollView>
-				{/*<Button*/}
-				{/*	mode="text"*/}
-				{/*	buttonColor="#303038"*/}
-				{/*	theme={{*/}
-				{/*		roundness: 0,*/}
-				{/*	}}*/}
-				{/*	textColor='#FFFFFF'*/}
-				{/*	onPress={() => console.log('Pressed')}>*/}
-				{/*</Button>*/}
-				<Text
-					style={{...styles.titleText, paddingTop: 5}}>
-					Generals
-				</Text>
-				<Divider />
-				<Text
-					style={styles.clickableText} onPress={() => navigate('/settings/server')}>
-					Configure server
-				</Text>
-				<Text
-					style={styles.titleText}>
-					Services
-				</Text>
-				<Divider/>
-				<Text
-					style={styles.clickableText} onPress={() => console.log("Coucou")}>
-					Enable/Disable services
-				</Text>
-				<Divider />
-				<Text
-					style={styles.clickableText} onPress={() => console.log("Coucou")}>
-					Connect to a service
-				</Text>
-				<Divider/>
-				<Text
-					style={styles.clickableText} onPress={() => console.log("Coucou")}>
-					Disconnect from a service
-				</Text>
-				<Text style={styles.endOfScroll}>
-				</Text>
-			</ScrollView>
+	const [isSwitchOn, setIsSwitchOn] = React.useState(false);
 
+	const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+	return (
+		<View style={{backgroundColor: "#121313"}}>
+			<Appbar.Header theme={DarkTheme}>
+				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => { navigate('/settings') }} />
+				<Appbar.Content title="Server Settings" titleStyle={{color: 'white'}} />
+			</Appbar.Header>
+			<TextInput
+				label="Server URL"
+				mode="flat"
+				defaultValue={formIP}
+				keyboardType="url"
+				style={{margin: 10}}
+				activeUnderlineColor='#9a5373'
+				value={formIP}
+				onChangeText={text => setFormIP(text)}
+			/>
+			<TextInput
+				label="Port"
+				mode="flat"
+				defaultValue={formPort}
+				value={formPort}
+				keyboardType="numeric"
+				style={{margin: 10}}
+				activeUnderlineColor='#9a5373'
+				onChangeText={text => setFormPort(text)}
+			/>
+			<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 10}}>
+				<Text style={{color: 'white'}}>Use HTTPS</Text>
+				<Switch value={isSwitchOn} onValueChange={onToggleSwitch} color='#9a5373' />
+			</View>
+
+			<Button
+				mode="contained"
+				style={{margin: 10, backgroundColor: "#9a5373"}}
+				theme={{
+					roundness: 1,
+				}}
+				onPress={() => {
+					if (isIpDomain(formIP) && isPort(formPort) || formIP === "localhost") {
+						console.log("IP: " + formIP + " Port: " + formPort);
+					} else {
+						createAlert("Error", "Invalid IP or Port");
+					}
+				}}>
+				Save
+			</Button>
 		</View>
 	);
-};
-
-const DarkTheme = {
-	...MD3LightTheme,
-	dark: true,
-
-	colors: {
-		...MD3LightTheme.colors,
-		primary: '#9a5373',
-		accent: '#f1c40f',
-		background: '#2c3e50',
-		surface: '#121313',
-		text: '#ecf0f1',
-		textColor: '#ecf0f1',
-		disabled: '#ecf0f1',
-		placeholder: '#ecf0f1',
-		backdrop: '#34495e',
-		notification: '#f1c40f',
-	},
-};
-
-const styles = StyleSheet.create({
-	clickableText: {
-		textAlign: 'left',
-		fontSize: 14,
-		margin: 0,
-		padding: 20,
-		backgroundColor: "#1e1f1f",
-		color: 'white'
-	},
-	endOfScroll: {
-		padding: Platform.OS === 'ios' ? 100 : 50,
-		color: "#121313",
-		backgroundColor: "#121313",
-	},
-	titleText: {
-		color: '#dfdfde',
-		fontSize: 20,
-		textAlign: 'left',
-		backgroundColor: "#121313",
-		paddingTop: 75,
-		paddingBottom: 20,
-		padding: 20,
-		fontWeight: 'bold',
-	},
-});
+}
