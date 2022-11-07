@@ -8,6 +8,7 @@ const {hashPassword} = require('./utils/passwordHashing')
 const JwtDenyList = require('./core/jwtDenyList')
 const MailSender = require('./core/mailSender')
 const ServicesManager = require('./core/services/servicesManager')
+const StatsManager = require('./core/statsManager')
 
 class AREA {
     constructor() {
@@ -22,6 +23,9 @@ class AREA {
 
         // Load all configs
         this.checkConfig()
+
+        // Instantiate stats manager
+        this.statsManager = new StatsManager()
 
         // Load all middlewares and routes
         dynamicLoader(this, path.join(__dirname, 'api/middlewares'), ['dynamic.js', 'others.js', 'error.js'])
@@ -78,6 +82,8 @@ class AREA {
             useUnifiedTopology: true,
         })
         logger.success("Connected to MongoDB")
+        // Init stats manager
+        await this.statsManager.init()
     }
 
     async start(callback) {
