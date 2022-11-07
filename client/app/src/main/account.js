@@ -14,13 +14,24 @@ export default function Account({ userInfo, setUserInfo }) {
     };
 
 
-
     return (
         <View style={styles.view}>
             <Appbar.Header theme={DarkTheme}>
                 <Appbar.Content title="My Account" style={{alignItems: 'center'}} titleStyle={{color: 'white'}} />
                 <Appbar.Action icon={'logout'} color={'white'} onPress={() => {
+                    //erase all user data
+                    setUserInfo({
+                        username: '',
+                        password: '',
+                        token: '',
+                        refreshToken: '',
+                        id: '',
+                        email: '',
+                        actions: [],
+                        reactions: []
+                    })
                     setUserInfo(null)
+                    setUserInfo({})
                     if (Platform.OS === 'android') {
                         showToast()
                     }
