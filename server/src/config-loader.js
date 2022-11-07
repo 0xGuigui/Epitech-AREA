@@ -5,7 +5,7 @@ module.exports.initEnv = () => {
     require('dotenv').config({ path: path.join(__dirname, '../../.env') })
 }
 
-module.exports.checkEnvConfig = (config, exitOnError) => {
+module.exports.checkEnvConfig = (config, exitOnError = false) => {
     let errors = []
 
     Object.entries(config).forEach(([_, value]) => {
@@ -17,9 +17,7 @@ module.exports.checkEnvConfig = (config, exitOnError) => {
             }
             matched = true
         } else if (typeof value === 'string') {
-            if (process.env[value]) {
-                matched = true
-            }
+            matched = !!process.env[value]
         }
 
         if (!matched) {
@@ -32,5 +30,5 @@ module.exports.checkEnvConfig = (config, exitOnError) => {
         errors.forEach(key => logger.error(key))
         process.exit(1)
     }
-    return errors.length ? errors : true
+    return errors.length ? errors : null
 }
