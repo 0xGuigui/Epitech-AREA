@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, IconButton} from 'react-native-paper';
 import {getMe, logUser} from "../services/server";
+import global from "../../config";
 const logo = require('../assets/logo/logo.png')
 
 export default function Login({ setUserInfo }) {
@@ -12,12 +13,13 @@ export default function Login({ setUserInfo }) {
 		password: ""
 	})
 	const navigate = useNavigate()
+	const global = require('../../config')
 
 	return (
 		<View style={styles.loginSection}>
 			<View>
 				<IconButton
-					icon="cog"
+					icon="server-network"
 					iconColor="white"
 					size={24}
 					style={styles.settingsButton}
@@ -100,7 +102,9 @@ export default function Login({ setUserInfo }) {
 					Sign in with Google
 				</Button>
 			</View>
+			<Text style={{...styles.forgotSection, color: 'white', paddingTop: 20, textAlign: 'center' }}> Actually connected to: {global.serverUrl} </Text>
 		</View>
+
 	);
 }
 
