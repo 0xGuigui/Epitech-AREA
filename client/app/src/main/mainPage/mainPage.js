@@ -42,8 +42,9 @@ export default function mainPage({userInfo}) {
 	return (
 		<View style={styles.mainSection}>
 			<Appbar.Header theme={DarkTheme}>
-				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}} />
+				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}}/>
 			</Appbar.Header>
+			<Text style={styles.titleText}> Welcome {userInfo?.user.username}</Text>
 			{actions.length > 0 ?
 				<View key='actionKey' style={styles.actionsContainer}>
 					{actions.map((e, i) =>
@@ -107,5 +108,12 @@ const styles = StyleSheet.create({
 		marginRight: 'auto',
 		marginTop: 'auto',
 		marginBottom: 'auto'
+	},
+	titleText: {
+		fontSize: 30,
+		fontWeight: 'bold',
+		paddingLeft: '3%',
+		paddingTop: '3%',
+		color: 'white'
 	}
 });
