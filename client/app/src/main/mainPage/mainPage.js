@@ -5,6 +5,7 @@ import {HistoryContext} from "../../historyContext";
 import {getActions, getMe, refreshToken} from "../../services/server";
 import {Pressable} from "@react-native-material/core";
 import ActionDisplay from "./actionDisplay";
+import ActionModal from "./ActionModal";
 import {DarkTheme} from "../../../config";
 import {Appbar} from "react-native-paper";
 import * as React from "react";
@@ -13,6 +14,7 @@ export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
 	const history = useContext(HistoryContext)
 	const [actions, setActions] = useState([])
+	const [actionModal, setActionModal] = useState(undefined)
 
 	const backAction = async () => {
 		navigate(history.prev)
@@ -23,7 +25,7 @@ export default function mainPage({userInfo}) {
 		token.status !== 200 && navigate('/login')
 		const actions = await getActions(token.token)
 		actions.status !== 200 && navigate('/login')
-		setActions([...actions.actions, ...actions.actions, ...actions.actions, ...actions.actions])
+		setActions([...actions.actions, ...actions.actions, ...actions.actions])
 	}
 
 	useEffect(() => {
@@ -43,12 +45,15 @@ export default function mainPage({userInfo}) {
 				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}} />
 			</Appbar.Header>
 			{actions.length > 0 ?
-				<View style={styles.actionsContainer}>
+				<View key='actionKey' style={styles.actionsContainer}>
 					{actions.map((e, i) =>
 						<>
-							<ActionDisplay key={i} action={e} style={styles.actions} textStyle={styles.actionsText} />
+							<ActionDisplay key={i} action={e} style={styles.actions} textStyle={styles.actionsText} onPress={() => {
+								setActionModal(e)
+							}} />
 						</>
 					)}
+					{actions.length % 2 === 1 && <View style={{...styles.actions, borderWidth: 0}}/>}
 				</View>
 				:
 				<View style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: 'auto', marginTop: '70%'}}>
@@ -57,6 +62,9 @@ export default function mainPage({userInfo}) {
 						<Text style={{color: '#107dc7', fontSize: 20, marginLeft: 'auto', marginRight: 'auto', textDecorationLine: 'underline'}}>Create one</Text>
 					</Pressable>
 				</View>
+			}
+			{actionModal &&
+				<ActionModal action={actionModal} setAction={setActionModal}/>
 			}
 		</View>
 	)

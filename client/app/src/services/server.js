@@ -85,11 +85,21 @@ async function getActions(token, page = 1) {
 	}
 }
 
+async function getAbout() {
+	const response = await fetch(`${serverUrl}/about.json`)
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
 	refreshToken,
 	resetPassword,
 	getMe,
-	getActions
+	getActions,
+	getAbout
 }

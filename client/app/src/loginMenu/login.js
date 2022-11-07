@@ -44,7 +44,7 @@ export default function Login({ setUserInfo }) {
 					autoCapitalize='none'
 					activeUnderlineColor='#9a5373'
 					onChangeText={e => setForm({...form, password: e})}
-					style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#212123'}}
+					style={{ marginLeft: 16, marginRight: 16, marginTop: 10, color: '#121313'}}
 					placeholder="*********"
 					secureTextEntry
 				/>
