@@ -1,17 +1,29 @@
-import {Button, TextInput} from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import { Appbar, MD3LightTheme } from 'react-native-paper';
-import {BackHandler, View} from "react-native";
+import { Alert, BackHandler, View } from "react-native";
 import { useNavigate } from "react-router-native";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as React from "react";
-import {isIpDomain, isPort} from "../../utils";
+import { isIpDomain, isPort } from "../../utils";
+import { HistoryContext } from "../../historyContext";
+import { DarkTheme } from "../../../config";
 
 export default function ServerSelector() {
+    const { history } = React.useContext(HistoryContext);
     const [formIP, setFormIP] = useState("92.148.23.72");
     const [formPort, setFormPort] = useState("8080");
     const navigate = useNavigate();
+    const createAlert = (title, message) => {
+        Alert.alert(
+            title,
+            message,
+            [
+                { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+        );
+    }
     const backAction = async () => {
-        navigate('/login')
+        navigate(history.prev)
     }
 
     useEffect(() => {
@@ -33,7 +45,7 @@ export default function ServerSelector() {
                 defaultValue={formIP}
                 keyboardType="url"
                 style={{margin: 10}}
-                activeOutlineColor="#9a5373"
+                activeUnderlineColor='#9a5373'
                 value={formIP}
                 onChangeText={text => setFormIP(text)}
             />
@@ -44,7 +56,7 @@ export default function ServerSelector() {
                 value={formPort}
                 keyboardType="numeric"
                 style={{margin: 10}}
-                activeOutlineColor="#9a5373"
+                activeUnderlineColor='#9a5373'
                 onChangeText={text => setFormPort(text)}
             />
             <Button
@@ -54,10 +66,10 @@ export default function ServerSelector() {
                     roundness: 1,
                 }}
                 onPress={() => {
-                    if (isIpDomain(formIP) && isPort(formPort)) {
+                    if (isIpDomain(formIP) && isPort(formPort) || formIP === "localhost") {
                         console.log("IP: " + formIP + " Port: " + formPort);
                     } else {
-                        alert("Invalid IP or port");
+                        createAlert("Error", "Invalid IP or Port");
                     }
                 }}>
                 Save
@@ -65,22 +77,3 @@ export default function ServerSelector() {
         </View>
     );
 }
-
-const DarkTheme = {
-    ...MD3LightTheme,
-    dark: true,
-
-    colors: {
-        ...MD3LightTheme.colors,
-        primary: '#9a5373',
-        accent: '#f1c40f',
-        background: '#121313',
-        surface: '#121313',
-        text: '#ecf0f1',
-        textColor: '#ecf0f1',
-        disabled: '#ecf0f1',
-        placeholder: '#ecf0f1',
-        backdrop: '#121313',
-        notification: '#f1c40f',
-    },
-};
