@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Appbar, MD3DarkTheme, MD3LightTheme, Divider } from 'react-native-paper';
-import {ScrollView, Text, useColorScheme, View, StyleSheet, BackHandler, Animated, Platform} from "react-native";
+import { ScrollView, Text, useColorScheme, View, StyleSheet, BackHandler, Animated, Platform } from "react-native";
 import { useNavigate } from "react-router-native";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { HistoryContext } from "../../historyContext";
 
 export const isAndroid = Platform.OS === 'android';
 export const isIOS = Platform.OS === 'ios';
@@ -10,6 +11,7 @@ export const isIOS = Platform.OS === 'ios';
 export default function Settings() {
 	let theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
 	const navigate = useNavigate();
+	const history = React.useContext(HistoryContext);
 	const { colors } = theme;
 	const backAction = async () => {
 		navigate('/login')
@@ -26,7 +28,14 @@ export default function Settings() {
 		<View style={{ backgroundColor: colors.background }}>
 			<Appbar.Header theme={DarkTheme}>
 				{/*<Appbar.Action icon="menu" color={'white'} onPress={() => {}} />*/}
-				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => { navigate('/login') }} />
+				<Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => {
+					if (history.prev === '/serverSelector') {
+						navigate(history.prevPrev)
+					}
+					else {
+						navigate(history.prev)
+					}
+				}} />
 				<Appbar.Content title="Settings" titleStyle={{color: 'white'}} />
 			</Appbar.Header>
 			<ScrollView>

@@ -5,6 +5,9 @@ import {HistoryContext} from "../../historyContext";
 import {getActions, getMe, refreshToken} from "../../services/server";
 import {Pressable} from "@react-native-material/core";
 import ActionDisplay from "./actionDisplay";
+import {DarkTheme} from "../../../config";
+import {Appbar} from "react-native-paper";
+import * as React from "react";
 
 export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
@@ -36,7 +39,9 @@ export default function mainPage({userInfo}) {
 
 	return (
 		<View style={styles.mainSection}>
-			<Text style={styles.text}>My Actions</Text>
+			<Appbar.Header theme={DarkTheme}>
+				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}} />
+			</Appbar.Header>
 			{actions.length > 0 ?
 				<View style={styles.actionsContainer}>
 					{actions.map((e, i) =>

@@ -1,4 +1,4 @@
-import { Button, TextInput } from 'react-native-paper';
+import {Button, TextInput, Checkbox, Text} from 'react-native-paper';
 import { Appbar, MD3LightTheme } from 'react-native-paper';
 import { Alert, BackHandler, View } from "react-native";
 import { useNavigate } from "react-router-native";
@@ -13,6 +13,7 @@ export default function ServerSelector() {
     const [formIP, setFormIP] = useState("92.148.23.72");
     const [formPort, setFormPort] = useState("8080");
     const navigate = useNavigate();
+    const [checked, setChecked] = React.useState(false);
     const createAlert = (title, message) => {
         Alert.alert(
             title,
@@ -59,6 +60,7 @@ export default function ServerSelector() {
                 activeUnderlineColor='#9a5373'
                 onChangeText={text => setFormPort(text)}
             />
+            <Text style={{color:'white', margin: 10}}>Use HTTPS <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!checked); }} /></Text>
             <Button
                 mode="contained"
                 style={{margin: 10, backgroundColor: "#9a5373"}}
