@@ -8,7 +8,8 @@ export const HistoryProvider = ({ children }) => {
 	const location = useLocation()
 	const [history, setHistory] = useState({
 		path: location.pathname,
-		prev: '/'
+		prev: '/',
+		prevPrev: '/..',
 	})
 
 	useEffect(() => {
