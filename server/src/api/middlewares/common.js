@@ -4,6 +4,13 @@ const jwt = require('jsonwebtoken')
 const cors = require('cors')
 
 module.exports = (area) => {
+    area.app.use((req, res, next) => {
+        res.on("finish", () => {
+            console.log(`${req.method} ${req.originalUrl} ${res.statusCode} ${req.path}`)
+        })
+        next()
+    })
+
     // parse application/x-www-form-urlencoded
     area.app.use(bodyParser.urlencoded({extended: false}))
 
