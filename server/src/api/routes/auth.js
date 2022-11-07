@@ -73,7 +73,7 @@ module.exports = (area) => {
             }
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: false,
                 maxAge: 3 * 60 * 60 * 1000
             });
             res.status(200).send({token: accessToken})
