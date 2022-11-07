@@ -1,6 +1,9 @@
 import {StyleSheet, Text, View} from "react-native";
 import {Pressable} from "@react-native-material/core";
 import {useState} from "react";
+import {Appbar} from "react-native-paper";
+import {DarkTheme} from "../../../config";
+import * as React from "react";
 
 export default function CreateArea() {
 	const [area, setArea] = useState({
@@ -10,7 +13,9 @@ export default function CreateArea() {
 
 	return (
 		<View style={styles.mainSection}>
-			<Text style={styles.text}>Create an action</Text>
+			<Appbar.Header theme={DarkTheme}>
+				<Appbar.Content title="Create a new action" titleStyle={{color: 'white'}}/>
+			</Appbar.Header>
 			<View style={styles.actionsContainer}>
 				<Pressable style={styles.actions} onPress={() => {
 
