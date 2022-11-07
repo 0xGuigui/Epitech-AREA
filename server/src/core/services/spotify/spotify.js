@@ -126,6 +126,8 @@ module.exports = (area, servicesManager) => {
 		return refreshTokenData.refresh_token
 	})
 
+	spotifyService.setCheckToken(async token => await getAccessToken(token))
+
 	const playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
 		.on('create', async ctx => {
 			const access_token = await getAccessToken(ctx.actionData.user.data[spotifyService.name])

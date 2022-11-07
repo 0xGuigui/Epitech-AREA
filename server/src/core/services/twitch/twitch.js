@@ -90,6 +90,8 @@ module.exports = (area, servicesManager) => {
 		return refreshTokenData.refresh_token
 	})
 
+	twitchService.setCheckToken(async token => await getAccessToken(token))
+
 	const newProfileImageAction = new Action('newProfileImage', 'when you change your profile image')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(ctx.actionData.user.data[twitchService.name])
