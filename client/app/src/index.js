@@ -1,6 +1,5 @@
 import {StyleSheet, View} from 'react-native';
 import Login from './loginMenu/login';
-import Settings from './loginMenu/settings/settings'
 import { useEffect, useState } from "react";
 import {Route, Routes, useLocation, useNavigate} from "react-router-native";
 import MainRoutes from "./main/mainRoutes";
@@ -9,12 +8,12 @@ import Register from "./loginMenu/register";
 import Forgot from "./loginMenu/forgot";
 import {HistoryProvider} from "./historyContext";
 import SettingsRoutes from "./loginMenu/settings/settingsRoutes";
+import Oauth2 from "./oauth2";
 
 export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
 	const navigate = useNavigate()
 	const location = useLocation()
-	const global = require('../config')
 
 	const checkUser = async () => {
 		if (location.pathname !== '/')
@@ -40,6 +39,7 @@ export default function Index() {
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
 					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
+					<Route path='/oauth2' element={<Oauth2 setUserInfo={setUserInfo} />} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>
