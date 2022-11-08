@@ -83,7 +83,7 @@ class AREA {
         })
         logger.success("Connected to MongoDB")
         // Init stats manager
-        await this.statsManager.init()
+        await this.statsManager.init(this)
     }
 
     async start(callback) {

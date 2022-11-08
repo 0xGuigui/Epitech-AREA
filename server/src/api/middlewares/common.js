@@ -6,7 +6,7 @@ const cors = require('cors')
 module.exports = (area) => {
     area.app.use((req, res, next) => {
         res.on("finish", () => {
-            console.log(`${req.method} ${req.originalUrl} ${res.statusCode} ${req.path}`)
+            area.statsManager.addStats(res.statusCode)
         })
         next()
     })
@@ -25,8 +25,11 @@ module.exports = (area) => {
 
     // JWT middleware
     area.app.use((req, res, next) => {
-        const token = req.headers['x-access-token'] || req.headers['authorization']
+        let token = req.headers['x-access-token'] || req.headers['authorization']
 
+        if (!token && req.query.token) {
+            token = "Bearer " + req.query.token
+        }
         for (const unprotectedRoute of area.unprotectedRoutes) {
             if (req.path.slice(1).startsWith(unprotectedRoute)) {
                 return next()
