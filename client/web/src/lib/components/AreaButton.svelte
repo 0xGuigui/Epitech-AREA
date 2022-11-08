@@ -11,7 +11,7 @@
 
 <section style={styleString} class="flex justify-center items-center select-none cursor-pointer bg-area-button hover:bg-area-blue hover:scale-110 transition-all duration-150 rounded-lg {$$props.class}" on:click={() => {dispatcher("click")}}>
     {#if redirectUrl}
-        <a href={redirectUrl}>
+        <a href={redirectUrl} class="h-full w-full flex justify-center items-center">
             <slot/>
         </a>
     {:else}
