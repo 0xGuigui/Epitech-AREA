@@ -20,18 +20,26 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["92.148.23.72"]
+        "LSApplicationQueriesSchemes": [
+          "92.148.23.72"
+        ]
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.area"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "area"
+    "scheme": "area",
+    "extra": {
+      "eas": {
+        "projectId": "0bde72ee-7acc-41dd-ba4a-b0bbbb15b527"
+      }
+    }
   }
 }

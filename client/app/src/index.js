@@ -1,7 +1,7 @@
 import {StyleSheet, View} from 'react-native';
 import Login from './loginMenu/login';
 import { useEffect, useState } from "react";
-import {Route, Routes, useLocation, useNavigate} from "react-router-native";
+import {Route, Routes, useDeepLinking, useLocation, useNavigate} from "react-router-native";
 import MainRoutes from "./main/mainRoutes";
 import {getMe, refreshToken} from "./services/server";
 import Register from "./loginMenu/register";
@@ -9,6 +9,7 @@ import Forgot from "./loginMenu/forgot";
 import {HistoryProvider} from "./historyContext";
 import SettingsRoutes from "./loginMenu/settings/settingsRoutes";
 import Oauth2 from "./oauth2";
+import * as Linking from 'expo-linking'
 
 export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
@@ -23,6 +24,12 @@ export default function Index() {
 			const me = await getMe(token.token)
 			if (me.status === 200) {
 				setUserInfo(me)
+				const initialUrl = await Linking.getInitialURL();
+
+				if (initialUrl) {
+					const test = Linking.parse(initialUrl)
+					return navigate(test.path)
+				}
 				return navigate('/main')
 			}
 		}
@@ -30,6 +37,17 @@ export default function Index() {
 	}
 
 	checkUser()
+
+	useEffect(() => {
+		const {remove} = Linking.addEventListener('url', async ({url}) => {
+			const token = await refreshToken()
+			if (token.status === 200) {
+				const test = Linking.parse(url)
+				return navigate(test.path)
+			}
+		});
+		return remove
+	}, [])
 
 	return (
 		<HistoryProvider>
