@@ -9,7 +9,7 @@ import { HistoryContext } from "../../historyContext";
 import { DarkTheme } from "../../../config";
 
 export default function Settings() {
-	const global = require('../../../config')
+	// const global = require('../../../config')
 	const parsedIP = global.serverUrl.split(':')[1].split('//')[1]
 	const parsedPort = global.serverUrl.split(':')[2]
 	const { history } = React.useContext(HistoryContext);

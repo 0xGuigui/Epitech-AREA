@@ -5,12 +5,13 @@ import * as React from "react";
 import { useNavigate } from "react-router-native";
 import {getActions, getMe, refreshToken} from "../services/server";
 import {useEffect} from "react";
-import { logOut } from '../services/server'
-import { showToast } from '../utils'
 
 export default function Account({ userInfo, setUserInfo }) {
     const navigate = useNavigate()
-    const global = require('../../config')
+
+    const showToast = () => {
+        ToastAndroid.show("You are logged out", ToastAndroid.SHORT);
+    };
 
 
     return (
@@ -18,8 +19,21 @@ export default function Account({ userInfo, setUserInfo }) {
             <Appbar.Header theme={DarkTheme}>
                 <Appbar.Content title="My Account" style={{alignItems: 'center'}} titleStyle={{color: 'white'}} />
                 <Appbar.Action icon={'logout'} color={'white'} onPress={() => {
+                    //erase all user data
+                    setUserInfo({
+                        username: '',
+                        password: '',
+                        token: '',
+                        refreshToken: '',
+                        id: '',
+                        email: '',
+                        actions: [],
+                        reactions: []
+                    })
+                    setUserInfo(null)
+                    setUserInfo({})
                     if (Platform.OS === 'android') {
-                        showToast('You have been logged out')
+                        showToast()
                     }
                     navigate('/login')
                 }} />
@@ -66,17 +80,7 @@ export default function Account({ userInfo, setUserInfo }) {
                 </Text>
                 <Divider />
                 <Text
-                    style={{...styles.clickableText, color: 'red'}} onPress={async () => {
-                        const token = await refreshToken()
-                    const res = await logOut(token.token)
-                    if (res.status === 200) {
-                        setUserInfo({})
-                        navigate('/login')
-                        if (Platform.OS === 'android')
-                            showToast('You have been logged out')
-                    }
-                    console.log(res)
-                }}>
+                    style={{...styles.clickableText, color: 'red'}} onPress={() => console.log("Coucou")}>
                     Log out
                 </Text>
                 <Divider />
