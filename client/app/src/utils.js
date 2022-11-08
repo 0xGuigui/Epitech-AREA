@@ -1,3 +1,5 @@
+const {ToastAndroid} = require("react-native");
+
 function isEmail(email) {
 	const re =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -16,8 +18,13 @@ function isPort(port) {
 	return re.test(port);
 }
 
+function showToast(message) {
+	ToastAndroid.show(message, ToastAndroid.SHORT);
+}
+
 module.exports = {
 	isEmail,
 	isIpDomain,
 	isPort,
+	showToast,
 }
