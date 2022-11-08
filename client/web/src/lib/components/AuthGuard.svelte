@@ -30,7 +30,7 @@
     });
 </script>
 
-<section in:fly={{duration: 150}} class="relative text-white flex justify-between items-center">
+<section class="relative text-white flex justify-between items-center">
     <!-- Auth guard -->
     {#if userLoggedIn}
         <AreaButton on:click={updateDropdown} width="40" height="40" class="ml-5">
@@ -53,9 +53,9 @@
                 class="z-50 absolute right-0 top-[63px] w-52 rounded-lg text-white bg-area-button overflow-hidden">
             {#each Object.entries(dropDownActions) as value, idx}
                 <div
-                        in:fly={{duration: 250, delay: idx * 50 + 100}}
+                        in:fly={{duration: 250, delay: idx * 50 + 80}}
                         on:click={value[1]}
-                        class="select-none cursor-pointer flex justify-center items-center w-full h-10 hover:bg-area-blue transition-all duration-150">
+                        class="select-none cursor-pointer flex justify-center items-center w-full h-11 hover:bg-area-blue transition-all duration-150">
                     <span class="font-white font-bold">{value[0]}</span>
                 </div>
             {/each}
