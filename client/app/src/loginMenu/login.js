@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import {View, Text, StyleSheet, Image, ToastAndroid, Platform} from 'react-native';
 import { useState } from 'react';
 import {useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
-import {Button, TextInput, IconButton} from 'react-native-paper';
-import {getMe, logUser} from "../services/server";
+import { Button, TextInput, IconButton } from 'react-native-paper';
+import { getMe, logUser } from "../services/server";
 import global from "../../config";
 const logo = require('../assets/logo/logo.png')
+import { showToast } from "../utils";
 
 export default function Login({ setUserInfo }) {
 	const [form, setForm] = useState({
@@ -13,7 +14,6 @@ export default function Login({ setUserInfo }) {
 		password: ""
 	})
 	const navigate = useNavigate()
-	const global = require('../../config')
 
 	return (
 		<View style={styles.loginSection}>
@@ -68,6 +68,8 @@ export default function Login({ setUserInfo }) {
 							return alert(log.message)
 						const me = await getMe(log.token)
 						setUserInfo(me.user)
+						if (Platform.OS === 'android')
+							showToast('Welcome back ' + me.user.username)
 						navigate('/')
 					}}>
 					CONNECT
