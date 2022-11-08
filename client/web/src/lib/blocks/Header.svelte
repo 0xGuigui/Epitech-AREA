@@ -1,8 +1,5 @@
 <script>
     import {loggedIn} from "../../store.ts";
-    import Icon from 'svelte-awesome';
-    import user from 'svelte-awesome/icons/user';
-    import { refresh, comment, codeFork, camera, ban } from 'svelte-awesome/icons';
 
     let scrollY;
     let buffer;
@@ -25,7 +22,6 @@
         </a>
         <div class="flex items-center lg:order-2 text-white">
             {#if $loggedIn === true}
-                <Icon class="scale-150 select-none cursor-pointer hover:text-area-blue transition-all mx-5 flex" data={user}/>
                 <div on:click={() => {loggedIn.update(n => false)}}
                 class="select-none cursor-pointer font-bold mr-2 py-2 px-6 bg-area-button hover:bg-area-blue hover:scale-110 transition-all duration-150 rounded-lg">Logout</div>
             {:else}

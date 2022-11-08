@@ -16,10 +16,6 @@
 </script>
 
 <section class="w-screen h-screen flex flex-col">
-	<!-- Header -->
-	<div class="bg-area-blue w-full min-h-[70px] flex justify-center items-center px-4">
-		<div class="text-white text-center text-3xl">AREA - admin console</div>
-	</div>
 	<!-- Navigation Menu -->
 	<div class="w-full py-3 flex justify-center items-center drop-shadow shadow-gray-500">
 		{#each Object.entries(components) as [key, value]}

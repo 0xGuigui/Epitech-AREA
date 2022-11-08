@@ -85,4 +85,19 @@ module.exports = (area) => {
             return res.json({message: 'Valid token'})
         res.status(498).json({message: 'Invalid token'})
     })
+
+    area.app.get('/events-stream', async (req, res) => {
+        res.set({
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive'
+        });
+        res.flushHeaders();
+
+        area.statsManager.addOpenedRequest(res)
+
+        res.on('close', () => {
+            area.statsManager.removeOpenedRequest(res)
+        })
+    })
 }
