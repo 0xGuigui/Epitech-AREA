@@ -5,6 +5,7 @@ import {Appbar} from "react-native-paper";
 import {DarkTheme} from "../../../config";
 import * as React from "react";
 import * as WebBrowser from 'expo-web-browser'
+import {generateCodeVerifier} from "../../utils";
 
 export default function CreateArea() {
 
@@ -16,10 +17,7 @@ export default function CreateArea() {
 			<View style={styles.actionsContainer}>
 				<View style={styles.actions}>
 					<Pressable style={styles.actionsPressable} onPress={() => {
-						const clientId = "1022518270202499072"
-						const redirect_uri = "area://oauth2"
-						const scopes = "identify email guilds guilds.members.read connections"
-						WebBrowser.openBrowserAsync(`https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirect_uri}&response_type=code&scope=${scopes}`)
+
 					}}>
 						<Text style={styles.actionsText}>Choose an action</Text>
 					</Pressable>
