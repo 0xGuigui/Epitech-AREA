@@ -14,6 +14,7 @@ export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
 	const navigate = useNavigate()
 	const location = useLocation()
+	const global = require('../config')
 
 	const checkUser = async () => {
 		if (location.pathname !== '/')
