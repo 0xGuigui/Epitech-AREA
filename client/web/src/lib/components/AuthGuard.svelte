@@ -6,6 +6,7 @@
     import {clickOutside} from "../utils/clickOutside";
     import AreaButton from "$lib/components/AreaButton.svelte";
     import Fa from "svelte-fa";
+    import { goto } from '$app/navigation';
 
     let showDropdown = false;
     let userLoggedIn = $loggedIn;
@@ -18,6 +19,9 @@
     let dropDownActions = {
         "Profile": () => {
             console.log("profile");
+        },
+        "Mes actions": () => {
+            goto(`/me/actions`);
         },
         "Logout": () => {
             showDropdown = false;

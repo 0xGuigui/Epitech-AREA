@@ -54,7 +54,7 @@
             <h1 class="flex my-5 justify-center text-4xl font-bold text-white">Login</h1>
                 <div class="">
                     <label class="block font-bold text-white" for="email">Email</label>
-                    <input class="rounded shadow-2xl"
+                    <input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1"
                             id="email"
                             name="email"
                             on:change={handleChange}
@@ -66,7 +66,7 @@
                 </div>
                 <div class="my-5">
                     <label class="block font-bold text-white" for="password">Password</label>
-                    <input class="rounded"
+                    <input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1"
                             id="password"
                             name="password"
                             on:change={handleChange}
