@@ -1,13 +1,16 @@
-import {BackHandler, StyleSheet, Text, View} from "react-native";
-import {useNavigate} from "react-router-native";
-import {useContext, useEffect, useState} from "react";
-import {HistoryContext} from "../../historyContext";
-import {getActions, getMe, refreshToken} from "../../services/server";
-import {Pressable} from "@react-native-material/core";
+import {BackHandler, Image, StyleSheet, Text, View} from "react-native";
+import { useNavigate } from "react-router-native";
+import { useContext, useEffect, useState } from "react";
+import { HistoryContext } from "../../historyContext";
+import { getActions, getMe, refreshToken } from "../../services/server";
+import { Pressable } from "@react-native-material/core";
 import ActionDisplay from "./actionDisplay";
 import ActionModal from "./ActionModal";
-import {DarkTheme} from "../../../config";
-import {Appbar} from "react-native-paper";
+import { DarkTheme } from "../../../config";
+import { Appbar, Provider } from "react-native-paper";
+import AREAlogo from '../../assets/logo/app_logo.png'
+
+
 import * as React from "react";
 
 export default function mainPage({userInfo}) {
@@ -42,7 +45,7 @@ export default function mainPage({userInfo}) {
 	return (
 		<View style={styles.mainSection}>
 			<Appbar.Header theme={DarkTheme}>
-				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}}/>
+				<Appbar.Content title="My Actions" style={{alignItems: 'center'}} titleStyle={{color: 'white'}} />
 			</Appbar.Header>
 			<Text style={styles.titleText}> Welcome {userInfo?.user.username}</Text>
 			{actions.length > 0 ?
