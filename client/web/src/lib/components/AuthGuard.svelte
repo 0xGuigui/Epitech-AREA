@@ -6,7 +6,7 @@
     import {clickOutside} from "../utils/clickOutside";
     import AreaButton from "$lib/components/AreaButton.svelte";
     import Fa from "svelte-fa";
-    import { goto } from '$app/navigation';
+    import {goto} from '$app/navigation';
 
     let showDropdown = false;
     let userLoggedIn = $loggedIn;
@@ -54,7 +54,7 @@
                 transition:fly={{duration: 150}}
                 use:clickOutside
                 on:click_outside={updateDropdown}
-                class="z-50 absolute right-0 top-[63px] w-52 rounded-lg text-white bg-area-button overflow-hidden">
+                class="z-50 absolute right-0 top-[63px] w-52 rounded-lg text-white overflow-hidden backdrop-blur-sm bg-white/30">
             {#each Object.entries(dropDownActions) as value, idx}
                 <div
                         in:fly={{duration: 250, delay: idx * 50 + 80}}
