@@ -1,3 +1,11 @@
+<script lang="ts">
+    let payloadExample = [
+        'db', 'api'
+    ]
+</script>
+
 <section>
-	metrics
+    <div class="max-w-[900px]">
+
+    </div>
 </section>

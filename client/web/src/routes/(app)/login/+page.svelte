@@ -1,7 +1,9 @@
 <script>
     import config from "../../../config.js"
     import {createForm} from "svelte-forms-lib";
-    import {loggedIn} from "../../../store.ts";
+    import {loggedIn, accessToken} from "../../../store.ts";
+    import {goto} from "$app/navigation";
+    import {page} from "$app/stores";
 
     let errs = {};
     async function logUser(form) {
@@ -18,7 +20,6 @@
             ...json
         }
     }
-    localStorage.setItem('JWT_tokens', JSON.stringify('value'));
     const {form, errors, handleChange, handleSubmit} = createForm({
         initialValues: {
             email: "",
@@ -38,10 +39,10 @@
             if (response.status === 401) {
                 errs["email"] = "Email or password is invalid";
             } else {
-                loggedIn.update(n => true);
-                window.location = "/";
+                loggedIn.set(true);
+                accessToken.set(response.token);
+                await goto($page.url.searchParams.get("redirect-url") || "/");
             }
-            console.log(response);
         }
     });
 </script>
