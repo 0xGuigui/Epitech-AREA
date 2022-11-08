@@ -137,4 +137,11 @@ module.exports = (area) => {
             })
         })
     })
+
+    area.app.post('/logout', (req, res) => {
+        if (!req.cookies.jwt) {
+            return res.status(401).json({message: 'Unauthorized'})
+        }
+        res.clearCookie('jwt').json({message: 'Logged out'})
+    })
 }
