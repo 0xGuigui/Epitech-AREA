@@ -40,7 +40,7 @@ module.exports = (area) => {
     })
 
     area.app.get('/oauth2/:service', (req, res) => {
-        res.redirect(`area://oauth2/${req.params.service}?code=${req.query.code}`)
+        res.redirect(`area:///oauth2/${req.params.service}?code=${req.query.code}`)
     })
 
     area.app.post('/oauth2/:service', validatePayload(oauthSchema), async (req, res) => {
