@@ -1,14 +1,14 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 const {ref} = require("joi");
 
-async function getRefreshToken(code) {
+async function getRefreshToken(code, redirect_uri, mobile) {
 	const response = await fetch(`https://www.reddit.com/api/v1/access_token`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `basic ${Buffer.from(process.env.REDDIT_CLIENT_ID + ':' + process.env.REDDIT_CLIENT_SECRET).toString('base64')}`
+			'Authorization': `basic ${Buffer.from(process.env[mobile ? 'REDDIT_MOBILE_CLIENT_ID': 'REDDIT_CLIENT_ID'] + ':' + process.env[mobile ? 'REDDIT_MOBILE_CLIENT_SECRET' : 'REDDIT_CLIENT_SECRET']).toString('base64')}`
 		},
-		body: `grant_type=authorization_code&code=${code}&redirect_uri=${process.env.REDDIT_REDIRECT_URI}`
+		body: `grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}`
 	})
 	return await response.json()
 }
@@ -22,6 +22,18 @@ async function getAccessToken(refresh_token) {
 		},
 		body: `grant_type=refresh_token&refresh_token=${refresh_token}`
 	})
+	if (response.status !== 200) {
+		const responseMobile = await fetch(`https://www.reddit.com/api/v1/access_token`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Authorization': `basic ${Buffer.from(process.env.REDDIT_MOBILE_CLIENT_ID + ':' + process.env.REDDIT_MOBILE_CLIENT_SECRET).toString('base64')}`
+			},
+			body: `grant_type=refresh_token&refresh_token=${refresh_token}`
+		})
+		if (responseMobile.status === 200)
+			return await responseMobile.json()
+	}
 	return await response.json()
 }
 
@@ -109,8 +121,8 @@ async function readAllMessages(access_token) {
 module.exports = (area, servicesManager) => {
 	const redditService = new Service('Reddit', 'Reddit - Dive into anything')
 
-	redditService.setAuthentification(async (code) => {
-		const refreshTokenData = await getRefreshToken(code)
+	redditService.setAuthentification(async (code, redirect_uri, mobile) => {
+		const refreshTokenData = await getRefreshToken(code, redirect_uri, mobile)
 		return refreshTokenData.refresh_token
 	})
 

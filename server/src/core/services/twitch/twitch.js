@@ -1,6 +1,6 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 
-async function getRefreshToken(code) {
+async function getRefreshToken(code, redirect_uri) {
 	const response = await fetch(`https://id.twitch.tv/oauth2/token`, {
 		method: 'POST',
 		headers: {
@@ -11,7 +11,7 @@ async function getRefreshToken(code) {
 			client_secret: process.env.TWITCH_CLIENT_SECRET,
 			code,
 			grant_type: 'authorization_code',
-			redirect_uri: process.env.TWITCH_REDIRECT_URI
+			redirect_uri
 		})
 	})
 	return await response.json()
@@ -85,8 +85,8 @@ async function changeMyDescription(access_token, description = "") {
 module.exports = (area, servicesManager) => {
 	const twitchService = new Service('Twitch', 'Twitch - We saved you a seat in chat')
 
-	twitchService.setAuthentification(async (code) => {
-		const refreshTokenData = await getRefreshToken(ctx.payload.twitch_code)
+	twitchService.setAuthentification(async (code, redirect_uri) => {
+		const refreshTokenData = await getRefreshToken(code, redirect_uri)
 		return refreshTokenData.refresh_token
 	})
 
