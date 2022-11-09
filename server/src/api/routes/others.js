@@ -61,7 +61,7 @@ module.exports = (area) => {
             req.jwt = decoded
         })
 
-        let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.body.userId
+        let userId = req.jwt.userId
 
         const service = area.servicesManager.getService(req.params.service)
 
@@ -95,24 +95,8 @@ module.exports = (area) => {
     })
 
     area.app.get('/oauth2/:service/check-token', async (req, res) => {
-        let token = req.headers['x-access-token'] || req.headers['authorization']
 
-        if (!token && req.query.token) {
-            token = "Bearer " + req.query.token
-        }
-
-        if (!token) {
-            return res.status(401).json({message: 'No token provided'})
-        }
-        const rawToken = token.split(' ')[1]
-        jwt.verify(rawToken, process.env.JWT_ACCESS_SECRET, {}, (err, decoded) => {
-            if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
-                return res.status(401).json({message: 'Unauthorized'})
-            }
-            req.jwt = decoded
-        })
-
-        let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.body.userId
+        let userId = req.jwt.userId
 
         const service = area.servicesManager.getService(req.params.service)
 
