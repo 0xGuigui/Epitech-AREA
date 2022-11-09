@@ -22,8 +22,10 @@
     //}
 </script>
 
-<section class="h-[100vh] w-[100vw] area-fade2 flex block">
-    <AreaButton on:click={() => {}}>
-        <Fa icon={icons.faUser}/>
-    </AreaButton>
+<section class="h-[100vh] w-[100vw] area-fade2 flex justify-center items-center">
+    <div data-aos="fade-down" data-aos-duration="700">
+        <div on:click={() => {}} class="bg-transparent hover:scale-110 select-none cursor-pointer transition-all duration-150">
+            <Fa icon={icons.faPlus} size="5x" primaryColor="#262729"/>
+        </div>
+    </div>
 </section>
