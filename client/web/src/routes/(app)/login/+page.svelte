@@ -1,6 +1,6 @@
 <script>
     import {createForm} from "svelte-forms-lib";
-    import {loggedIn, accessToken, serverUrl} from "../../../store.ts";
+    import {loggedIn, accessToken, serverUrl, serverState} from "../../../store.ts";
     import {goto} from "$app/navigation";
     import {page} from "$app/stores";
     import {browser} from "$app/environment";
@@ -50,6 +50,7 @@
                 serverUrl.set(values.serverUrl);
                 loggedIn.set(true);
                 accessToken.set(response.token);
+                serverState.set("online");
                 if (browser) {
                     localStorage.setItem("refreshToken", response.refreshToken);
                 }
