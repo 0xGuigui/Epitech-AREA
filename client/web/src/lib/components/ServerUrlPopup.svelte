@@ -56,10 +56,10 @@
                 Server URL:
             </div>
             <div class="flex w-[85%] pt-5">
-                <div class="flex w-full ring-1 ring-gray-300 rounded-full overflow-hidden">
+                <div class="flex w-full ring-1 ring-gray-300 rounded-lg overflow-hidden">
                     <input bind:value={serverUrlInputValue} placeholder="enter server url" class="py-2.5 pl-4 w-full bg-transparent focus:outline-none">
                     <div    on:click={updateServerUrl}
-                            class="transition-all duration-150 w-[180px] text-center {serverUrlInputValue === serverUrlBuffer ? 'bg-gray-300' : 'bg-ui-blue text-white cursor-pointer'} py-2.5 font-bold">Switch server</div>
+                            class="select-none transition-all duration-150 w-[180px] text-center {serverUrlInputValue === serverUrlBuffer ? 'bg-gray-300' : 'bg-ui-blue text-white cursor-pointer'} py-2.5 font-bold">Switch server</div>
                 </div>
             </div>
         </div>
