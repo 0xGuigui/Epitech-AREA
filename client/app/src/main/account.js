@@ -1,11 +1,10 @@
 import {Alert, Platform, ScrollView, StyleSheet, Text, ToastAndroid, View} from "react-native";
-import { Appbar, Divider } from 'react-native-paper';
+import {Appbar, Divider, Button, Paragraph, Dialog, Portal, Provider, TextInput} from 'react-native-paper';
 import { DarkTheme } from "../../config";
 import * as React from "react";
 import { useNavigate } from "react-router-native";
-import {getActions, getMe, refreshToken} from "../services/server";
+import { getActions, getMe, refreshToken, logOut, deleteAccount } from "../services/server";
 import {useEffect} from "react";
-import { logOut, deleteAccount } from '../services/server'
 import { showToast } from '../utils'
 
 export default function Account({ userInfo, setUserInfo }) {
@@ -21,11 +20,18 @@ export default function Account({ userInfo, setUserInfo }) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "OK", onPress: () => {
-                        showToast('Account deleted, you will be logged out')
-                        navigate('/login')
-                        deleteAccount(userInfo, setUserInfo).then(r => console.log(r))
-                    } }
+                { text: "OK", onPress: async () => {
+                        const token = await refreshToken()
+                        if (token) {
+                            const res = await deleteAccount(token)
+                            if (res) {
+                                await logOut()
+                                navigate('/login')
+                                showToast("Account deleted")
+                            }
+                        }
+                    }
+                }
             ],
             { cancelable: false }
         );
@@ -83,7 +89,24 @@ export default function Account({ userInfo, setUserInfo }) {
                 </Text>
                 <Divider />
                 <Text
-                    style={styles.clickableText} onPress={() => console.log("Coucou")}>
+                    style={styles.clickableText} onPress={() => {
+                        Alert.alert(
+                            "Change username",
+                            "Are you sure you want to change your username?",
+                            [
+                                {
+                                    text: "Cancel",
+                                    onPress: () => console.log("Cancel Pressed"),
+                                    style: "cancel"
+                                },
+                                { text: "OK", onPress: async () => {
+                                        navigate('/changeUsername')
+                                    }
+                                }
+                            ],
+                            { cancelable: false }
+                        );
+                    }}>
                     Change username
                 </Text>
                 <Divider />

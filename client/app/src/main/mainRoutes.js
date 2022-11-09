@@ -3,8 +3,8 @@ import {Route, Routes, useLocation, useNavigate} from "react-router-native";
 import MainPage from './mainPage/mainPage'
 import Account from "./account";
 import CreateArea from "./createArea/create";
-import {AreaProvider} from "./createArea/areaContext";
-import {useEffect} from "react";
+import { AreaProvider } from "./createArea/areaContext";
+import { useEffect } from "react";
 
 export default function MainRoutes({ userInfo, setUserInfo }) {
 	const location = useLocation()
