@@ -3,6 +3,7 @@
     import {loggedIn, accessToken, serverUrl} from "../../../store.ts";
     import {goto} from "$app/navigation";
     import {page} from "$app/stores";
+    import {browser} from "$app/environment";
     import config from "$lib/data/config"
 
     let errs = {};
@@ -49,6 +50,9 @@
                 serverUrl.set(values.serverUrl);
                 loggedIn.set(true);
                 accessToken.set(response.token);
+                if (browser) {
+                    localStorage.setItem("refreshToken", response.refreshToken);
+                }
                 await goto($page.url.searchParams.get("redirect-url") || "/");
             }
         }

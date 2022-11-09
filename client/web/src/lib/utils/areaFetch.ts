@@ -1,22 +1,63 @@
-import {serverUrl} from "../../store";
+import {accessToken, loggedIn} from "../../store";
 
-export function refreshAccessToken():boolean {
-    return true;
+function buildRequestFactory(url: string, method: string, body: object | null, token: string | null) {
+    const config = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+    if (body) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        config["body"] = JSON.stringify(body)
+    }
+    if (token) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return {
+        fetch: () => fetch(url, config),
+    }
 }
 
-export async function areaFetch(url: string, method = "GET", body = null, depth = 0): Promise<any> {
-    const token = localStorage.getItem("accessToken") || 'dummy'
+export async function refreshAccessToken(serverUrl: string): Promise<boolean> {
+    const request = buildRequestFactory(serverUrl + '/refresh', 'POST', {
+        jwt: localStorage.getItem('refreshToken') || '',
+    }, null)
+    const response = await request.fetch()
 
-    const response = await fetch(url, {
-        method,
-        body,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    if (response.status === 401 && depth === 0 && refreshAccessToken()) {
-        return areaFetch(url, method, body, depth + 1)
+    if (response.status === 200) {
+        const data = await response.json()
+        accessToken.set(data.token)
+        return true;
     }
-    return response.json()
+    loggedIn.set(false)
+    return false;
+}
+
+export async function areaFetch(url: string, method = "GET", body = null): Promise<any> {
+    const token = localStorage.getItem("accessToken");
+    const serverUrl = localStorage.getItem("serverURL");
+
+    if (!token || !serverUrl) {
+        throw new Error("No token or serverUrl");
+    }
+    const request = buildRequestFactory(serverUrl + url, method, body, token);
+    let response = await request.fetch();
+
+    if (response.status === 401) {
+        if (await refreshAccessToken(serverUrl)) {
+            response = await request.fetch();
+
+            if (response.status === 401) {
+                throw new Error("Unauthorized");
+            }
+            return response;
+        }
+        throw new Error("Unauthorized");
+    }
+    return response;
 }
