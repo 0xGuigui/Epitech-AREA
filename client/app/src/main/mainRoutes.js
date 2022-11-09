@@ -4,8 +4,17 @@ import MainPage from './mainPage/mainPage'
 import Account from "./account";
 import CreateArea from "./createArea/create";
 import {AreaProvider} from "./createArea/areaContext";
+import {useEffect} from "react";
 
 export default function MainRoutes({ userInfo, setUserInfo }) {
+	const location = useLocation()
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (location.pathname === '/' && userInfo)
+			navigate('/main')
+	}, [location])
+
 	return (
 		<>
 			<Routes>
