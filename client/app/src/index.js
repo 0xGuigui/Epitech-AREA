@@ -23,7 +23,7 @@ export default function Index() {
 		if (token.status === 200) {
 			const me = await getMe(token.token)
 			if (me.status === 200) {
-				setUserInfo(me)
+				setUserInfo(me.user)
 				const initialUrl = await Linking.getInitialURL();
 
 				if (initialUrl) {
@@ -57,7 +57,7 @@ export default function Index() {
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
 					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
-					<Route path='/oauth2/:service' element={<Oauth2 setUserInfo={setUserInfo} />} />
+					<Route path='/oauth2/:service' element={<Oauth2 setUserInfo={setUserInfo} userInfo={userInfo} />} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>

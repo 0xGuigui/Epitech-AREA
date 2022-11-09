@@ -122,6 +122,36 @@ async function deleteAccount(userInfo) {
 	}
 }
 
+async function registerService(token, service, code) {
+	const response = await fetch(`${serverUrl}/oauth2/${service}?mobile=true`, {
+		method: 'POST',
+		headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({code, redirect_uri: `${serverUrl}/oauth2/${service}`})
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
+async function checkService(token, service) {
+	const response = await fetch(`${serverUrl}/oauth2/${service}/check-token`, {
+		headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -131,5 +161,7 @@ module.exports = {
 	getActions,
 	getAbout,
 	logOut,
-	deleteAccount
+	deleteAccount,
+	registerService,
+	checkService
 }
