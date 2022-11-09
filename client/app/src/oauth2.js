@@ -11,7 +11,6 @@ export default function Oauth2({setUserInfo}) {
 	}
 
 	useEffect(() => {
-		console.log(location)
 		console.log(params['service'])
 		console.log(searchParams.get('code'))
 	}, [])
