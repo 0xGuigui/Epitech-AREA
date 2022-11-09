@@ -1,14 +1,15 @@
 <script lang="ts">
     import {page} from "$app/stores";
     import {fly} from "svelte/transition";
-    import {loggedIn} from "../../store";
+    import {loggedIn, serverUrl} from "../../store";
     import {onMount} from "svelte";
     import {icons} from "../utils/fontAwesome";
     import {clickOutside} from "../utils/clickOutside";
     import AreaButton from "$lib/components/AreaButton.svelte";
     import Fa from "svelte-fa";
     import {goto} from '$app/navigation';
-    import serverUrl from "../../config.js"
+    import {browser} from '$app/environment';
+    import ServerUrlPopup from "$lib/components/ServerUrlPopup.svelte";
 
     export let light = false;
 
@@ -18,8 +19,14 @@
     let updateDropdown = () => {
         showDropdown = !showDropdown;
     };
+    let updatePopup = () => {
+        showPopup = !showPopup;
+        if (browser) {
+            document.body.style.overflow = showPopup ? "hidden" : "auto";
+        }
+    };
     let dropDownActions = {
-        "Profile": () => {
+        "Profil": () => {
             console.log("profile");
         },
         "Mes actions": () => {
@@ -38,14 +45,12 @@
     })
 </script>
 
-{#if showPopup}
-    ok
-{/if}
+<ServerUrlPopup on:close={updatePopup} show={showPopup} />
 <section class="relative text-white flex justify-between items-center">
     <!-- Auth guard -->
     {#if userLoggedIn}
-        <AreaButton height="40" class="relative">
-            <span class="font-bold text-sm px-3">{serverUrl.serverUrl}</span>
+        <AreaButton height="40" class="relative" animateOnHover={false} on:click={updatePopup}>
+            <span class="font-bold text-sm px-3">{$serverUrl}</span>
             <span class="absolute top-0 right-0 flex h-3 w-3 -translate-y-[30%] translate-x-[30%]">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
@@ -76,6 +81,9 @@
                         class="select-none cursor-pointer flex justify-center items-center w-full h-11 hover:bg-area-blue transition-all duration-150">
                     <span class="font-white font-bold">{value[0]}</span>
                 </div>
+                {#if idx !== Object.entries(dropDownActions).length - 1}
+                    <div class="w-full h-[1px] bg-white/20"></div>
+                {/if}
             {/each}
         </div>
     {/if}

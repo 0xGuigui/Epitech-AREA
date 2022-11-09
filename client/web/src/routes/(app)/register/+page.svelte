@@ -1,11 +1,10 @@
 <script>
-    import config from "../../../config.js"
     import {createForm} from "svelte-forms-lib";
 
     let errs = {};
 
     async function logUser(form) {
-        const response = await fetch(`${config.serverUrl}/register`, {
+        const response = await fetch(`test/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -52,7 +51,7 @@
     });
 </script>
 
-<section class="h-[100vh] w-[100vw] area-fade2 flex justify-center items-center">
+<section class="h-[100vh] w-[100vw] flex justify-center items-center">
     <div data-aos="fade-up"
          class="shadow-2xl w-[400px] h-[600px] backdrop-blur-sm bg-white/30 rounded-3xl">
         <form class="flex flex-col justify-center items-center h-full" on:submit={handleSubmit}>
