@@ -64,8 +64,8 @@ export default function Register() {
 						mode="flat"
 						color='#9a5373'
 						error={error.email}
-						keyboardType='email-address'
 						autoCapitalize='none'
+						keyboardType='email-address'
 						label='Enter your email'
 						onPressIn={() => error.email && setError({...error, email: false})}
 						onChangeText={e => setForm({...form, email: e})}

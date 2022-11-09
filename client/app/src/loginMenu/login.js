@@ -31,8 +31,8 @@ export default function Login({ setUserInfo }) {
 					mode="flat"
 					color='#9a5373'
 					label="Email"
-					keyboardType='email-address'
 					autoCapitalize='none'
+					keyboardType='email-address'
 					activeUnderlineColor='#9a5373'
 					onChangeText={e => setForm({...form, email: e})}
 					style={{ marginLeft: 16, marginRight: 16, marginTop: 16, color: 'white', trailingContainerStyle: 'white'}}
