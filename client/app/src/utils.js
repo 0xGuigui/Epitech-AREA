@@ -1,3 +1,5 @@
+const {ToastAndroid} = require("react-native");
+
 function isEmail(email) {
 	const re =
 		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -59,10 +61,15 @@ const generateCodeVerifier = () => {
 	return Array.from(array, dec => ("0" + dec.toString(16)).substring(-2)).join("");
 }
 
+function showToast(message) {
+	ToastAndroid.show(message, ToastAndroid.SHORT);
+}
+
 module.exports = {
 	isEmail,
 	isIpDomain,
 	isPort,
 	generateCodeVerifier,
-	generateCodeChallengeFromVerifier
+	generateCodeChallengeFromVerifier,
+	showToast,
 }
