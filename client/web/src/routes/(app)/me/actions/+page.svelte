@@ -1,6 +1,6 @@
 <script>
     import AreaButton from "$lib/components/AreaButton.svelte";
-    import {icons} from "../../../../lib/utils/fontAwesome.ts";
+    import {icons} from "$lib/utils/fontAwesome.js";
     import Fa from "svelte-fa";
 
 

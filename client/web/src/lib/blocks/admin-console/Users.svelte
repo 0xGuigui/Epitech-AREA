@@ -1,4 +1,6 @@
 <script lang="ts">
+	import {areaFetch} from "../../utils/areaFetch";
+
 	export let data: object;
 	let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzY5NzY1NGZhMzZkZjgyZjNhNmI5M2QiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjY3OTI0NTY3LCJleHAiOjE2Njc5MjQ4Njd9.rJyqXV0wDlMLTpiZUAAIL6-oXQeEPtdWwoBC4PzK6J8";
 

@@ -1,18 +1,21 @@
 <script>
-    import config from "../../../config.js"
     import {createForm} from "svelte-forms-lib";
-    import {loggedIn, accessToken} from "../../../store.ts";
+    import {loggedIn, accessToken, serverUrl} from "../../../store.ts";
     import {goto} from "$app/navigation";
     import {page} from "$app/stores";
+    import config from "$lib/data/config"
 
     let errs = {};
     async function logUser(form) {
-        const response = await fetch(`${config.serverUrl}/login`, {
+        const response = await fetch(`${form.serverUrl}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(form)
+            body: JSON.stringify({
+                email: form.email,
+                password: form.password
+            })
         })
         const json = await response.json()
         return {
@@ -23,9 +26,13 @@
     const {form, errors, handleChange, handleSubmit} = createForm({
         initialValues: {
             email: "",
-            password: ""
+            password: "",
+            serverUrl: $serverUrl || config.defaultServerUrl
         },
         validate: values => {
+            if (values.serverUrl === "") {
+                errs.serverUrl = "Invalid server address"
+            }
             if (values.email === "") {
                 errs["email"] = "Email is required";
             }
@@ -37,8 +44,9 @@
         onSubmit: async values => {
             const response = await logUser(values);
             if (response.status === 401) {
-                errs["email"] = "Email or password is invalid";
+                errs["email"] = "Invalid data provided";
             } else {
+                serverUrl.set(values.serverUrl);
                 loggedIn.set(true);
                 accessToken.set(response.token);
                 await goto($page.url.searchParams.get("redirect-url") || "/");
@@ -47,13 +55,25 @@
     });
 </script>
 
-<section class="h-[100vh] w-[100vw] area-fade2 flex justify-center items-center">
+<section class="h-[100vh] w-[100vw] flex justify-center items-center">
     <div
         data-aos="fade-up"
         class="shadow-2xl w-[350px] h-[500px] backdrop-blur-sm bg-white/30 rounded-3xl">
         <form class="flex flex-col justify-center items-center h-full" on:submit={handleSubmit}>
             <h1 class="flex my-5 justify-center text-4xl font-bold text-white">Login</h1>
-                <div class="">
+                <div class="mt-5">
+                    <label class="block font-bold text-white" for="serverUrl">Server URL</label>
+                    <input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1"
+                           id="serverUrl"
+                           name="serverUrl"
+                           on:change={handleChange}
+                           bind:value={$form.serverUrl}
+                    />
+                    {#if $errors.serverUrl}
+                        <small data-aos="fade-right" data-aos-duration="500" class="block flex justify-center text-red-600 font-semibold">{$errors.serverUrl}</small>
+                    {/if}
+                </div>
+                <div class="mt-5">
                     <label class="block font-bold text-white" for="email">Email</label>
                     <input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1"
                             id="email"

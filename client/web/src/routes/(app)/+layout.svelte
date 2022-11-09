@@ -1,6 +1,8 @@
 <script>
-	import Header from "$lib/blocks/Header.svelte";
+    import Header from "$lib/blocks/Header.svelte";
 </script>
 
-<Header light={true} />
-<slot />
+<div class="area-fade2">
+    <Header light={true}/>
+    <slot/>
+</div>

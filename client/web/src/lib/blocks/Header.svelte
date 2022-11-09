@@ -18,7 +18,7 @@
 
 <section
         class:-translate-y-full={scrollY >= hideBreakpoint && direction === 'down'}
-        class="relative flex justify-between items-center w-full h-16 px-5 bg-area-header transition-all duration-150">
+        class="relative flex justify-between items-center w-full h-16 px-5 bg-area-header transition-all duration-200">
     <div>
         <a href="/" class="flex items-center">
             <img src="/logo-area.png" class="mr-2 h-6 sm:h-8 hover:scale-110 duration-150" alt="area_logo"/>
