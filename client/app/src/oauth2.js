@@ -20,15 +20,28 @@ export default function Oauth2({setUserInfo}) {
 	const location = useLocation()
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams();
+	const history = useContext(HistoryContext)
+	const navigate = useNavigate()
 
 	const doStuff = async () => {
 
+	}
+
+	const backAction = () => {
+		navigate(history.prev)
 	}
 
 	useEffect(() => {
 		console.log(params['service'])
 		console.log(searchParams.get('code'))
 	}, [])
+
+	useEffect(() => {
+		BackHandler.addEventListener("hardwareBackPress", backAction);
+
+		return () =>
+			BackHandler.removeEventListener("hardwareBackPress", backAction);
+	}, [history])
 
 	return (
 		<View style={ DarkTheme.container }>
