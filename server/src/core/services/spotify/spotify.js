@@ -1,14 +1,14 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 const {Buffer} = require("buffer")
 
-async function getRefreshToken(code) {
+async function getRefreshToken(code, redirect_uri) {
 	const response = await fetch(`https://accounts.spotify.com/api/token`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Authorization': 'Basic ' + (Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
 		},
-		body: `code=${code}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(process.env.SPOTIFY_REDIRECT_URI)}&client_id=${process.env.SPOTIFY_CLIENT_ID}`
+		body: `code=${code}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${process.env.SPOTIFY_CLIENT_ID}`
 	})
 	return await response.json()
 }
@@ -121,8 +121,8 @@ async function getMyPlaylists(access_token) {
 module.exports = (area, servicesManager) => {
 	const spotifyService = new Service('Spotify', "Spotify - control your music")
 
-	spotifyService.setAuthentification(async (code) => {
-		const refreshTokenData = await getRefreshToken(code)
+	spotifyService.setAuthentification(async (code, redirect_uri) => {
+		const refreshTokenData = await getRefreshToken(code, redirect_uri)
 		return refreshTokenData.refresh_token
 	})
 

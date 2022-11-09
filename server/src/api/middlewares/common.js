@@ -25,15 +25,15 @@ module.exports = (area) => {
 
     // JWT middleware
     area.app.use((req, res, next) => {
-        let token = req.headers['x-access-token'] || req.headers['authorization']
-
-        if (!token && req.query.token) {
-            token = "Bearer " + req.query.token
-        }
         for (const unprotectedRoute of area.unprotectedRoutes) {
             if (req.path.slice(1).startsWith(unprotectedRoute)) {
                 return next()
             }
+        }
+
+        let token = req.headers['x-access-token'] || req.headers['authorization']
+        if (!token && req.query.token) {
+            token = "Bearer " + req.query.token
         }
         if (!token) {
             return res.status(401).json({message: 'No token provided'})

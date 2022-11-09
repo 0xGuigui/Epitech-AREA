@@ -25,5 +25,6 @@ module.exports.updatePasswordSchema = joi.object({
 }).unknown(true);
 
 module.exports.oauthSchema = joi.object({
-    code: joi.string().required()
-})
+    code: joi.string().required(),
+    redirect_uri: joi.string().required()
+}).unknown(true)

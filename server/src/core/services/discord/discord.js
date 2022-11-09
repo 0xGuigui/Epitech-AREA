@@ -2,7 +2,7 @@ const {Service, Action, Reaction} = require('../serviceComponents')
 const mongoose = require("mongoose");
 const {ref} = require("joi");
 
-async function getRefreshToken(code) {
+async function getRefreshToken(code, redirect_uri) {
 	const response = await fetch(`https://discord.com/api/oauth2/token`, {
 		method: 'POST',
 		headers: {
@@ -11,7 +11,7 @@ async function getRefreshToken(code) {
 		body: new URLSearchParams({
 			client_id: process.env.DISCORD_CLIENT_ID,
 			client_secret: process.env.DISCORD_CLIENT_SECRET,
-			redirect_uri: process.env.DISCORD_REDIRECT_URI,
+			redirect_uri,
 			code,
 			grant_type: 'authorization_code'
 		})
@@ -74,17 +74,23 @@ async function saveRefreshToken(refresh_token, userId, serviceName, ctx) {
 	const user = await mongoose.model('User')
 		.findById(userId)
 		.exec()
-	user.data[serviceName] = refresh_token
+	user.data = {
+		...user.data,
+		[serviceName]: refresh_token
+	}
 	if (ctx)
-		ctx.actionData.user.data[discordService.name] = refresh_token
+		ctx.actionData.user.data = {
+			...ctx.actionData.user.data,
+			[serviceName]: refresh_token
+		}
 	await user.save()
 }
 
 module.exports = (area, servicesManager) => {
 	const discordService = new Service('Discord', "Discord - your place to talk")
 
-	discordService.setAuthentification(async (code) => {
-		const refreshData = await getRefreshToken(code)
+	discordService.setAuthentification(async (code, redirect_uri) => {
+		const refreshData = await getRefreshToken(code, redirect_uri)
 		return refreshData.refresh_token
 	})
 
