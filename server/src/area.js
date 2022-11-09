@@ -13,7 +13,7 @@ const StatsManager = require('./core/statsManager')
 class AREA {
     constructor() {
         this.app = express()
-        this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify", "webhook"]
+        this.unprotectedRoutes = ["login", "refresh", "register", "reset-password", "about.json", "verify", "webhook", "oauth2"]
 
         // Call dotenv to init env file
         configLoader.initEnv()
