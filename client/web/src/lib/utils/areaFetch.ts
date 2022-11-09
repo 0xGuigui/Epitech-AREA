@@ -1,4 +1,5 @@
 import {accessToken, loggedIn, serverState} from "../../store";
+import {browser} from "$app/environment";
 
 function buildRequestFactory(url: string, method: string, body: object | null, token: string | null) {
     const config = {
@@ -39,6 +40,7 @@ export async function refreshAccessToken(serverUrl: string): Promise<boolean> {
 }
 
 export async function areaFetch(url: string, method = "GET", body = null): Promise<any> {
+    if (!browser) return;
     const token = localStorage.getItem("accessToken");
     const serverUrl = localStorage.getItem("serverURL");
 
