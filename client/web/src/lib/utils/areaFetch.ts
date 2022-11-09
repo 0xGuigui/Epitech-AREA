@@ -1,4 +1,5 @@
-import {accessToken, loggedIn} from "../../store";
+import {accessToken, loggedIn, serverState} from "../../store";
+import {browser} from "$app/environment";
 
 function buildRequestFactory(url: string, method: string, body: object | null, token: string | null) {
     const config = {
@@ -39,25 +40,33 @@ export async function refreshAccessToken(serverUrl: string): Promise<boolean> {
 }
 
 export async function areaFetch(url: string, method = "GET", body = null): Promise<any> {
+    if (!browser) return;
     const token = localStorage.getItem("accessToken");
     const serverUrl = localStorage.getItem("serverURL");
 
     if (!token || !serverUrl) {
         throw new Error("No token or serverUrl");
     }
-    const request = buildRequestFactory(serverUrl + url, method, body, token);
-    let response = await request.fetch();
+    try {
+        let request = buildRequestFactory(serverUrl + url, method, body, token);
+        let response = await request.fetch();
 
-    if (response.status === 401) {
-        if (await refreshAccessToken(serverUrl)) {
-            response = await request.fetch();
+        serverState.set("online");
+        if (response.status === 401) {
+            if (await refreshAccessToken(serverUrl)) {
+                const newToken = localStorage.getItem("accessToken");
+                request = buildRequestFactory(serverUrl + url, method, body, newToken);
+                response = await request.fetch();
 
-            if (response.status === 401) {
-                throw new Error("Unauthorized");
+                if (response.status === 401) {
+                    throw new Error("Unauthorized");
+                }
+                return response;
             }
-            return response;
+            throw new Error("Unauthorized");
         }
-        throw new Error("Unauthorized");
+        return response;
+    } catch (e) {
+        serverState.set("error");
     }
-    return response;
 }
