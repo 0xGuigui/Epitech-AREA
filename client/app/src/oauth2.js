@@ -1,8 +1,10 @@
 import {useEffect} from "react";
-import {useLocation} from "react-router-native";
+import {useLocation, useParams, useSearchParams} from "react-router-native";
 
 export default function Oauth2({setUserInfo}) {
 	const location = useLocation()
+	const params = useParams()
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	const doStuff = async () => {
 
@@ -10,6 +12,8 @@ export default function Oauth2({setUserInfo}) {
 
 	useEffect(() => {
 		console.log(location)
+		console.log(params['service'])
+		console.log(searchParams.get('code'))
 	}, [])
 
 	return (

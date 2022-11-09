@@ -28,7 +28,7 @@ export default function Index() {
 
 				if (initialUrl) {
 					const test = Linking.parse(initialUrl)
-					return navigate(test.path)
+					return navigate(`${test.path}?${Object.keys(test.queryParams).map((e, i) => `${e}=${test.queryParams[e]}${i > 0 ? '&' : ''}`)}`)
 				}
 				return navigate('/main')
 			}
@@ -43,7 +43,7 @@ export default function Index() {
 			const token = await refreshToken()
 			if (token.status === 200) {
 				const test = Linking.parse(url)
-				return navigate(test.path)
+				return navigate(`${test.path}?${Object.keys(test.queryParams).map((e, i) => `${e}=${test.queryParams[e]}${i > 0 ? '&' : ''}`)}`)
 			}
 		});
 		return remove
@@ -57,7 +57,7 @@ export default function Index() {
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
 					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
-					<Route path='/oauth2' element={<Oauth2 setUserInfo={setUserInfo} />} />
+					<Route path='/oauth2/:service' element={<Oauth2 setUserInfo={setUserInfo} />} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>
