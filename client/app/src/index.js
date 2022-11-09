@@ -1,14 +1,15 @@
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Login from './loginMenu/login';
 import { useEffect, useState } from "react";
-import {Route, Routes, useDeepLinking, useLocation, useNavigate} from "react-router-native";
+import { Route, Routes, useDeepLinking, useLocation, useNavigate} from "react-router-native";
 import MainRoutes from "./main/mainRoutes";
-import {getMe, refreshToken} from "./services/server";
+import { getMe, refreshToken } from "./services/server";
 import Register from "./loginMenu/register";
 import Forgot from "./loginMenu/forgot";
-import {HistoryProvider} from "./historyContext";
+import { HistoryProvider } from "./historyContext";
 import SettingsRoutes from "./loginMenu/settings/settingsRoutes";
 import Oauth2 from "./oauth2";
+import ChangeUsername from "./main/changeUsername";
 import * as Linking from 'expo-linking'
 
 export default function Index() {
@@ -58,6 +59,7 @@ export default function Index() {
 					<Route path='/forgot' element={<Forgot />} />
 					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
 					<Route path='/oauth2/:service' element={<Oauth2 setUserInfo={setUserInfo} userInfo={userInfo} />} />
+					<Route path='/changeUsername' element={<ChangeUsername userInfo={userInfo} setUserInfo={setUserInfo} />} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>

@@ -122,6 +122,22 @@ async function deleteAccount(userInfo) {
 	}
 }
 
+async function changeUsername(userInfo, username) {
+	const response = await fetch(`${serverUrl}/me`, {
+		method: 'PATCH',
+		headers: {
+			'Authorization': `Bearer ${userInfo.token}`,
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({username})
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 async function registerService(token, service, code) {
 	const response = await fetch(`${serverUrl}/oauth2/${service}?mobile=true`, {
 		method: 'POST',
@@ -162,6 +178,7 @@ module.exports = {
 	getAbout,
 	logOut,
 	deleteAccount,
+	changeUsername,
 	registerService,
 	checkService
 }

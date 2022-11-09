@@ -35,14 +35,6 @@ export default function Register() {
 
 	return (
 		<View style={styles.view}>
-			{/*<IconButton*/}
-			{/*	icon="arrow-left-thick"*/}
-			{/*	iconColor="white"*/}
-			{/*	size={24}*/}
-			{/*	style={styles.backButton}*/}
-			{/*	onPress={() => {*/}
-			{/*		navigate('/login')*/}
-			{/*	}} />*/}
 			<View style={styles.subView}>
 				<View style={styles.subsubView}>
 					<Text style={styles.registerText}>Register your account</Text>
@@ -50,7 +42,6 @@ export default function Register() {
 						mode="flat"
 						color='#9a5373'
 						error={error.username}
-						autoCapitalize='none'
 						label='Enter your username'
 						onPressIn={() => error.username && setError({...error, username: false})}
 						onChangeText={e => setForm({...form, username: e})}
