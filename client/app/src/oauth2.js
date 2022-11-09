@@ -8,6 +8,7 @@ const discordLogo = require('./assets/img/discord_logo.png')
 const twitchLogo = require('./assets/img/twitch_logo.png')
 const redditLogo = require('./assets/img/reddit_logo.png')
 import {HistoryContext} from "./historyContext";
+import {checkService, refreshToken, registerService} from "./services/server";
 
 const logos = {
 	Discord: discordLogo,
@@ -16,25 +17,27 @@ const logos = {
 	Twitch: twitchLogo
 }
 
-export default function Oauth2({setUserInfo}) {
+export default function Oauth2({userInfo, setUserInfo}) {
 	const location = useLocation()
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams();
 	const history = useContext(HistoryContext)
 	const navigate = useNavigate()
 
-	const doStuff = async () => {
-
+	const registerCode = async () => {
+		const token = await refreshToken()
+		token.status !== 200 && navigate('/login')
+		await registerService(token.token, params.service, searchParams.get('code'))
 	}
+
+	useEffect(() => {
+		if (searchParams.get('code'))
+			registerCode()
+	}, [])
 
 	const backAction = () => {
 		navigate(history.prev)
 	}
-
-	useEffect(() => {
-		console.log(params['service'])
-		console.log(searchParams.get('code'))
-	}, [])
 
 	useEffect(() => {
 		BackHandler.addEventListener("hardwareBackPress", backAction);
@@ -46,7 +49,7 @@ export default function Oauth2({setUserInfo}) {
 	return (
 		<View style={ DarkTheme.container }>
 			<Image source={logos[params.service]} style={styles.logo}/>
-			<Text style={styles.titleText}>Connected to {params.service}</Text>
+			<Text style={styles.titleText}>{searchParams.get('code') ? `Connected to ${params.service}` : `Connection to ${params.service} refused`}</Text>
 			<Button
 				mode="contained"
 				onPress={backAction}
