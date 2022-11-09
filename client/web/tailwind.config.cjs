@@ -18,7 +18,7 @@ module.exports = {
 				'ui-blue': 'rgb(26,115,232)',
 			},
 			fontFamily: {
-				Fira: ['Fira Sans Extra Condensed', 'sans-serif']
+			    area: ['Product Sans Regular', 'sans-serif'],
 			}
 		}
 	},
