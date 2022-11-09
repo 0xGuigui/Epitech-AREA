@@ -1,7 +1,7 @@
 <script lang="ts">
     import {page} from "$app/stores";
     import {fly} from "svelte/transition";
-    import {loggedIn, serverUrl} from "../../store";
+    import {loggedIn, serverUrl, serverState} from "../../store";
     import {onMount} from "svelte";
     import {icons} from "../utils/fontAwesome";
     import {clickOutside} from "../utils/clickOutside";
@@ -12,10 +12,12 @@
     import ServerUrlPopup from "$lib/components/ServerUrlPopup.svelte";
 
     export let light = false;
+    export let admin = false;
 
     let showDropdown = false;
     let showPopup = false;
     let userLoggedIn = undefined;
+    let serverStateBuffer = undefined;
     let updateDropdown = () => {
         showDropdown = !showDropdown;
     };
@@ -42,6 +44,9 @@
         loggedIn.subscribe(value => {
             userLoggedIn = value;
         });
+        serverState.subscribe(value => {
+            serverStateBuffer = value;
+        });
     })
 </script>
 
@@ -49,11 +54,16 @@
 <section class="relative text-white flex justify-between items-center">
     <!-- Auth guard -->
     {#if userLoggedIn}
+        {#if admin}
+            <a href="/admin-console" class="cursor-pointer transition-all duration-150 flex justify-center items-center h-[40px] text-ui-blue hover:bg-ui-blue hover:bg-opacity-20 mr-5 rounded-lg px-3">
+                <span>Console</span>
+            </a>
+        {/if}
         <AreaButton height="40" class="relative" animateOnHover={false} on:click={updatePopup}>
             <span class="font-bold text-sm px-3">{$serverUrl}</span>
             <span class="absolute top-0 right-0 flex h-3 w-3 -translate-y-[30%] translate-x-[30%]">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                {#if serverStateBuffer === "online"}<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>{/if}
+                <span class="relative inline-flex rounded-full h-3 w-3 {serverStateBuffer === 'online' ? 'bg-green-500' : 'bg-red-500'}"></span>
             </span>
         </AreaButton>
         <AreaButton on:click={updateDropdown} width="40" height="40" class="ml-5">

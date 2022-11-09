@@ -2,6 +2,7 @@
     import AuthGuard from "$lib/components/AuthGuard.svelte";
 
     export let light = false;
+    export let admin = false;
 
     let scrollY = 0;
     let lastScrollY = 0;
@@ -25,5 +26,5 @@
             <span class="text-xl font-bold dark:text-white">AREA</span>
         </a>
     </div>
-    <AuthGuard light={light} />
+    <AuthGuard {light} {admin} />
 </section>
