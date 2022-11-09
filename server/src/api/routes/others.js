@@ -44,9 +44,9 @@ module.exports = (area) => {
     })
 
     area.app.post('/oauth2/:service', validatePayload(oauthSchema), async (req, res) => {
-        let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.params.userId
+        let userId = req.userIdLocation === "jwt" ? req.jwt.userId : req.body.userId
 
-        const service = area.serviceManager.getService(req.params.service)
+        const service = area.servicesManager.getService(req.params.service)
 
         if (!service) {
             return res.status(404).json({message: 'Service not found'})
