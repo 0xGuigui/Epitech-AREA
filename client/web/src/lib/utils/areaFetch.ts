@@ -1,3 +1,5 @@
+import {serverUrl} from "../../store";
+
 export function refreshAccessToken():boolean {
     return true;
 }

@@ -33,6 +33,6 @@
 
 <style>
     .admin-console-tab {
-        @apply flex justify-center items-center min-w-[135px] py-3 transition-all duration-150 px-3 text-xl font-semibold cursor-pointer border-b-[3px];
+        @apply flex justify-center items-center min-w-[135px] py-3 transition-all duration-150 px-3 text-xl font-bold cursor-pointer border-b-[3px];
     }
 </style>
