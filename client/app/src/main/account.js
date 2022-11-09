@@ -1,41 +1,49 @@
-import { Platform, ScrollView, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import {Alert, Platform, ScrollView, StyleSheet, Text, ToastAndroid, View} from "react-native";
 import { Appbar, Divider } from 'react-native-paper';
 import { DarkTheme } from "../../config";
 import * as React from "react";
 import { useNavigate } from "react-router-native";
 import {getActions, getMe, refreshToken} from "../services/server";
 import {useEffect} from "react";
+import { logOut, deleteAccount } from '../services/server'
+import { showToast } from '../utils'
 
 export default function Account({ userInfo, setUserInfo }) {
     const navigate = useNavigate()
-
-    const showToast = () => {
-        ToastAndroid.show("You are logged out", ToastAndroid.SHORT);
-    };
+    const global = require('../../config')
+    const createAlertDeleteAccount = () =>
+        Alert.alert(
+            "Delete Account",
+            "Are you sure you want to delete your account?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => {
+                        showToast('Account deleted, you will be logged out')
+                        navigate('/login')
+                        deleteAccount(userInfo, setUserInfo).then(r => console.log(r))
+                    } }
+            ],
+            { cancelable: false }
+        );
 
 
     return (
         <View style={styles.view}>
             <Appbar.Header theme={DarkTheme}>
                 <Appbar.Content title="My Account" style={{alignItems: 'center'}} titleStyle={{color: 'white'}} />
-                <Appbar.Action icon={'logout'} color={'white'} onPress={() => {
-                    //erase all user data
-                    setUserInfo({
-                        username: '',
-                        password: '',
-                        token: '',
-                        refreshToken: '',
-                        id: '',
-                        email: '',
-                        actions: [],
-                        reactions: []
-                    })
-                    setUserInfo(null)
-                    setUserInfo({})
-                    if (Platform.OS === 'android') {
-                        showToast()
+                <Appbar.Action icon={'logout'} color={'white'} onPress={async () => {
+                    const token = await refreshToken()
+                    const res = await logOut(token.token)
+                    if (res.status === 200) {
+                        setUserInfo({})
+                        navigate('/login')
+                        if (Platform.OS === 'android')
+                            showToast('You have been logged out')
                     }
-                    navigate('/login')
                 }} />
             </Appbar.Header>
             <ScrollView>
@@ -80,12 +88,25 @@ export default function Account({ userInfo, setUserInfo }) {
                 </Text>
                 <Divider />
                 <Text
-                    style={{...styles.clickableText, color: 'red'}} onPress={() => console.log("Coucou")}>
+                    style={{...styles.clickableText, color: 'red'}} onPress={async () => {
+                    const token = await refreshToken()
+                    const res = await logOut(token.token)
+                    if (res.status === 200) {
+                        setUserInfo({})
+                        navigate('/login')
+                        if (Platform.OS === 'android')
+                            showToast('You have been logged out')
+                    }
+                }}>
                     Log out
                 </Text>
                 <Divider />
                 <Text
-                    style={{...styles.clickableText, color: 'red'}} onPress={() => console.log("Coucou")}>
+                    style={{...styles.clickableText, color: 'red'}} onPress={
+                    () => {
+                        createAlertDeleteAccount()
+                    }
+                }>
                     Delete account
                 </Text>
                 <Divider />
