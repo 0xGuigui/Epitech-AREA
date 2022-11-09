@@ -1,6 +1,8 @@
 <script>
     import AuthGuard from "$lib/components/AuthGuard.svelte";
 
+    export let light = false;
+
     let scrollY = 0;
     let lastScrollY = 0;
     let direction = "down";
@@ -23,5 +25,5 @@
             <span class="text-xl font-bold dark:text-white">AREA</span>
         </a>
     </div>
-    <AuthGuard/>
+    <AuthGuard light={light} />
 </section>

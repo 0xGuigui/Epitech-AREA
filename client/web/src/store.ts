@@ -1,12 +1,10 @@
 import { writable } from 'svelte/store';
 import { browser } from "$app/environment";
 
-export let loggedIn = writable(false);
-export const accessToken = writable(null as string | null);
+export const loggedIn = writable<boolean>(browser ? localStorage.loggedIn === 'true' : false);
+export const accessToken = writable<string>(browser ? localStorage.accessToken : '');
 
 if (browser) {
-    loggedIn.update(n => Boolean(localStorage.getItem('loggedIn')) || false)
-    loggedIn.subscribe(value => {
-        localStorage.setItem("loggedIn", value.toString());
-    });
+    loggedIn.subscribe(value => localStorage.loggedIn = String(value));
+    accessToken.subscribe(value => localStorage.accessToken = value);
 }

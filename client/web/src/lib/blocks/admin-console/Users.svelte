@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let data: object;
-	let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzUzYWE2ZmMzNTRiNWQ1OTNkYTFkZGMiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjY2NzMwOTQ2LCJleHAiOjE2NjY4MDI5NDZ9.RxnMdXXcvr227RK205VT_f_9EVwwbFz7u2l2_hRY3Qs";
+	let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzY5NzY1NGZhMzZkZjgyZjNhNmI5M2QiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjY3OTI0NTY3LCJleHAiOjE2Njc5MjQ4Njd9.rJyqXV0wDlMLTpiZUAAIL6-oXQeEPtdWwoBC4PzK6J8";
 
 	async function getUsers() {
 		let response = await fetch("http://localhost:8080/users", {
@@ -19,7 +19,7 @@
 			headers: {
 				"Content-Type": "application/json",
 				"Authorization": `Bearer ${token}`
-			}
+			},
 		});
 		if (response.status == 200) {
 			usersPromise = getUsers();
@@ -37,7 +37,7 @@
 		{#if users.users.length > 0}
 			<div class="h-full w-full pt-10">
 				{#each users.users as user}
-					<div class="py-1.5 px-4 w-[800px] border border-gray-600 rounded my-1 mx-auto">
+					<div class="py-1.5 px-4 max-w-[900px] border border-gray-600 rounded my-1 mx-auto">
 						<div class="flex justify-between">
 							<div class="text-2xl font-bold text-area-blue">
 							<span

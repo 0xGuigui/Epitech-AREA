@@ -14,7 +14,11 @@ module.exports = {
 					'blue2': '#4B67C6',
 					'purple2': '#4B67C6',
 					'red2': '#FF3F41'
-				}
+				},
+				'ui-blue': 'rgb(26,115,232)',
+			},
+			fontFamily: {
+				Fira: ['Fira Sans Extra Condensed', 'sans-serif']
 			}
 		}
 	},

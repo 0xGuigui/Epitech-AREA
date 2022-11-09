@@ -23,7 +23,7 @@
 </script>
 
 <section class="h-[100vh] w-[100vw] area-fade2 flex block">
-    <AreaButton on:click={getActions}>
+    <AreaButton on:click={() => {}}>
         <Fa icon={icons.faUser}/>
     </AreaButton>
 </section>
