@@ -94,6 +94,34 @@ async function getAbout() {
 	}
 }
 
+async function logOut(token) {
+	const response = await fetch(`${serverUrl}/logout`, {
+		method: 'POST',
+		headers : {
+			'Authorization': `Bearer ${token}`
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
+async function deleteAccount(userInfo) {
+	const response = await fetch(`${serverUrl}/me`, {
+		method: 'DELETE',
+		headers: {
+			'Authorization': `Bearer ${userInfo.token}`
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -101,5 +129,7 @@ module.exports = {
 	resetPassword,
 	getMe,
 	getActions,
-	getAbout
+	getAbout,
+	logOut,
+	deleteAccount
 }
