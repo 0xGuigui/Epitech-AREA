@@ -5,13 +5,7 @@
 	let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzY5NzY1NGZhMzZkZjgyZjNhNmI5M2QiLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNjY3OTI0NTY3LCJleHAiOjE2Njc5MjQ4Njd9.rJyqXV0wDlMLTpiZUAAIL6-oXQeEPtdWwoBC4PzK6J8";
 
 	async function getUsers() {
-		let response = await fetch("http://localhost:8080/users", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${token}`
-			}
-		});
+		let response = await areaFetch("/users");
 		return await response.json();
 	}
 

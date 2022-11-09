@@ -72,20 +72,21 @@ module.exports = (area) => {
                 return res.status(500).send({error: 'Internal server error'})
             }
             res.cookie('jwt', refreshToken, {
-                httpOnly: true,
-                secure: false,
                 maxAge: 3 * 60 * 60 * 1000
             });
-            res.status(200).send({token: accessToken})
+            res.status(200).send({
+                token: accessToken,
+                refreshToken: refreshToken,
+            })
         })
     })
 
     area.app.post('/refresh', (req, res) => {
-        if (!req.cookies.jwt) {
+        if (!req.cookies.jwt && !req.body.jwt) {
             return res.status(401).json({message: 'Unauthorized'})
         }
 
-        jwt.verify(req.cookies.jwt, process.env.JWT_REFRESH_SECRET, {}, async (err, decoded) => {
+        jwt.verify(req.cookies.jwt || req.body.jwt, process.env.JWT_REFRESH_SECRET, {}, async (err, decoded) => {
             if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
                 return res.status(401).json({message: 'Unauthorized'});
             }
@@ -117,8 +118,9 @@ module.exports = (area) => {
                 redirectUrl
             )
             return res.status(200).json({message: 'Processed'})
-        } else
+        } else {
             return res.status(404).json({message: 'User not found'})
+        }
     })
 
     area.app.post('/reset-password/:token', validatePayload(resetPasswordSchema), (req, res) => {
