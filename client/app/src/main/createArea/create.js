@@ -17,7 +17,10 @@ export default function CreateArea() {
 			<View style={styles.actionsContainer}>
 				<View style={styles.actions}>
 					<Pressable style={styles.actionsPressable} onPress={() => {
-
+						const clientId = "e62780e3630e4439b855928a8514e977"
+						const redirect_uri = "http://92.148.23.72:8080/oauth2/Spotify"
+						const scopes = "user-read-private user-read-email user-read-playback-state user-modify-playback-state app-remote-control playlist-read-private"
+						WebBrowser.openBrowserAsync(`https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${scopes}&redirect_uri=${redirect_uri}`)
 					}}>
 						<Text style={styles.actionsText}>Choose an action</Text>
 					</Pressable>
