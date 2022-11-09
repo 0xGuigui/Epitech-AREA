@@ -61,7 +61,7 @@ module.exports = (area) => {
             return res.status(404).json({message: 'User not found'})
         }
 
-        user.data[req.params.service] = service.authenticate(req.params.code)
+        user.data[req.params.service] = service.authenticate(req.body.code)
         await user.save()
 
         return res.json({message: 'Processed'})
