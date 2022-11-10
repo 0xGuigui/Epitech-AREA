@@ -124,7 +124,7 @@ async function deleteAccount(userInfo) {
 
 async function changeUsername(userInfo, username) {
 	const response = await fetch(`${serverUrl}/me`, {
-		method: 'PATCH',
+		method: 'PUT',
 		headers: {
 			'Authorization': `Bearer ${userInfo.token}`,
 			'Content-Type': 'application/json'

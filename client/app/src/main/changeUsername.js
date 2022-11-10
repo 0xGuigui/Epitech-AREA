@@ -8,7 +8,7 @@ import { HistoryContext } from "../historyContext";
 import { DarkTheme } from "../../config";
 import * as React from "react";
 
-export default function ChangeUsername() {
+export default function ChangeUsername({userInfo, setUserInfo}) {
 	const navigate = useNavigate()
 	const history = useContext(HistoryContext)
 
@@ -37,15 +37,22 @@ export default function ChangeUsername() {
 								primary: '#9a5373',
 							},
 						}}
-						onPress={() => {
-							// changeUsername()
-							// 	.then(() => {
-							// 		showToast('Username changed successfully')
-							// 		navigate('/login')
-							// 	})
-							// 	.catch(() => {
-							// 		showToast('Failed to change username')
-							// 	})
+						onPress={ async () => {
+							const token = await refreshToken()
+							if (token.status === 200) {
+								const res = await changeUsername(token.token)
+								if (res.status === 200) {
+									console.log(res)
+									setUserInfo({...userInfo, username: res.user.username})
+									showToast('Username changed')
+									navigate('/account')
+								}
+								else {
+									showToast('Failed to change username')
+								}
+ 							} else {
+								showToast('Failed to change username')
+							}
 						}}
 					>
 						Change username
