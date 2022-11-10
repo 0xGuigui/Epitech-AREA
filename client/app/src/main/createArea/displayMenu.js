@@ -1,9 +1,24 @@
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, StyleSheet, BackHandler} from "react-native";
 import {Pressable} from "@react-native-material/core";
 import {useNavigate} from "react-router-native";
+import {useContext, useEffect} from "react";
+import {HistoryContext} from "../../historyContext";
 
 export default function DisplayMenu() {
 	const navigate = useNavigate()
+	const history = useContext(HistoryContext)
+
+	const backAction = () => {
+		navigate(history.prev)
+	}
+
+	useEffect(() => {
+		BackHandler.addEventListener("hardwareBackPress", backAction);
+
+		return () =>
+			BackHandler.removeEventListener("hardwareBackPress", backAction);
+	}, [history])
+
 	return (
 		<>
 			<View style={styles.actionsContainer}>

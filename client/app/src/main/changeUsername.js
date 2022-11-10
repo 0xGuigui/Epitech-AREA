@@ -42,7 +42,6 @@ export default function ChangeUsername({userInfo, setUserInfo}) {
 							if (token.status === 200) {
 								const res = await changeUsername(token.token)
 								if (res.status === 200) {
-									console.log(res)
 									setUserInfo({...userInfo, username: res.user.username})
 									showToast('Username changed')
 									navigate('/account')
