@@ -184,6 +184,32 @@ async function deleteAction(token, actionId) {
 	}
 }
 
+async function getActionByName(token, serviceName, actionName) {
+	const response = await fetch(`${serverUrl}/services/${serviceName}/actions/${actionName}`, {
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
+async function getReactionByName(token, serviceName, reactionName) {
+	const response = await fetch(`${serverUrl}/services/${serviceName}/reactions/${reactionName}`, {
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -197,5 +223,7 @@ module.exports = {
 	changeUsername,
 	registerService,
 	checkService,
-	deleteAction
+	deleteAction,
+	getActionByName,
+	getReactionByName
 }

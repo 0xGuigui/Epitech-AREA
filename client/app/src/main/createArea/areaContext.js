@@ -9,8 +9,12 @@ export const AreaProvider = ({ children }) => {
 		reaction: {}
 	})
 
+	useEffect(() => {
+		console.log('area', area)
+	}, [area])
+
 	return (
-		<AreaContext.Provider value={area}>
+		<AreaContext.Provider value={{area, setArea}}>
 			{children}
 		</AreaContext.Provider>
 	)

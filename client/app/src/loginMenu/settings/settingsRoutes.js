@@ -13,8 +13,6 @@ export default function SettingsRoutes({userInfo}) {
 			setPrevHistory(history.path.split('/')[1] !== 'settings' ? history.prev : history.path)
 	}, [location])
 
-	console.log(prevHistory)
-
 	return (
 		<Routes>
 			<Route exact path='/' element={<Settings prevHistory={prevHistory} />} />

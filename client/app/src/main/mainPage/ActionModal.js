@@ -7,7 +7,7 @@ import { deleteAction, refreshToken } from "../../services/server";
 export default function ActionModal({action, setAction}) {
 	const params = useParams()
 	const navigate = useNavigate()
-	console.log(action)
+
 	return (
 		<>
 			<Modal
