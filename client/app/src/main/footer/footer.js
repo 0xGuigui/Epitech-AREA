@@ -27,12 +27,12 @@ export default function AppFooter() {
 		<View style={styles.footerContainer}>
 			{buttonsConfig.map((e, i) => {
 				return (
-					<View key={i} style={{...styles.buttonView, backgroundColor: location.pathname === e.path ? '#2e2e31' : 'transparent'}}>
+					<View key={i} style={{...styles.buttonView, backgroundColor: location.pathname.includes(e.path) ? '#2e2e31' : 'transparent'}}>
 						<IconButton
 							key={i}
 							iconColor='white'
 							size={32}
-							icon={`${e.iconName}${location.pathname !== e.path && !e.noOutline ? '-outline' : ''}`}
+							icon={`${e.iconName}${!location.pathname.includes(e.path) && !e.noOutline ? '-outline' : ''}`}
 							onPress={() => {
 								navigate(e.path)
 							}}

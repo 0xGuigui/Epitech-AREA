@@ -7,18 +7,19 @@ import * as WebBrowser from 'expo-web-browser'
 import {Route, Routes} from "react-router-native";
 import DisplayMenu from "./displayMenu";
 import DisplayServices from "./displayServices";
+import ChooseAction from "./chooseAction";
 
 export default function CreateArea() {
 
 	return (
 		<View style={styles.mainSection}>
 			<Appbar.Header theme={DarkTheme}>
-				<Appbar.Content title="Create a new action" titleStyle={{color: 'white'}}/>
+				<Appbar.Content title="Create a new area" titleStyle={{color: 'white'}}/>
 			</Appbar.Header>
 			<Routes>
 				<Route exact path='/' element={<DisplayMenu />}/>
-				<Route path='/action' element={<DisplayServices serviceType='action' />} />
-				<Route path='/reaction' element={<DisplayServices serviceType='reaction' />} />
+				<Route exact path='/:serviceType' element={<DisplayServices />} />
+				<Route exact path='/:serviceType/:serviceName' element={<ChooseAction />} />
 			</Routes>
 		</View>
 	)

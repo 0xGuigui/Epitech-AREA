@@ -122,11 +122,11 @@ async function deleteAccount(userInfo) {
 	}
 }
 
-async function changeUsername(userInfo, username) {
+async function changeUsername(token, username) {
 	const response = await fetch(`${serverUrl}/me`, {
-		method: 'PATCH',
+		method: 'PUT',
 		headers: {
-			'Authorization': `Bearer ${userInfo.token}`,
+			'Authorization': `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({username})
@@ -168,6 +168,22 @@ async function checkService(token, service) {
 	}
 }
 
+async function deleteAction(token, actionId) {
+	const response = await fetch(`${serverUrl}/me/actions`, {
+		method: 'DELETE',
+		headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({actionId})
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -180,5 +196,6 @@ module.exports = {
 	deleteAccount,
 	changeUsername,
 	registerService,
-	checkService
+	checkService,
+	deleteAction
 }

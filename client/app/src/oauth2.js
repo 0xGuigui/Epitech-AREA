@@ -7,6 +7,8 @@ const spotifyLogo = require('./assets/img/spotify_logo.png')
 const discordLogo = require('./assets/img/discord_logo.png')
 const twitchLogo = require('./assets/img/twitch_logo.png')
 const redditLogo = require('./assets/img/reddit_logo.png')
+const leagueLogo = require('./assets/img/league_of_legends_logo.png')
+const steamLogo = require('./assets/img/steam_logo.png')
 import {HistoryContext} from "./historyContext";
 import {checkService, refreshToken, registerService} from "./services/server";
 
@@ -14,7 +16,9 @@ const logos = {
 	Discord: discordLogo,
 	Spotify: spotifyLogo,
 	Reddit: redditLogo,
-	Twitch: twitchLogo
+	Twitch: twitchLogo,
+	LeagueOfLegends: leagueLogo,
+	Steam: steamLogo
 }
 
 export default function Oauth2({userInfo, setUserInfo}) {

@@ -100,6 +100,7 @@ export default function Account({ userInfo, setUserInfo }) {
                                     style: "cancel"
                                 },
                                 { text: "OK", onPress: async () => {
+                                        console.log(userInfo.username)
                                         navigate('/changeUsername')
                                     }
                                 }
