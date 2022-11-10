@@ -1,10 +1,12 @@
-import {Modal} from "react-native-paper";
-import {Image, StyleSheet, Text, View} from "react-native";
-import {Button, Pressable} from "@react-native-material/core";
-import {useParams} from "react-router-native";
+import { Modal } from "react-native-paper";
+import {Alert, Image, StyleSheet, Text, View} from "react-native";
+import { Button, Pressable } from "@react-native-material/core";
+import {useNavigate, useParams} from "react-router-native";
+import { deleteAction, refreshToken } from "../../services/server";
 
 export default function ActionModal({action, setAction}) {
 	const params = useParams()
+	const navigate = useNavigate()
 	console.log(action)
 	return (
 		<>
@@ -21,7 +23,30 @@ export default function ActionModal({action, setAction}) {
 				<View style={styles.modalContainer}>
 					<Text style={styles.actionTitle}>{action.name}</Text>
 					<Text style={styles.textStyle}> Do you want to remove this action ?</Text>
-					<Pressable style={styles.deleteButton}>
+					<Pressable style={styles.deleteButton} onPress={async () => {
+						Alert.alert(
+							"Delete Action",
+							"Are you sure you want to delete this action ?",
+							[
+								{
+									text: "Cancel",
+								},
+								{
+									text: "OK",
+									onPress: async () => {
+										const token = await refreshToken()
+										token.status !== 200 && navigate('/login')
+										const res = await deleteAction(token.token, action._id)
+										res.status !== 200
+											? alert('Error while deleting action')
+											: setAction(undefined)
+										navigate(`/`)
+									}
+								}
+							],
+							{ cancelable: false }
+						);
+					}}>
 						<Text style={styles.deleteButtonText}>Delete</Text>
 					</Pressable>
 					<Pressable style={styles.cancelButton} onPress={() => setAction(undefined)}>

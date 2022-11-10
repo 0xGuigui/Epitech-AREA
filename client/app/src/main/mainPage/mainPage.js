@@ -45,7 +45,7 @@ export default function mainPage({userInfo}) {
 			<Appbar.Header theme={DarkTheme}>
 				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}}/>
 			</Appbar.Header>
-			<Text style={styles.titleText}> Welcome {userInfo?.user?.username}</Text>
+			<Text style={styles.titleText}> Welcome {userInfo?.username}</Text>
 			{actions.length > 0 ?
 				<View key='actionKey' style={styles.actionsContainer}>
 					{actions.map((e, i) =>
