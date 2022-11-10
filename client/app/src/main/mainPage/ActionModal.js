@@ -1,8 +1,10 @@
 import {Modal} from "react-native-paper";
-import {StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, View} from "react-native";
 import {Button, Pressable} from "@react-native-material/core";
+import {useParams} from "react-router-native";
 
 export default function ActionModal({action, setAction}) {
+	const params = useParams()
 	console.log(action)
 	return (
 		<>
@@ -18,11 +20,12 @@ export default function ActionModal({action, setAction}) {
 			>
 				<View style={styles.modalContainer}>
 					<Text style={styles.actionTitle}>{action.name}</Text>
-					{/*<Pressable style={styles.saveButton}>*/}
-					{/*	<Text style={styles.saveButtonText}>Save</Text>*/}
-					{/*</Pressable>*/}
+					<Text style={styles.textStyle}> Do you want to remove this action ?</Text>
 					<Pressable style={styles.deleteButton}>
 						<Text style={styles.deleteButtonText}>Delete</Text>
+					</Pressable>
+					<Pressable style={styles.cancelButton} onPress={() => setAction(undefined)}>
+						<Text style={styles.cancelButtonText}>Cancel</Text>
 					</Pressable>
 				</View>
 			</Modal>
@@ -34,8 +37,8 @@ const styles = StyleSheet.create({
 	modal: {
 		backgroundColor: '#212123',
 		width: '75%',
-		height: '50%',
-		marginTop: '40%',
+		height: '20%',
+		marginTop: '80%',
 		marginBottom: 'auto',
 		marginLeft: '12.5%',
 		marginRight: 'auto',
@@ -52,6 +55,14 @@ const styles = StyleSheet.create({
 		color: 'white',
 		marginTop: '5%'
 	},
+	textStyle: {
+		color: 'white',
+		fontSize: 20,
+		marginTop: '10%',
+		marginBottom: 'auto',
+		marginLeft: 'auto',
+		marginRight: 'auto'
+	},
 	// saveButton: {
 	// 	position: 'absolute',
 	// 	bottom: '5%',
@@ -63,11 +74,20 @@ const styles = StyleSheet.create({
 	// },
 	deleteButton: {
 		position: 'absolute',
-		bottom: '5%',
+		bottom: '10%',
 		right: '8%'
 	},
 	deleteButtonText: {
 		color: '#c21f1f',
+		fontSize: 15
+	},
+	cancelButton: {
+		position: 'absolute',
+		bottom: '10%',
+		right: '30%'
+	},
+	cancelButtonText: {
+		color: '#FFFFFF',
 		fontSize: 15
 	}
 })
