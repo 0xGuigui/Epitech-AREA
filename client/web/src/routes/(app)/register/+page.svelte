@@ -55,7 +55,8 @@
     <div data-aos="fade-up"
          class="shadow-2xl w-[400px] h-[600px] backdrop-blur-sm bg-white/30 rounded-3xl">
         <form class="flex flex-col justify-center items-center h-full" on:submit={handleSubmit}>
-            <div class="my-5">
+            <h1 class="flex my-5 justify-center text-4xl font-bold text-white">Register</h1>
+            <div class="">
                 <label class="block font-bold text-white" for="username">Username</label>
                 <input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1"
                        id="username"
@@ -67,8 +68,7 @@
                     <small data-aos="fade-right" data-aos-duration="500" class="block flex justify-center text-red-600 font-semibold">{$errors.username}</small>
                 {/if}
             </div>
-            <h1 class="flex my-5 justify-center text-4xl font-bold text-white">Register</h1>
-            <div class="">
+            <div class="my-5">
                     <label class="block font-bold text-white" for="email">Email</label>
                     <input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1"
                            id="email"
