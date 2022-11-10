@@ -4,7 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import {HistoryContext} from "../../historyContext";
 import {getActions, getMe, refreshToken} from "../../services/server";
 import {Pressable} from "@react-native-material/core";
-import ActionDisplay from "./actionDisplay";
+import DataDisplayer from "../../dataDisplayer";
 import ActionModal from "./ActionModal";
 import {DarkTheme} from "../../../config";
 import {Appbar} from "react-native-paper";
@@ -22,10 +22,11 @@ export default function mainPage({userInfo}) {
 
 	const getUserActions = async () => {
 		const token = await refreshToken()
+		console.log(token)
 		token.status !== 200 && navigate('/login')
 		const actions = await getActions(token.token)
 		actions.status !== 200 && navigate('/login')
-		setActions([...actions.actions, ...actions.actions, ...actions.actions])
+		setActions([...actions.actions])
 	}
 
 	useEffect(() => {
@@ -44,12 +45,12 @@ export default function mainPage({userInfo}) {
 			<Appbar.Header theme={DarkTheme}>
 				<Appbar.Content title="My Actions" titleStyle={{color: 'white'}}/>
 			</Appbar.Header>
-			<Text style={styles.titleText}> Welcome {userInfo?.user?.username}</Text>
+			<Text style={styles.titleText}> Welcome {userInfo?.username}</Text>
 			{actions.length > 0 ?
 				<View key='actionKey' style={styles.actionsContainer}>
 					{actions.map((e, i) =>
 						<>
-							<ActionDisplay key={i} action={e} style={styles.actions} textStyle={styles.actionsText} onPress={() => {
+							<DataDisplayer key={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={() => {
 								setActionModal(e)
 							}} />
 						</>

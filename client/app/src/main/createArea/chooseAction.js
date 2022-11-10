@@ -1,43 +1,36 @@
-import {View, StyleSheet} from "react-native";
-import {Text} from "react-native-paper";
-import {useEffect, useState} from "react";
-import {checkService, getAbout, refreshToken} from "../../services/server";
 import {useNavigate, useParams} from "react-router-native";
-import {Oauth2} from '../../../config'
-import * as WebBrowser from 'expo-web-browser'
+import {checkService, getAbout, refreshToken} from "../../services/server";
+import {useEffect, useState} from "react";
+import {Oauth2} from "../../../config";
+import * as WebBrowser from "expo-web-browser";
+import {StyleSheet, View} from "react-native";
 import DataDisplayer from "../../dataDisplayer";
 
-export default function DisplayServices() {
+export default function ChooseAction() {
+	const {serviceType, serviceName} = useParams()
 	const [actions, setActions] = useState([])
-	const {serviceType} = useParams()
 	const navigate = useNavigate()
+	const [actionModal, setActionModal] = useState(undefined)
 
 	const getServerActions = async () => {
 		const about = await getAbout()
 		about.status !== 200 && navigate('/login')
-		setActions(about.server.services.filter(e => serviceType === 'action' ? e.actions.length > 0 : e.reactions.length > 0))
+		setActions(about.server.services.find(e => e.name === serviceName)[serviceType === "action" ? "actions" : "reactions"])
 	}
 
 	useEffect(() => {
 		getServerActions()
 	}, [])
 
+	console.log(actions)
+
 	return (
 		<>
-			<Text style={{fontSize: 40, color: 'white', textAlign: 'center'}}>Choose a{serviceType.startsWith('a') && 'n'} {serviceType}</Text>
 			<View key='actionKey' style={styles.actionsContainer}>
 				{actions.map((e, i) =>
 					<>
 						<DataDisplayer key={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={async () => {
-							if (Oauth2[e.name]) {
-								const token = await refreshToken()
-								token.status !== 200 && navigate('/login')
-								const res = await checkService(token.token, e.name)
-								console.log(res)
-								if (res.status !== 200)
-									return WebBrowser.openBrowserAsync(Oauth2[e.name].oauth_uri)
-							}
-							navigate(`/create/${serviceType}/${e.name}`)
+
 						}} />
 					</>
 				)}
