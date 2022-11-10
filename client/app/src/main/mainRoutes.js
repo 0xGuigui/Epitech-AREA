@@ -19,7 +19,7 @@ export default function MainRoutes({ userInfo, setUserInfo }) {
 		<>
 			<Routes>
 				<Route path="/main" element={<MainPage userInfo={userInfo} />} />
-				<Route path="/create" element={
+				<Route path="/create/*" element={
 					<AreaProvider>
 						<CreateArea />
 					</AreaProvider>
