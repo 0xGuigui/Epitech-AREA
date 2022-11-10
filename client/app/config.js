@@ -24,6 +24,8 @@ const oauth2 = {
 	}
 }
 
+//TODO check client_id (discord is not valid)
+
 module.exports = process.globals = {
 	"defaultServerUrl": "http://92.148.23.72:8080",
 	"serverUrl": "http://92.148.23.72:8080",
