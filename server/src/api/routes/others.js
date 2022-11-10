@@ -137,7 +137,7 @@ module.exports = (area) => {
         res.status(401).json({message: 'Invalid token'})
     })
 
-    area.app.get('/events-stream', async (req, res) => {
+    area.app.get('/server-stream-events', async (req, res) => {
         res.set({
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',

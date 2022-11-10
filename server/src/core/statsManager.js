@@ -2,21 +2,30 @@ const mongoose = require('mongoose');
 const logger = require('node-color-log')
 const STATS_QUEUE_SIZE = 10;
 const STATS_DOCUMENT_REF_ID = 1;
+const writingMethods = ['insert', 'update', 'remove', 'delete', 'createIndex', 'updateOne']
+
+function resetStatsFactory() {
+    return {
+        actionsCount: 0,
+        usersCount: 0,
+        servicesCount: 0,
+        servicesData: {},
+        api: {
+            total: 0,
+            "4XX": 0,
+            "5XX": 0
+        },
+        db: {
+            total: 0,
+            "write": 0,
+            "read": 0
+        },
+    }
+}
 
 module.exports = class StatsManager {
     constructor() {
-        this.stats = {
-            servicesCount: 0,
-            actionsCount: 0,
-            usersCount: 0,
-            api: {
-                requestsCount: 0,
-                codes: {}
-            },
-            db: {
-                queriesCount: 0,
-            },
-        }
+        this.stats = resetStatsFactory()
         this.openedRequests = []
     }
 
@@ -36,7 +45,7 @@ module.exports = class StatsManager {
         setInterval(async () => {
             let statsDocument = await mongoose.models.Stats.findOne({}).exec()
             let newEntry = {
-                date: Date.now(),
+                date: new Date(),
                 data: this.stats
             }
 
@@ -46,7 +55,7 @@ module.exports = class StatsManager {
             statsDocument.statsQueue.push(newEntry)
             await statsDocument.save()
             this.openedRequests.forEach(request => {
-                request.write(`data: ${JSON.stringify(newEntry)}\n\n`)
+                request.write(`data: ${JSON.stringify([newEntry])}\n\n`)
             })
             await this.resetStats(area)
         }, 5000);
@@ -54,34 +63,36 @@ module.exports = class StatsManager {
     }
 
     async resetStats(area) {
-        this.stats.usersCount = await mongoose.models.User.countDocuments()
-        this.stats.actionsCount = await mongoose.models.Action.countDocuments()
+        this.stats = resetStatsFactory()
+        this.stats.actionsCount = await mongoose.models.Action.countDocuments({}).exec()
+        this.stats.usersCount = await mongoose.models.User.countDocuments({}).exec()
         this.stats.servicesCount = area.servicesManager.getServices().length
-        this.stats.api.codes = {}
-        this.stats.api.requestsCount = 0
-        this.stats.db.queriesCount = 0
+        this.stats.servicesData = area.servicesManager.getServicesData()
     }
 
     setMongooseHookup() {
-        mongoose.set('debug', () => {
-            this.stats.db.queriesCount++
+        mongoose.set('debug', (collectionName, method, query, doc) => {
+            this.stats.db.total++
+            if (writingMethods.includes(method)) {
+                this.stats.db.write++
+            } else {
+                this.stats.db.read++
+            }
         })
     }
 
     addStats(statusCode) {
-        this.stats.api.requestsCount++
-        if (this.stats.api.codes[statusCode]) {
-            this.stats.api.codes[statusCode]++
-        } else {
-            this.stats.api.codes[statusCode] = 1
+        this.stats.api.total++
+        if (statusCode >= 400 && statusCode < 500) {
+            this.stats.api["4XX"]++
+        } else if (statusCode >= 500) {
+            this.stats.api["5XX"]++
         }
     }
 
     addOpenedRequest(response) {
         mongoose.models.Stats.findOne({}).exec().then(statsDocument => {
-            statsDocument.statsQueue.forEach(entry => {
-                response.write(`data: ${JSON.stringify(entry)}\n\n`)
-            })
+            response.write(`data: ${JSON.stringify(statsDocument.statsQueue)}\n\n`)
             this.openedRequests.push(response)
         })
     }

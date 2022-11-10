@@ -51,7 +51,6 @@ export async function areaFetch(url: string, method = "GET", body = null): Promi
         let request = buildRequestFactory(serverUrl + url, method, body, token);
         let response = await request.fetch();
 
-        serverState.set("online");
         if (response.status === 401) {
             if (await refreshAccessToken(serverUrl)) {
                 const newToken = localStorage.getItem("accessToken");
@@ -61,9 +60,10 @@ export async function areaFetch(url: string, method = "GET", body = null): Promi
                 if (response.status === 401) {
                     throw new Error("Unauthorized");
                 }
-                return response;
             }
-            throw new Error("Unauthorized");
+        }
+        if (response.status === 200) {
+            serverState.set("online");
         }
         return response;
     } catch (e) {
