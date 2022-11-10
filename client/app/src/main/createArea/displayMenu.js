@@ -1,18 +1,20 @@
 import {Text, View, StyleSheet} from "react-native";
 import {Pressable} from "@react-native-material/core";
+import {useNavigate} from "react-router-native";
 
 export default function DisplayMenu() {
+	const navigate = useNavigate()
 	return (
 		<>
 			<View style={styles.actionsContainer}>
 				<View style={styles.actions}>
 					<Pressable style={styles.actionsPressable} onPress={() => {
-
+						navigate('/create/action')
 					}}>
 						<Text style={styles.actionsText}>Choose an action</Text>
 					</Pressable>
 					<Pressable style={styles.actionsPressable} onPress={() => {
-
+						navigate('/create/reaction')
 					}}>
 						<Text style={styles.actionsText}>Choose a reaction</Text>
 					</Pressable>
