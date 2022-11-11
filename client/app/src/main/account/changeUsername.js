@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import {BackHandler, Platform, StyleSheet, Text, View} from "react-native";
 import { useNavigate } from "react-router-native";
-import {changeUsername, logOut, refreshToken, resetPassword} from "../services/server";
+import {changeUsername, logOut, refreshToken, resetPassword} from "../../services/server";
 import { Appbar, Button, TextInput } from "react-native-paper";
-import {isEmail, showToast} from '../utils'
-import { HistoryContext } from "../historyContext";
-import { DarkTheme } from "../../config";
+import {isEmail, showToast} from '../../utils'
+import { HistoryContext } from "../../historyContext";
+import { DarkTheme } from "../../../config";
 import * as React from "react";
 
 export default function ChangeUsername({userInfo, setUserInfo}) {
