@@ -17,7 +17,12 @@
             <img src="/loaders/ball-triangle.svg" alt="Loading svg">
         </div>
     {:then services}
-        <ListBuilder dataList={services.services} hasExtraData={false} viewer={ServiceViewer} />
+        <ListBuilder
+                dataList={services.services}
+                hasExtraData={false}
+                viewer={ServiceViewer}
+                on:refresh={fetchServices}
+        />
     {:catch error}
         <div class="w-screen h-screen flex justify-center items-center">
             An error occurred: {error.message}
