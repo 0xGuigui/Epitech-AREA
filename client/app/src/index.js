@@ -60,6 +60,7 @@ export default function Index() {
 					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
 					<Route path='/oauth2/:service' element={<Oauth2 setUserInfo={setUserInfo} userInfo={userInfo} />} />
 					<Route path='/change/:data' element={<ChangeUserData userInfo={userInfo} setUserInfo={setUserInfo} />} />
+					<Route path='/manageServices' element={<ManageServices />} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
 			</View>

@@ -99,7 +99,6 @@ export default function Account({ userInfo, setUserInfo }) {
                 <Text
                     style={styles.clickableText} onPress={() => {
                     navigate('/change/password')
-
                 }}>
                     Change password
                 </Text>
