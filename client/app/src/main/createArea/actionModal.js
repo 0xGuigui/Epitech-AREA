@@ -39,8 +39,10 @@ export default function ({action, setAction, serviceName, serviceType}) {
 						)
 					})}
 					<Pressable style={styles.saveButton} onPress={async () => {
+						let error = false
 						Object.keys(action.fields).forEach(e => {
 							if (!data[e]) {
+								error = true
 								Alert.alert(
 									"Error",
 									"Please fill all the fields",
@@ -55,23 +57,24 @@ export default function ({action, setAction, serviceName, serviceType}) {
 									],
 									{cancelable: false}
 								);
-							} else {
-								setArea({
-									...area,
-									actions: [
-										...area.actions,
-										{
-											name: action.name,
-											serviceName: serviceName,
-											serviceType: serviceType,
-											data: data
-										}
-									]
-								})
-								showToast('Action added to your area')
-								setAction(undefined)
 							}
 						})
+						if (error)
+							return;
+						setArea({
+							...area,
+							actions: [
+								...area.actions,
+								{
+									name: action.name,
+									serviceName: serviceName,
+									serviceType: serviceType,
+									data: data
+								}
+							]
+						})
+						showToast('Action added to your area')
+						setAction(undefined)
 					}}>
 						<Text style={styles.saveButtonText}>Save</Text>
 					</Pressable>
