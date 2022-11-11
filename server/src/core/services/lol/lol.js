@@ -71,7 +71,10 @@ async function getRotation() {
 }
 
 module.exports = (area, servicesManager) => {
-	const lolService = new Service('League of Legends', 'League of Legends')
+	const lolService = new Service('League of Legends', 'League of Legends', {
+		mainColor: '#b88c3e',
+		secondaryColor: '#149ea7'
+	})
 
 	const levelUpAction = new Action('levelUp', 'when you level up in game')
 		.on('create', async ctx => {
