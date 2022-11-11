@@ -13,7 +13,8 @@ module.exports = {
 					'button': '#6b727d',
 					'blue2': '#4B67C6',
 					'purple2': '#4B67C6',
-					'red2': '#FF3F41'
+					'red2': '#FF3F41',
+					'spotify': '#2ebd59'
 				},
 				'ui-blue': 'rgb(26,115,232)',
 			},
