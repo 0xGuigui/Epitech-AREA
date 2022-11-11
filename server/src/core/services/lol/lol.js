@@ -1,4 +1,5 @@
 const {Service, Action, Reaction} = require("../serviceComponents");
+const Joi = require("joi");
 
 async function getRankById(id) {
 	const response = await fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${id}`, {
@@ -78,7 +79,7 @@ module.exports = (area, servicesManager) => {
 
 	const levelUpAction = new Action('levelUp', 'when you level up in game')
 		.on('create', async ctx => {
-			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
+			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			ctx.setActionData('lol_puuid', playerData.puuid)
 			ctx.setActionData('lol_level', playerData.level)
 			await ctx.next()
@@ -92,7 +93,7 @@ module.exports = (area, servicesManager) => {
 		})
 	const nameChangeAction = new Action('nameChange', 'when you change your name')
 		.on('create', async ctx => {
-			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
+			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			ctx.setActionData('lol_puuid', playerData.puuid)
 			ctx.setActionData('lol_name', playerData.name)
 			await ctx.next()
@@ -104,29 +105,9 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const rankChangeAction = new Action('rankChange', 'when you go up or down a rank/division')
-		.on('create', async ctx => {
-			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
-			const rankData = await getRankById(playerData.id)
-			const rank = rankData.find(e => e.queueType === ctx.playload.queueType)
-			ctx.setActionData('lol_id', playerData.id)
-			ctx.setActionData('lol_queue_type', ctx.payload.queueType)
-			ctx.setActionData('lol_rank', rank.rank)
-			ctx.setActionData('lol_tier', rank.tier)
-			await ctx.next()
-		})
-		.on('trigger', async ctx => {
-			const rankData = await getRankById(ctx.getActionData('lol_id'))
-			const rank = rankData.find(e => e.queueType === ctx.getActionData('lol_queue_type'))
-			if (rank.rank !== ctx.getActionData('lol_rank') || rank.tier !== ctx.getActionData('lol_tier')) {
-				ctx.setActionData('lol_rank', rank.rank)
-				ctx.setActionData('lol_tier', rank.tier)
-				await ctx.next()
-			}
-		})
 	const newGameAction = new Action('newGame', 'when you finish a new game')
 		.on('create', async (ctx) => {
-			const playerData = await getAccountInfoByName(ctx.payload.summonerName)
+			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			const lastMatch = await getLastMatch(playerData.puuid)
 			ctx.setActionData('lol_puuid', playerData.puuid)
 			ctx.setActionData('lol_match_id', lastMatch.matchId)
@@ -157,10 +138,17 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 
+	const schema = Joi.object().keys({
+		"Summoner name": Joi.string().required()
+	}).unknown(true)
+
+	levelUpAction.validationSchema = schema
+	nameChangeAction.validationSchema = schema
+	newGameAction.validationSchema = schema
+
 	lolService.addAction(
 		levelUpAction,
 		nameChangeAction,
-		rankChangeAction,
 		newGameAction,
 		newRotationAction
 	)

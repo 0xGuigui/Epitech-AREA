@@ -1,4 +1,5 @@
 const {Service, Action} = require('../serviceComponents')
+const Joi = require("joi");
 
 async function getId(profileUrl) {
 	const profileId = profileUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:steamcommunity.com\/(?:profiles|id)\/)([a-zA-Z0-9]+)/)
@@ -42,7 +43,7 @@ module.exports = (area, servicesManager) => {
 
 	const newGameNewsAction = new Action('newGameNews', 'when a game gets a news')
 		.on('create', async ctx => {
-			const game = await getGameByName(ctx.payload.steam_game_name)
+			const game = await getGameByName(ctx.payload["Game name"])
 			const news = await getGameNews(game.appid)
 			ctx.setActionData('steam_news_id', news.appnews.newsitems[0].gid)
 			ctx.setActionData('steam_app_id', game.appid)
@@ -56,8 +57,8 @@ module.exports = (area, servicesManager) => {
 		})
 	const newAchievementAction = new Action('newAchievement', 'new achievement on a game')
 		.on('create', async ctx => {
-			const game = await getGameByName(ctx.payload.steam_game_name)
-			const steamId = await getId(ctx.payload.steam_profile_url)
+			const game = await getGameByName(ctx.payload["Game name"])
+			const steamId = await getId(ctx.payload["Profile url"])
 			const stats = await getUserStatsByGame(steamId, game.appid)
 			ctx.setActionData('steam_app_id', game.appid)
 			ctx.setActionData('steam_id', steamId)
@@ -72,7 +73,7 @@ module.exports = (area, servicesManager) => {
 		})
 	const newOwnedGameAction = new Action('newOwnedGame', 'new owned game')
 		.on('create', async ctx => {
-			const steamId = await getId(ctx.payload.steam_profile_url)
+			const steamId = await getId(ctx.payload["Profile url"])
 			const ownedGames = await getOwnedGames(steamId)
 			ctx.setActionData('steam_id', steamId)
 			ctx.setActionData('steam_game_count', ownedGames.game_count)
@@ -84,6 +85,19 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
+
+	newGameNewsAction.validationSchema = Joi.object().keys({
+		"Game name": Joi.string().required()
+	}).unknown(true)
+
+	newAchievementAction.validationSchema = Joi.object().keys({
+		"Game name": Joi.string().required(),
+		"Profile url": Joi.string().required()
+	}).unknown(true)
+
+	newOwnedGameAction.validationSchema = Joi.object().keys({
+		"Profile url": Joi.string().required()
+	}).unknown(true)
 
 	steamService.addAction(
 		newGameNewsAction,
