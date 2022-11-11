@@ -13,6 +13,30 @@ export default function ({action, setAction, serviceName, serviceType}) {
 	const navigate = useNavigate()
 	const numberOfFields = Object.keys(action.fields || {}).length
 
+	const handleDelete = async () => {
+		const token = await refreshToken()
+		token.status !== 200 && navigate('/login')
+		const res = await deleteAction(token.token, action.id)
+		res.status === 200 && setAction({})
+	}
+
+	const handleSave = () => {
+		setAction({...action, fields: data})
+		setArea({...area, action: {...action, fields: data}})
+	}
+
+	const handleCancel = () => {
+		setAction({})
+	}
+
+	const handleFieldChange = (key, value) => {
+		setData({...data, [key]: value})
+	}
+
+	console.log(action)
+	console.log('keys:', Object.keys(action))
+	console.log('values:', Object.values(action))
+
 	return (
 		<Modal
 			visible={true}
@@ -118,22 +142,22 @@ const styles = StyleSheet.create({
 		marginRight: 'auto',
 	},
 	saveButton: {
-		flex: 1,
 		bottom: -20,
 		left: '80%',
-		right: '8%'
+		right: '8%',
+		marginRight: 'auto',
 	},
 	saveButtonText: {
 		color: '#0a9307',
 		fontSize: 15
 	},
 	cancelButton: {
-		flex: 1,
 		bottom: 0,
 		left: '58%',
 		right: '30%',
 		marginTop: 'auto',
-		marginBottom: '10%'
+		marginBottom: '10%',
+		marginRight: 'auto',
 	},
 	cancelButtonText: {
 		color: '#FFFFFF',
