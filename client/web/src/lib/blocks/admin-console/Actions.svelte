@@ -13,11 +13,36 @@
         actionsPromise = response.json();
     }
 
-    async function deleteActions(userData: object) {
-        console.log("delete actions", userData);
+    async function deleteActions(actionsData: object[]) {
+        let promises = actionsData.map((actionData) => {
+            return areaFetch("/actions/" + actionData["_id"], "DELETE");
+        });
+
+        await Promise.all(promises);
+        await fetchActions();
+    }
+
+    function matchTriggeredAction(e) {
+        actions.find((action) => {
+            return action.name === e.detail.name;
+        })?.action(e.detail.data);
     }
 
     const actions = [
+        {
+            name: "execute",
+            icon: icons.faPlay,
+            action: () => {
+                console.log("execute");
+            }
+        },
+        {
+            name: "retry",
+            icon: icons.faRedo,
+            action: () => {
+                console.log("retry");
+            }
+        },
         {
             name: "delete",
             icon: icons.faTrashAlt,
@@ -40,6 +65,7 @@
                 viewer={ActionViewer}
                 {actions}
                 {page}
+                on:actionTrigger={matchTriggeredAction}
                 on:refresh={() => fetchActions(page)}
                 on:pageChange={(e) => fetchActions(e.detail)}
         />

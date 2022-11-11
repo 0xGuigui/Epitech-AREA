@@ -4,7 +4,6 @@
     import {clickOutside} from "../utils/clickOutside";
     import {createEventDispatcher} from "svelte";
     import {icons} from "../utils/fontAwesome";
-    import {browser} from "$app/environment"
     import Fa from "svelte-fa";
     import {loggedIn, serverUrl} from "../../store";
     import {goto} from '$app/navigation';
@@ -24,19 +23,17 @@
         }
     };
 
-    let closePopup = () => {
-        dispatch('close')
-        serverUrlInputValue = serverUrlBuffer
-    }
+    let closePopup = (e = null) => {
+        if (e && e.key && e.key !== "Escape") return;
 
-    if (browser) {
-        window.onkeydown = e => {
-            if (e.key === "Escape") {
-                closePopup()
-            }
-        };
+        if (show === true) {
+            dispatch('close')
+            serverUrlInputValue = serverUrlBuffer
+        }
     }
 </script>
+
+<svelte:window on:keydown|preventDefault={closePopup}/>
 
 {#if show}
     <section
@@ -58,7 +55,7 @@
             <div class="flex w-[85%] pt-5">
                 <div class="flex w-full ring-1 ring-gray-300 rounded-lg overflow-hidden">
                     <input bind:value={serverUrlInputValue} placeholder="enter server url" class="py-2.5 pl-4 w-full bg-transparent focus:outline-none">
-                    <div    on:click={updateServerUrl}
+                    <div on:click={updateServerUrl}
                             class="select-none transition-all duration-150 w-[180px] text-center {serverUrlInputValue === serverUrlBuffer ? 'bg-gray-300' : 'bg-ui-blue text-white cursor-pointer'} py-2.5 font-bold">Switch server</div>
                 </div>
             </div>

@@ -15,6 +15,13 @@
 
 	const actions = [
 		{
+			name: "logout",
+			icon: icons.faSignOutAlt,
+			action: (userData: object) => {
+				console.log("logout user", userData);
+			}
+		},
+		{
 			name: "delete",
 			icon: icons.faTrashAlt,
 			action: deleteUsers
