@@ -3,14 +3,14 @@ import {useLocation, useNavigate, useParams, useSearchParams} from "react-router
 import { DarkTheme } from "../config";
 import {Image, StyleSheet, View, BackHandler} from "react-native";
 import {Button, Text} from "react-native-paper";
-const spotifyLogo = require('./assets/img/spotify_logo.png')
-const discordLogo = require('./assets/img/discord_logo.png')
-const twitchLogo = require('./assets/img/twitch_logo.png')
-const redditLogo = require('./assets/img/reddit_logo.png')
-const leagueLogo = require('./assets/img/league_of_legends_logo.png')
-const steamLogo = require('./assets/img/steam_logo.png')
+import spotifyLogo from './assets/img/spotify_logo.png'
+import discordLogo from './assets/img/discord_logo.png'
+import twitchLogo from './assets/img/twitch_logo.png'
+import redditLogo from './assets/img/reddit_logo.png'
+import leagueLogo from './assets/img/league_of_legends_logo.png'
+import steamLogo from './assets/img/steam_logo.png'
 import {HistoryContext} from "./historyContext";
-import {checkService, refreshToken, registerService} from "./services/server";
+import {refreshToken, registerService} from "./services/server";
 
 const logos = {
 	Discord: discordLogo,
@@ -22,7 +22,6 @@ const logos = {
 }
 
 export default function Oauth2({userInfo, setUserInfo}) {
-	const location = useLocation()
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams();
 	const history = useContext(HistoryContext)
