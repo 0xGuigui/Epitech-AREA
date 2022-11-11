@@ -11,11 +11,6 @@ const oauth2 = {
 		redirect_uri: "http://92.148.23.72:8080/oauth2/Discord",
 		scopes: "identify email guilds guilds.members.read connections"
 	},
-	"Twitch": {
-		client_id: "ekj703fl2fqbgmhurg7pl0ufkikmnk",
-		redirect_uri: "http://92.148.23.72:8080/oauth2/Twitch",
-		scopes: "user:manage:whispers%20user:edit%20user:read:follows"
-	},
 	"Reddit": {
 		client_id: "jw-vAdRZIVhcdojFkr2iuw",
 		redirect_uri: "http://92.148.23.72:8080/oauth2/Reddit",
@@ -56,10 +51,6 @@ module.exports = process.globals = {
 		"Discord": {
 			...oauth2.Discord,
 			oauth_uri: `https://discord.com/api/oauth2/authorize?client_id=${oauth2.Discord.client_id}&redirect_uri=${oauth2.Discord.redirect_uri}&response_type=code&scope=${oauth2.Discord.scopes}`
-		},
-		"Twitch": {
-			...oauth2.Twitch,
-			oauth_uri: `https://id.twitch.tv/oauth2/authorize?client_id=${oauth2.Twitch.client_id}&redirect_uri=${oauth2.Twitch.redirect_uri}&scope=${oauth2.Twitch.scopes}&response_type=code`
 		},
 		"Reddit": {
 			...oauth2.Reddit,
