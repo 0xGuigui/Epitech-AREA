@@ -3,7 +3,7 @@ import {Appbar, Divider} from 'react-native-paper';
 import { DarkTheme } from "../../config";
 import * as React from "react";
 import { useNavigate } from "react-router-native";
-import { refreshToken, logOut, deleteAccount } from "../services/server";
+import { refreshToken, logOut, deleteAccount, resetPassword } from "../services/server";
 import { showToast } from '../utils'
 import {useContext, useEffect} from "react";
 import {HistoryContext} from "../historyContext";
@@ -95,7 +95,30 @@ export default function Account({ userInfo, setUserInfo }) {
                 </Text>
                 <Divider />
                 <Text
-                    style={styles.clickableText} onPress={() => console.log("Coucou")}>
+                    style={styles.clickableText} onPress={() => {
+                        Alert.alert(
+                            "Change password",
+                            "Are you sure you want to change your password?",
+                            [
+                                {
+                                    text: "Cancel",
+                                    onPress: () => console.log("Cancel Pressed"),
+                                    style: "cancel"
+                                },
+                                { text: "OK", onPress: () => async () => {
+                                    const token = await refreshToken()
+                                        if (token) {
+                                            const res = await resetPassword(token)
+                                            if (res) {
+                                                navigate('/changePassword')
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            { cancelable: false }
+                        );
+                    }}>
                     Change password
                 </Text>
                 <Divider />
