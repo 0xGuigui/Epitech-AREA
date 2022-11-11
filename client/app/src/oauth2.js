@@ -10,18 +10,19 @@ import redditLogo from './assets/img/reddit_logo.png'
 import leagueLogo from './assets/img/league_of_legends_logo.png'
 import steamLogo from './assets/img/steam_logo.png'
 import {HistoryContext} from "./historyContext";
-import {refreshToken, registerService} from "./services/server";
+import {checkService, refreshToken, registerService} from "./services/server";
 
 const logos = {
 	Discord: discordLogo,
 	Spotify: spotifyLogo,
 	Reddit: redditLogo,
 	Twitch: twitchLogo,
-	LeagueOfLegends: leagueLogo,
+	"League of Legends": leagueLogo,
 	Steam: steamLogo
 }
 
 export default function Oauth2({userInfo, setUserInfo}) {
+	const location = useLocation()
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams();
 	const history = useContext(HistoryContext)
@@ -30,7 +31,8 @@ export default function Oauth2({userInfo, setUserInfo}) {
 	const registerCode = async () => {
 		const token = await refreshToken()
 		token.status !== 200 && navigate('/login')
-		await registerService(token.token, params.service, searchParams.get('code'))
+		// const res = await registerService(token.token, params.service, searchParams.get('code'))
+		console.log(location)
 	}
 
 	useEffect(() => {

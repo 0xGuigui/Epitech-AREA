@@ -6,7 +6,8 @@ export const AreaContext = createContext()
 export const AreaProvider = ({ children }) => {
 	const [area, setArea] = useState({
 		action: {},
-		reaction: {}
+		reaction: {},
+		name: ''
 	})
 
 	useEffect(() => {

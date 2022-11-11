@@ -1,5 +1,12 @@
 import {useNavigate, useParams} from "react-router-native";
-import {checkService, getAbout, getActionByName, getReactionByName, refreshToken} from "../../services/server";
+import {
+	checkService,
+	getAbout,
+	getActionByName,
+	getReactionByName,
+	getServices,
+	refreshToken
+} from "../../services/server";
 import {useContext, useEffect, useState} from "react";
 import {Oauth2} from "../../../config";
 import * as WebBrowser from "expo-web-browser";
@@ -17,13 +24,13 @@ export default function ChooseAction() {
 	const history = useContext(HistoryContext)
 
 	const getServerActions = async () => {
-		const about = await getAbout()
-		about.status !== 200 && navigate('/login')
 		const token = await refreshToken()
 		token.status !== 200 && navigate('/login')
-		const serviceActions = about.server.services.find(e => e.name === serviceName)[serviceType === "action" ? "actions" : "reactions"]
+		const about = await getServices(token.token)
+		about.status !== 200 && navigate('/login')
+		const serviceActions = about.services.find(e => e.name === serviceName)[serviceType === "action" ? "actions" : "reactions"]
 		const actionsData = await Promise.all(serviceActions.map(async e => {
-			const action = await (serviceType === 'action' ? getActionByName(token.token, serviceName, e.name) : getReactionByName(token.token, serviceName, e.name))
+			const action = await (serviceType === 'action' ? getActionByName(token.token, serviceName, e) : getReactionByName(token.token, serviceName, e))
 			return action[serviceType]
 		}))
 		setActions(actionsData)
@@ -49,7 +56,7 @@ export default function ChooseAction() {
 			<View key='actionKey' style={styles.actionsContainer}>
 				{actions.map((e, i) =>
 					<>
-						<DataDisplayer key={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={async () => {
+						<DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={async () => {
 							setActionModal(e)
 						}} />
 					</>

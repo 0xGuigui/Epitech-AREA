@@ -1,7 +1,7 @@
 import {View, StyleSheet, BackHandler} from "react-native";
 import {Text} from "react-native-paper";
 import {useContext, useEffect, useState} from "react";
-import {checkService, getAbout, refreshToken} from "../../services/server";
+import {checkService, getServices, refreshToken} from "../../services/server";
 import {useNavigate, useParams} from "react-router-native";
 import {Oauth2} from '../../../config'
 import * as WebBrowser from 'expo-web-browser'
@@ -15,9 +15,12 @@ export default function DisplayServices() {
 	const history = useContext(HistoryContext)
 
 	const getServerActions = async () => {
-		const about = await getAbout()
+		const refresh = await refreshToken()
+		refresh.status !== 200 && navigate('/login')
+		console.log(refresh)
+		const about = await getServices(refresh.token)
 		about.status !== 200 && navigate('/login')
-		setActions(about.server.services.filter(e => serviceType === 'action' ? e.actions.length > 0 : e.reactions.length > 0))
+		setActions(about.services.filter(e => serviceType === 'action' ? e.actions.length > 0 : e.reactions.length > 0))
 	}
 
 	useEffect(() => {
@@ -37,14 +40,15 @@ export default function DisplayServices() {
 	return (
 		<>
 			<Text style={{fontSize: 40, color: 'white', textAlign: 'center'}}>Choose a service</Text>
-			<View key='actionKey' style={styles.actionsContainer}>
+			<View style={styles.actionsContainer}>
 				{actions.map((e, i) =>
 					<>
-						<DataDisplayer key={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={async () => {
+						<DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={async () => {
 							if (Oauth2[e.name]) {
 								const token = await refreshToken()
 								token.status !== 200 && navigate('/login')
 								const res = await checkService(token.token, e.name)
+								console.log(Oauth2[e.name].oauth_uri)
 								if (res.status !== 200)
 									return WebBrowser.openBrowserAsync(Oauth2[e.name].oauth_uri)
 							}

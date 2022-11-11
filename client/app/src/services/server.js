@@ -85,8 +85,12 @@ async function getActions(token, page = 1) {
 	}
 }
 
-async function getAbout() {
-	const response = await fetch(`${serverUrl}/about.json`)
+async function getServices(token) {
+	const response = await fetch(`${serverUrl}/services`, {
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})
 	const json = await response.json()
 	return {
 		status: response.status,
@@ -145,7 +149,7 @@ async function registerService(token, service, code) {
 			'Authorization': `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({code, redirect_uri: `${serverUrl}/oauth2/${service}`})
+		body: JSON.stringify({"code": code, "redirect_uri": `${serverUrl}/oauth2/${service}`})
 	})
 	const json = await response.json()
 	return {
@@ -210,6 +214,27 @@ async function getReactionByName(token, serviceName, reactionName) {
 	}
 }
 
+async function registerArea(token, area) {
+	const response = await fetch(`${serverUrl}/me/actions`, {
+		method: 'POST',
+		headers: {
+			'Authorization': `Bearer ${token}`
+		},
+		body: JSON.stringify({
+			actionType: `${area.action.serviceName}/${area.action.name}`,
+			reactionType: `${area.reaction.serviceName}/${area.reaction.name}`,
+			name: area.name,
+			...area.action.data,
+			...area.reaction.data
+		})
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -217,7 +242,7 @@ module.exports = {
 	resetPassword,
 	getMe,
 	getActions,
-	getAbout,
+	getServices,
 	logOut,
 	deleteAccount,
 	changeUsername,
@@ -225,5 +250,6 @@ module.exports = {
 	checkService,
 	deleteAction,
 	getActionByName,
-	getReactionByName
+	getReactionByName,
+	registerArea
 }

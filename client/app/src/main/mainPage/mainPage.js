@@ -49,7 +49,7 @@ export default function mainPage({userInfo}) {
 				<View key='actionKey' style={styles.actionsContainer}>
 					{actions.map((e, i) =>
 						<>
-							<DataDisplayer key={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={() => {
+							<DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={() => {
 								setActionModal(e)
 							}} />
 						</>
