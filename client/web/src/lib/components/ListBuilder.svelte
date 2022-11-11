@@ -9,13 +9,12 @@
     export let dataList = [];
     export let viewer;
     export let hasExtraData = false;
-    export let actions;
+    export let actions = [];
+    export let page = 1;
 
     const dispatch = createEventDispatcher();
     let selected = [];
-    let allSelected = false;
     let selectedListState = "deselected";
-    let page = 1;
 
     function computeListSelectedState() {
         const selectedCount = selected.filter((item) => item).length;
@@ -46,6 +45,27 @@
         selectedListState = "deselected";
     }
 
+    function handleActionTrigger(actionName) {
+        let event = {
+            page: page,
+            name: actionName,
+            data: selected.map((item, idx) => item ? dataList[idx] : null).filter((item) => item)
+        }
+        updateAllSelectedElement(false);
+        dispatch("actionTrigger", event);
+    }
+
+    function handlePageChange(direction: "prev" | "next") {
+        if ((direction === "prev" && page <= 1) || (direction === "next" && dataList.length < 10)) {
+            return;
+        }
+        if (direction === "prev") {
+            dispatch("pageChange", page - 1);
+        } else {
+            dispatch("pageChange", page + 1);
+        }
+    }
+
     $: dataList, onDataListChange();
 </script>
 
@@ -53,13 +73,26 @@
     <div
             class:bg-ui-blue={selectedListState !== "deselected"}
             class="transition-all duration-150 bg-opacity-10 relative h-14 w-full flex justify-center items-center drop-shadow-sm shadow shadow-gray-300 border-b border-gray-300 px-6">
-        <div>test</div>
+        {#each actions as action}
+            <div on:click={() => handleActionTrigger(action.name)}
+                 class="mx-3 flex items-center select-none rounded-lg transition-all duration-150 {selectedListState !== 'deselected' ? 'cursor-pointer hover:bg-ui-blue hover:bg-opacity-20' : 'opacity-50'} px-3 py-1.5">
+                <Fa icon={action.icon || icons.faArrowPointer} size={action.iconSize || "1x"}
+                    color={selectedListState !== 'deselected' ? 'rgb(26,115,232)' : 'rgb(156, 163, 175)'}/>
+                <span class="{selectedListState !== 'deselected' ? 'text-ui-blue' : 'text-[rgb(156, 163, 175)]'} ml-2 text-lg">{action.name}</span>
+            </div>
+        {/each}
+        <div
+                on:click={() => dispatch("refresh")}
+             class="flex items-center select-none rounded-lg transition-all duration-150 cursor-pointer hover:bg-ui-blue hover:bg-opacity-20 px-3 py-1.5">
+            <Fa icon={icons.faRefresh} size="1x" color='rgb(26,115,232)'/>
+            <span class="text-ui-blue ml-2 text-lg">refresh</span>
+        </div>
         <div class="flex justify-center items-center h-full absolute top-0 left-0 ml-3.5">
             {#if selectedListState !== "deselected"}
                 <div on:click={() => updateAllSelectedElement(false)}
                      class="flex items-center select-none cursor-pointer rounded-lg transition-all duration-150 hover:bg-ui-blue hover:bg-opacity-20 px-3 py-1.5">
                     <Fa icon={icons.faClose} size="1.5x" color="rgb(26,115,232)"/>
-                    <span class="text-ui-blue ml-2 font-semibold text-lg mb-0.5">remove selection</span>
+                    <span class="text-ui-blue ml-2 text-lg mb-0.5">remove selection</span>
                 </div>
             {/if}
         </div>
@@ -96,13 +129,17 @@
         {/if}
         <!-- Footer (navigation) -->
         <div class="flex justify-end items-center bg-gray-100 flex h-12">
-            <div class="mr-5">
-                test
+            <div class="mr-3 text-sm">
+                <span>page: {page}</span>
             </div>
-            <div class="flex items-center justify-center w-9 h-9 rounded-full transition-all duration-150 {page <= 1 ? '' : 'hover:bg-ui-blue hover:bg-opacity-20'}">
+            <div
+                    on:click={() => handlePageChange("prev")}
+                    class="flex items-center justify-center w-9 h-9 rounded-full transition-all duration-150 {page <= 1 ? '' : 'hover:bg-ui-blue hover:bg-opacity-20'}">
                 <Fa icon={icons.faChevronLeft} size="1.25x" color={page <= 1 ? '#b2bec3' : 'black'}/>
             </div>
-            <div class="flex items-center justify-center w-9 h-9 mr-4 rounded-full transition-all duration-150 {hasExtraData ? 'hover:bg-ui-blue hover:bg-opacity-20' : ''}">
+            <div
+                    on:click={() => handlePageChange("next")}
+                    class="flex items-center justify-center w-9 h-9 mr-4 rounded-full transition-all duration-150 {hasExtraData ? 'hover:bg-ui-blue hover:bg-opacity-20' : ''}">
                 <Fa icon={icons.faChevronRight} size="1.25x" color={hasExtraData ? 'black' : '#b2bec3'}/>
             </div>
         </div>
