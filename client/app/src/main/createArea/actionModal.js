@@ -42,26 +42,6 @@ export default function ({action, setAction, serviceName, serviceType}) {
 							/>
 						)
 					})}
-					{Object.keys(action.fields).map((field, index) => {
-						return (
-							<TextInput
-								key={index}
-								label={field}
-								style={{...styles.textInput, marginTop: index === 0 ? 20 : 0, marginLeft: 20, marginRight: 20}}
-								onChangeText={text => setData({...data, [field]: text})}
-							/>
-						)
-					})}
-					{Object.keys(action.fields).map((field, index) => {
-						return (
-							<TextInput
-								key={index}
-								label={field}
-								style={{...styles.textInput, marginTop: index === 0 ? 20 : 0, marginLeft: 20, marginRight: 20}}
-								onChangeText={text => setData({...data, [field]: text})}
-							/>
-						)
-					})}
 					<Pressable style={styles.saveButton} onPress={async () => {
 						Object.keys(action.fields).forEach(e => {
 							if (!data[e]) {
