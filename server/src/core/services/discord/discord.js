@@ -94,7 +94,7 @@ module.exports = (area, servicesManager) => {
 		return refreshData.refresh_token
 	})
 
-	discordService.checkToken(async (token, userId) => {
+	discordService.setCheckToken(async (token, userId) => {
 		const accessTokenData = await getAccessToken(token)
 		if (accessTokenData?.refresh_token)
 			await saveRefreshToken(accessTokenData?.refresh_token, userId, discordService.name)
