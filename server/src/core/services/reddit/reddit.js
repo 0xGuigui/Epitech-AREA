@@ -1,5 +1,6 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 const {ref} = require("joi");
+const {getUserServiceData} = require("../../../utils/userData");
 
 async function getRefreshToken(code, redirect_uri, mobile) {
 	const response = await fetch(`https://www.reddit.com/api/v1/access_token`, {
@@ -130,9 +131,9 @@ module.exports = (area, servicesManager) => {
 
 	const avatarChangeAction = new Action('avatarChange', 'when you change your avatar')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, redditService.name))
 			const me = await getMe(accessTokenData.access_token)
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			ctx.setActionData('reddit_snoovatar_img', me.snoovatar_img)
 			await ctx.next()
 		})
@@ -146,9 +147,9 @@ module.exports = (area, servicesManager) => {
 		})
 	const newUpvoteAction = new Action('newUpvote', 'new upvoted message by you')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, redditService.name))
 			const upvotedListData = await getUpvoted(accessTokenData.access_token)
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			ctx.setActionData('reddit_last_upvoted', upvotedListData.data.children[0].data.id)
 			await ctx.next()
 		})
@@ -162,9 +163,9 @@ module.exports = (area, servicesManager) => {
 		})
 	const newDownvoteAction = new Action('newDownvote', 'new downvoted message by you')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, redditService.name))
 			const downvotedListData = await getDownvoted(accessTokenData.access_token)
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			ctx.setActionData('reddit_last_downvoted', downvotedListData.data.children[0].data.id)
 			await ctx.next()
 		})
@@ -178,9 +179,9 @@ module.exports = (area, servicesManager) => {
 		})
 	const newSavedAction = new Action('newSaved', 'new saved message by you')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, redditService.name))
 			const savedListData = await getSaved(accessTokenData.access_token)
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			ctx.setActionData('reddit_last_saved', savedListData.data.children[0].data.id)
 			await ctx.next()
 		})
@@ -194,9 +195,9 @@ module.exports = (area, servicesManager) => {
 		})
 	const newCommentAction = new Action('newComment', 'new comment by you')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, redditService.name))
 			const commentListData = await getComments(accessTokenData.access_token)
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			ctx.setActionData('reddit_last_comment', commentListData.data.children[0].data.id)
 			await ctx.next()
 		})
@@ -210,9 +211,9 @@ module.exports = (area, servicesManager) => {
 		})
 	const newPostAction = new Action('newPost', 'new post by you')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.actionData.user.data[redditService.name])
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, redditService.name))
 			const postListData = await getPosts(accessTokenData.access_token)
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			ctx.setActionData('reddit_last_post', postListData.data.children[0].data.id)
 			await ctx.next()
 		})
@@ -227,7 +228,7 @@ module.exports = (area, servicesManager) => {
 
 	const readMessagesReaction = new Reaction('readMessages', 'marks all your messages as read')
 		.on('create', async ctx => {
-			ctx.setActionData('reddit_refresh_token', ctx.actionData.user.data[redditService.name])
+			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user, redditService.name))
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
