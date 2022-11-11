@@ -3,10 +3,10 @@
     import ListBuilder from "$lib/components/ListBuilder.svelte";
     import ServiceViewer from "$lib/blocks/admin-console/viewers/ServiceViewer.svelte";
 
-    let fetchServices = async () => {
+    async function fetchServices() {
         let response = await areaFetch("/services");
         servicesPromise = response.json();
-    };
+    }
 
     let servicesPromise = fetchServices();
 </script>
