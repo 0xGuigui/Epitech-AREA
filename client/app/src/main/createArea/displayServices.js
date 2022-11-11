@@ -25,7 +25,6 @@ export default function DisplayServices() {
 	}, [])
 
 	const backAction = () => {
-		navigate(history.prev)
 	}
 
 	useEffect(() => {
