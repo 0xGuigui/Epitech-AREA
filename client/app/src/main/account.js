@@ -1,15 +1,13 @@
-import {Alert, Platform, ScrollView, StyleSheet, Text, ToastAndroid, View} from "react-native";
-import {Appbar, Divider, Button, Paragraph, Dialog, Portal, Provider, TextInput} from 'react-native-paper';
+import {Alert, Platform, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Appbar, Divider} from 'react-native-paper';
 import { DarkTheme } from "../../config";
 import * as React from "react";
 import { useNavigate } from "react-router-native";
-import { getActions, getMe, refreshToken, logOut, deleteAccount } from "../services/server";
-import {useEffect} from "react";
+import { refreshToken, logOut, deleteAccount } from "../services/server";
 import { showToast } from '../utils'
 
 export default function Account({ userInfo, setUserInfo }) {
     const navigate = useNavigate()
-    const global = require('../../config')
     const createAlertDeleteAccount = () =>
         Alert.alert(
             "Delete Account",

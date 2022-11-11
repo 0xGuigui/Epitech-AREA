@@ -4,7 +4,8 @@ import {useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, IconButton} from 'react-native-paper';
 import {getMe, logUser} from "../services/server";
-const logo = require('../assets/logo/logo.png')
+import logo from '../assets/logo/logo.png'
+import global from '../../config'
 
 export default function Login({ setUserInfo }) {
 	const [form, setForm] = useState({
@@ -12,7 +13,6 @@ export default function Login({ setUserInfo }) {
 		password: ""
 	})
 	const navigate = useNavigate()
-	const global = require('../../config')
 
 	return (
 		<View style={styles.loginSection}>
