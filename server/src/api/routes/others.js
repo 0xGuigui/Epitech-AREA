@@ -132,7 +132,7 @@ module.exports = (area) => {
         if (!(user.data ? user.data[req.params.service] : null))
             return res.status(401).json({message: 'No token to check'})
 
-        const response = await service.checkToken(user.data ? user.data[req.params.service] : null)
+        const response = await service.checkToken(user.data ? user.data[req.params.service] : null, userId)
         if (response)
             return res.json({message: 'Valid token'})
         res.status(401).json({message: 'Invalid token'})
