@@ -27,14 +27,6 @@ export default function Forgot() {
 
 	return (
 		<View style={styles.view}>
-			{/*<IconButton*/}
-			{/*	icon="arrow-left-thick"*/}
-			{/*	iconColor="white"*/}
-			{/*	size={24}*/}
-			{/*	style={styles.backButton}*/}
-			{/*	onPress={() => {*/}
-			{/*		navigate('/login')*/}
-			{/*	}} />*/}
 			<View style={styles.subView}>
 				<View style={styles.subsubView}>
 					<Text style={styles.registerText}>Recover your password</Text>
