@@ -120,7 +120,10 @@ async function getMyPlaylists(access_token) {
 }
 
 module.exports = (area, servicesManager) => {
-	const spotifyService = new Service('Spotify', "Spotify - control your music")
+	const spotifyService = new Service('Spotify', "Spotify - control your music", {
+		mainColor: '#2ebd59',
+		secondaryColor: '#000000'
+	})
 
 	spotifyService.setAuthentification(async (code, redirect_uri) => {
 		const refreshTokenData = await getRefreshToken(code, redirect_uri)

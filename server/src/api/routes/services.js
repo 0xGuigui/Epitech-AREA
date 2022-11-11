@@ -10,7 +10,8 @@ let formatService = (service) => {
         }),
         reactions: service.reactions.map((reaction) => {
             return reaction.name
-        })
+        }),
+        colorPalette: service.colorPalette
     }
 }
 

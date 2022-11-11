@@ -31,11 +31,12 @@ class Reaction extends ServiceComponent {
 class Service {
     #disabled = false
 
-    constructor(serviceName, serviceDescription = serviceName) {
+    constructor(serviceName, serviceDescription = serviceName, colorPalette = {mainColor: '#FFFFFF', secondaryColor: '#000000'}) {
         this.name = serviceName;
         this.description = serviceDescription;
         this.actions = [];
         this.reactions = [];
+        this.colorPalette = colorPalette
         this.authenticate = (code) => null
         this.checkToken = (token) => null
     }
