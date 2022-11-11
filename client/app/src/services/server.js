@@ -1,6 +1,5 @@
-const {serverUrl} = require("../../config");
-
 async function logUser(form) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/login`, {
 		method: 'POST',
 		headers: {
@@ -16,6 +15,7 @@ async function logUser(form) {
 }
 
 async function registerUser(form) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/register`, {
 		method: 'POST',
 		headers: {
@@ -31,6 +31,7 @@ async function registerUser(form) {
 }
 
 async function refreshToken() {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/refresh`, {
 		method: 'POST',
 		headers: {
@@ -45,6 +46,7 @@ async function refreshToken() {
 }
 
 async function resetPassword(email) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/reset-password`, {
 		method: 'POST',
 		headers: {
@@ -60,6 +62,7 @@ async function resetPassword(email) {
 }
 
 async function getMe(token) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/me`, {
 		headers: {
 			'Authorization': `Bearer ${token}`
@@ -73,6 +76,11 @@ async function getMe(token) {
 }
 
 async function getActions(token, page = 1) {
+	const {serverUrl} = require("../../config");
+	console.log(serverUrl)
+	console.log(serverUrl)
+	console.log(serverUrl)
+	console.log(serverUrl)
 	const response = await fetch(`${serverUrl}/me/actions?page=${page}`, {
 		headers: {
 			'Authorization': `Bearer ${token}`
@@ -86,6 +94,7 @@ async function getActions(token, page = 1) {
 }
 
 async function getServices(token) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/services`, {
 		headers: {
 			'Authorization': `Bearer ${token}`
@@ -99,6 +108,7 @@ async function getServices(token) {
 }
 
 async function logOut(token) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/logout`, {
 		method: 'POST',
 		headers : {
@@ -113,6 +123,7 @@ async function logOut(token) {
 }
 
 async function deleteAccount(userInfo) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/me`, {
 		method: 'DELETE',
 		headers: {
@@ -127,6 +138,7 @@ async function deleteAccount(userInfo) {
 }
 
 async function changeUsername(token, username) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/me`, {
 		method: 'PUT',
 		headers: {
@@ -143,13 +155,14 @@ async function changeUsername(token, username) {
 }
 
 async function registerService(token, service, code) {
+	const {serverUrl, Oauth2} = require("../../config");
 	const response = await fetch(`${serverUrl}/oauth2/${service}?mobile=true`, {
 		method: 'POST',
 		headers: {
 			'Authorization': `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({"code": code, "redirect_uri": `${serverUrl}/oauth2/${service}`})
+		body: JSON.stringify({"code": code, "redirect_uri": Oauth2[service].redirect_uri})
 	})
 	const json = await response.json()
 	return {
@@ -159,6 +172,7 @@ async function registerService(token, service, code) {
 }
 
 async function checkService(token, service) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/oauth2/${service}/check-token`, {
 		headers: {
 			'Authorization': `Bearer ${token}`,
@@ -173,13 +187,13 @@ async function checkService(token, service) {
 }
 
 async function deleteAction(token, actionId) {
-	const response = await fetch(`${serverUrl}/me/actions`, {
+	const {serverUrl} = require("../../config");
+	const response = await fetch(`${serverUrl}/me/actions/${actionId}`, {
 		method: 'DELETE',
 		headers: {
 			'Authorization': `Bearer ${token}`,
 			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({actionId})
+		}
 	})
 	const json = await response.json()
 	return {
@@ -189,6 +203,7 @@ async function deleteAction(token, actionId) {
 }
 
 async function getActionByName(token, serviceName, actionName) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/services/${serviceName}/actions/${actionName}`, {
 		headers: {
 			'Authorization': `Bearer ${token}`
@@ -202,6 +217,7 @@ async function getActionByName(token, serviceName, actionName) {
 }
 
 async function getReactionByName(token, serviceName, reactionName) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/services/${serviceName}/reactions/${reactionName}`, {
 		headers: {
 			'Authorization': `Bearer ${token}`
@@ -215,10 +231,12 @@ async function getReactionByName(token, serviceName, reactionName) {
 }
 
 async function registerArea(token, area) {
+	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/me/actions`, {
 		method: 'POST',
 		headers: {
-			'Authorization': `Bearer ${token}`
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
 			actionType: `${area.action.serviceName}/${area.action.name}`,

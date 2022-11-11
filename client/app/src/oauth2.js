@@ -31,8 +31,8 @@ export default function Oauth2({userInfo, setUserInfo}) {
 	const registerCode = async () => {
 		const token = await refreshToken()
 		token.status !== 200 && navigate('/login')
-		// const res = await registerService(token.token, params.service, searchParams.get('code'))
-		console.log(location)
+		const res = await registerService(token.token, params.service, searchParams.get('code'))
+		console.log(res)
 	}
 
 	useEffect(() => {

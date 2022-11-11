@@ -12,8 +12,6 @@ export default function DisplayMenu() {
 	const history = useContext(HistoryContext)
 	const {area} = useContext(AreaContext)
 
-	console.log(area)
-
 	const backAction = () => {
 	}
 
@@ -51,8 +49,7 @@ export default function DisplayMenu() {
 									delete area.name
 								const token = await refreshToken()
 								token.status !== 200 && navigate('/login')
-								const res = registerArea(token.token, area)
-								console.log(res)
+								const res = await registerArea(token.token, area)
 							}}>
 							REGISTER AREA
 						</Button>

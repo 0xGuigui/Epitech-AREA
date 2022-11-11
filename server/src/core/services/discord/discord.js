@@ -2,6 +2,7 @@ const {Service, Action, Reaction} = require('../serviceComponents')
 const mongoose = require("mongoose");
 const {ref} = require("joi");
 const {getUserServiceData} = require("../../../utils/userData");
+const Joi = require("joi");
 
 async function getRefreshToken(code, redirect_uri) {
 	const response = await fetch(`https://discord.com/api/oauth2/token`, {
@@ -143,7 +144,7 @@ module.exports = (area, servicesManager) => {
 		})
 		.on('trigger', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
-			const myGuilds = await getMe(accessTokenData.access_token)
+			const myGuilds = await getMyGuilds(accessTokenData.access_token)
 			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name)
 			if (myGuilds.length > ctx.getActionData('discord_guild_number')) {
 				ctx.setActionData('discord_guild_number', myGuilds.length)
@@ -162,7 +163,7 @@ module.exports = (area, servicesManager) => {
 		})
 		.on('trigger', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
-			const myGuilds = await getMe(accessTokenData.access_token)
+			const myGuilds = await getMyGuilds(accessTokenData.access_token)
 			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name)
 			if (myGuilds.length < ctx.getActionData('discord_guild_number')) {
 				ctx.setActionData('discord_guild_number', myGuilds.length)
@@ -174,7 +175,7 @@ module.exports = (area, servicesManager) => {
 
 	const changeUsernameReaction = new Reaction('changeUsername', 'changes your username')
 		.on('create', async ctx => {
-			ctx.setActionData('discord_new_name', ctx.payload.discord_new_name)
+			ctx.setActionData('discord_new_name', ctx.payload["New Discord Username"])
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
@@ -183,6 +184,10 @@ module.exports = (area, servicesManager) => {
 			await changeUsername(accessTokenData.access_token, ctx.getActionData('discord_new_name'))
 			await ctx.end()
 		})
+
+	changeUsernameReaction.validationSchema = Joi.object().keys({
+		"New Discord Username": Joi.string().required()
+	}).unknown(true)
 
 	discordService.addAction(
 		avatarChangeAction,
