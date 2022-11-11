@@ -1,6 +1,7 @@
 const {Service, Action, Reaction} = require('../serviceComponents')
 const {Buffer} = require("buffer")
 const {getUserServiceData} = require("../../../utils/userData");
+const Joi = require("joi");
 
 async function getRefreshToken(code, redirect_uri) {
 	const response = await fetch(`https://accounts.spotify.com/api/token`, {
@@ -136,9 +137,9 @@ module.exports = (area, servicesManager) => {
 		.on('create', async ctx => {
 			const access_token = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 			const playlist = (await getMyPlaylists(access_token.access_token))
-				.find(p => p.name === ctx.payload.playlist_name)
+				.find(p => p.name === ctx.payload["Playlist name"])
 
-			ctx.setActionData('spotify_playlist_name', ctx.payload.playlist_name)
+			ctx.setActionData('spotify_playlist_name', ctx.payload["Playlist name"])
 			ctx.setActionData('spotify_playlist_snapshot_id', playlist.snapshot_id)
 			await ctx.next()
 		})
@@ -168,6 +169,10 @@ module.exports = (area, servicesManager) => {
 	const loopMusicReaction = new Reaction('loopMusic', 'loop your current music when your action is triggered')
 		.on('create', async (ctx) => await ctx.next())
 		.on('trigger', (ctx) => loopMusic(ctx, spotifyService))
+
+	playlistChangeAction.validationSchema = Joi.object().keys({
+		"Playlist name": Joi.string().required()
+	}).unknown(true)
 
 	spotifyService.addAction(playlistChangeAction)
 
