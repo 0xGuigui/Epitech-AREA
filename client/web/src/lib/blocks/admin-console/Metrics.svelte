@@ -10,12 +10,7 @@
     let maxBufferedData = 10;
     let chartRef: Chart;
     let chartRef2: Chart;
-    let dataMax = 0;
-    let dataTotal = 0;
-    let dataAverage = 0;
-    let data2Max = 0;
-    let data2Total = 0;
-    let data2Average = 0;
+    let latestRawData;
     let data = {
         labels: ['_'],
         datasets: [
@@ -32,8 +27,7 @@
                 values: [0]
             },
         ],
-        yMarkers: [{ label: "Highest peak", value: 0 }],
-        yRegions: [{ label: "Average", start: 0, end: 0 }]
+        yMarkers: [{ label: "Highest peak", value: 0 }, { label: "Average", value: 0 }],
     };
     let data2 = {
         labels: ['_'],
@@ -51,9 +45,7 @@
                 values: [0]
             },
         ],
-        yMarkers: [{ label: "Highest peak", value: 0 }],
-
-        yRegions: [{ label: "Average", start: 0, end: 0 }]
+        yMarkers: [{ label: "Highest peak", value: 0 }, { label: "Average", value: 0 }],
     };
 
     async function init() {
@@ -68,18 +60,13 @@
             let newData2 = data2
 
             rawData.forEach((item) => {
+                latestRawData = item;
                 let date = new Date(item.date)
 
-                dataMax = Math.max(dataMax, item.data.api.total)
-                dataTotal += item.data.api.total
-                dataAverage = dataTotal / newData.labels.length
-                data2Max = Math.max(data2Max, item.data.db.total)
-                data2Total += item.data.db.total
-                data2Average = data2Total / newData2.labels.length
-                newData2.yMarkers[0].value = data2Max
-                newData2.yRegions[0].end = data2Average
-                newData.yMarkers[0].value = dataMax
-                newData.yRegions[0].end = dataAverage
+                newData2.yMarkers[0].value = item.data.db.max
+                newData2.yMarkers[1].value = item.data.db.average
+                newData.yMarkers[0].value = item.data.api.max
+                newData.yMarkers[1].value = item.data.api.average
                 newData.labels.push(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
                 newData.datasets[0].values.push(item.data.api.total);
                 newData.datasets[1].values.push(item.data.api['4xx']);
@@ -90,7 +77,7 @@
                     newData.datasets[1].values.shift();
                     newData.datasets[2].values.shift();
                 }
-                newData2.labels.push(date.getHours().toFixed(2) + ":" + date.getMinutes().toFixed(2) + ":" + date.getSeconds().toFixed(2));
+                newData2.labels.push(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
                 newData2.datasets[0].values.push(item.data.db.total);
                 newData2.datasets[1].values.push(item.data.db.write);
                 newData2.datasets[2].values.push(item.data.db.read);
@@ -117,7 +104,7 @@
 
 <section class="pt-8 pb-16">
     <div class="w-[1000px] mx-auto">
-        <div class="flex items-center font-bold text-xl ml-7">
+        <div class="flex items-center font-semibold text-xl ml-7">
             <Fa icon={icons.faChartArea} class="mr-2"/>
             <span>API requests</span>
         </div>
@@ -130,7 +117,7 @@
                 lineOptions={{regionFill: 1}}
                 tooltipOptions={{formatTooltipX: d => (new Date(d)).toLocaleString(), formatTooltipY: d => d}}
         />
-        <div class="flex items-center font-bold text-xl ml-7 mt-8">
+        <div class="flex items-center font-semibold text-xl ml-7 mt-8">
             <Fa icon={icons.faDatabase} class="mr-2"/>
             <span>DB requests</span>
         </div>
@@ -143,15 +130,64 @@
                 lineOptions={{regionFill: 1}}
                 tooltipOptions={{formatTooltipX: d => (new Date(d)).toLocaleString(), formatTooltipY: d => d}}
         />
-        <div class="flex items-center font-bold text-xl ml-7 mt-8">
-            <Fa icon={icons.faInfoCircle} class="mr-2"/>
-            <span>Stats</span>
+        <div class="flex items-center font-semibold text-xl ml-7 mt-8">
+            <Fa icon={icons.faBook} class="mr-2"/>
+            <span>Summary</span>
         </div>
-        <div class="flex justify-between items-center w-full h-20 border-gray-300 border-[1px] mx-8 mt-4 rounded-sm">
-            <div class="flex-1 w-full h-full"></div>
-            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300"></div>
-            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300"></div>
-            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300"></div>
+        <div class="flex justify-between items-center w-full border-[1px] mx-8 mt-4 rounded-sm">
+            <div class="relative w-1/2">
+                <Chart
+                        type="pie"
+                        height={300}
+                        data={{
+                            labels: ['Total requests', '4XX - client', '5XX - server'],
+                            datasets: [
+                                {
+                                    values: [1, 12, 34]
+                                }
+                            ]
+                        }}
+                        colors={['#1abc9c', '#fdcb6e', '#d63031']}
+                />
+            </div>
+            <div class="relative border-l-[1px] w-1/2">
+                <Chart
+                        type="pie"
+                        height={300}
+                        data={{
+                            labels: ['Total requests', '4XX - client', '5XX - server'],
+                            datasets: [
+                                {
+                                    values: [1, 12, 34]
+                                }
+                            ]
+                        }}
+                        colors={['#1abc9c', '#fdcb6e', '#d63031']}
+                />
+            </div>
+        </div>
+        <div class="flex justify-between items-center w-full h-20 border-gray-300 border-[1px] border-t-0 mx-8 rounded-sm">
+            <div class="flex-1 w-full h-full">
+                <div>{latestRawData?.data["usersCount"] || "0" }</div>
+                <div>
+                    <Fa icon={icons.faUser} class="mr-2"/>
+                    <span>Users</span>
+                </div>
+            </div>
+            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300">
+                <div>{latestRawData?.data["actionsCount"] || "0" }</div>
+                <div>
+                    <Fa icon={icons.faUser} class="mr-2"/>
+                    <span>Actions</span>
+                </div>
+            </div>
+            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300">
+                <div>{latestRawData?.data["servicesCount"] || "0" }</div>
+                <div>
+                    <Fa icon={icons.faServicestack} class="mr-2"/>
+                    <span>Services</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

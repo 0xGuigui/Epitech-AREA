@@ -1,6 +1,7 @@
 <script lang="ts">
     import {areaFetch} from "../../utils/areaFetch";
     import ListBuilder from "$lib/components/ListBuilder.svelte";
+    import ServiceViewer from "$lib/blocks/admin-console/viewers/ServiceViewer.svelte";
 
     let fetchServices = async () => {
         let response = await areaFetch("/services");
@@ -12,10 +13,14 @@
 
 <section>
     {#await servicesPromise}
-        <p>loading...</p>
+        <div class="w-screen h-screen flex justify-center items-center">
+            <img src="/loaders/ball-triangle.svg" alt="Loading svg">
+        </div>
     {:then services}
-        <ListBuilder list={services.services} />
+        <ListBuilder dataList={services.services} hasExtraData={false} viewer={ServiceViewer} />
     {:catch error}
-        <p>error</p>
+        <div class="w-screen h-screen flex justify-center items-center">
+            An error occurred: {error.message}
+        </div>
     {/await}
 </section>
