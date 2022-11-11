@@ -1,13 +1,16 @@
-import {Alert, Platform, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Alert, BackHandler, Platform, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Appbar, Divider} from 'react-native-paper';
 import { DarkTheme } from "../../config";
 import * as React from "react";
 import { useNavigate } from "react-router-native";
 import { refreshToken, logOut, deleteAccount } from "../services/server";
 import { showToast } from '../utils'
+import {useContext, useEffect} from "react";
+import {HistoryContext} from "../historyContext";
 
 export default function Account({ userInfo, setUserInfo }) {
     const navigate = useNavigate()
+    const history = useContext(HistoryContext)
     const createAlertDeleteAccount = () =>
         Alert.alert(
             "Delete Account",
@@ -34,6 +37,16 @@ export default function Account({ userInfo, setUserInfo }) {
             { cancelable: false }
         );
 
+    const backAction = () => {
+        navigate(history.prev)
+    }
+
+    useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () =>
+            BackHandler.removeEventListener("hardwareBackPress", backAction);
+    }, [history])
 
     return (
         <View style={styles.view}>

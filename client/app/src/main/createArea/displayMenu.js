@@ -9,7 +9,6 @@ export default function DisplayMenu() {
 	const history = useContext(HistoryContext)
 
 	const backAction = () => {
-		navigate(history.prev)
 	}
 
 	useEffect(() => {

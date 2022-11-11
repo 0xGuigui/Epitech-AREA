@@ -34,7 +34,6 @@ export default function ChooseAction() {
 	}, [])
 
 	const backAction = () => {
-		navigate(history.prev)
 	}
 
 	useEffect(() => {
