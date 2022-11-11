@@ -13,6 +13,6 @@
     }
 </script>
 
-<section on:click={select} class="bg-white my-2 mx-3 w-4 h-4 transition-all rounded-sm ring-2 {selected ? 'ring-blue-500 bg-blue-500' : 'ring-gray-900'}">
+<section on:click={select} class="my-2 mx-3 w-4 h-4 transition-all rounded-sm ring-2 {selected ? 'ring-ui-blue-500 bg-ui-blue' : 'ring-gray-900 bg-white'}">
     <Fa icon={icons.faCheck} class="text-white" />
 </section>

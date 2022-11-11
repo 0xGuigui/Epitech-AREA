@@ -2,6 +2,7 @@
     export let data;
 </script>
 
+
 <section class="w-full">
-    {data.name}
+    {data.username}
 </section>
