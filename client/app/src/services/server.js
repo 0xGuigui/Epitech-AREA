@@ -137,15 +137,16 @@ async function deleteAccount(userInfo) {
 	}
 }
 
-async function changeUsername(token, username) {
+async function updateUser(token, type, data, previousData) {
 	const {serverUrl} = require("../../config");
+	const newData = previousData === '' ? {[type]: data} : {newPassword: data, password: previousData}
 	const response = await fetch(`${serverUrl}/me`, {
 		method: 'PUT',
 		headers: {
 			'Authorization': `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({username})
+		body: JSON.stringify(newData)
 	})
 	const json = await response.json()
 	return {
@@ -263,7 +264,7 @@ module.exports = {
 	getServices,
 	logOut,
 	deleteAccount,
-	changeUsername,
+	updateUser,
 	registerService,
 	checkService,
 	deleteAction,
