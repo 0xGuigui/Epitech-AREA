@@ -90,57 +90,24 @@ export default function Account({ userInfo, setUserInfo }) {
                 </Text>
                 <Divider />
                 <Text
-                    style={styles.clickableText} onPress={() => console.log("Coucou")}>
+                    style={styles.clickableText} onPress={() => {
+                    navigate('/change/email')
+                }}>
                     Change email
                 </Text>
                 <Divider />
                 <Text
                     style={styles.clickableText} onPress={() => {
-                        Alert.alert(
-                            "Change password",
-                            "Are you sure you want to change your password?",
-                            [
-                                {
-                                    text: "Cancel",
-                                    onPress: () => console.log("Cancel Pressed"),
-                                    style: "cancel"
-                                },
-                                { text: "OK", onPress: () => async () => {
-                                    const token = await refreshToken()
-                                        if (token) {
-                                            const res = await resetPassword(token)
-                                            if (res) {
-                                                navigate('/changePassword')
-                                            }
-                                        }
-                                    }
-                                }
-                            ],
-                            { cancelable: false }
-                        );
-                    }}>
+                    navigate('/change/password')
+
+                }}>
                     Change password
                 </Text>
                 <Divider />
                 <Text
                     style={styles.clickableText} onPress={() => {
-                        Alert.alert(
-                            "Change username",
-                            "Are you sure you want to change your username?",
-                            [
-                                {
-                                    text: "Cancel",
-                                    onPress: () => console.log("Cancel Pressed"),
-                                    style: "cancel"
-                                },
-                                { text: "OK", onPress: async () => {
-                                        navigate('/changeUsername')
-                                    }
-                                }
-                            ],
-                            { cancelable: false }
-                        );
-                    }}>
+                    navigate('/change/username')
+                }}>
                     Change username
                 </Text>
                 <Divider />
