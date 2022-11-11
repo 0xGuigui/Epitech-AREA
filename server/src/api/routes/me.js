@@ -1,7 +1,7 @@
 const express = require('express')
 require('express-async-errors')
 const mongoose = require('mongoose')
-const {setOptions} = require('../middlewares/dynamic')
+const {setOptions, checkId} = require('../middlewares/dynamic')
 const {getUser, updateUser, deleteUser, updateUserPassword} = require("../controllers/users");
 const {
     getUserActions,
@@ -28,11 +28,12 @@ module.exports = (area) => {
         .use('/actions/:actionId', userActionRouter)
         .post('/update-password', setOptions({areaInstance: area}), updateUserPassword)
 
+    userActionRouter.use(checkId('actionId'))
     userActionRouter.route('/')
         .get(getUserAction)
         .delete(deleteUserAction)
 
-    router.post('/actions/:actionId/execute', async (req, res) => {
+    router.post('/actions/:actionId/execute', [checkId("actionId"), async (req, res) => {
         let action = await mongoose
             .model('Action')
             .findById(req.params.actionId)
@@ -43,16 +44,16 @@ module.exports = (area) => {
             return res.status(400).json({error: error})
         }
         return res.status(200).json({action: actionData})
-    })
+    }])
 
-    router.post('/actions/:actionId/retry', async (req, res) => {
+    router.post('/actions/:actionId/retry', [checkId("actionId"), async (req, res) => {
         let action = await mongoose
             .model('Action')
             .findByIdAndUpdate(req.params.actionId, {$unset: {error: 1}}, {new: true})
             .exec()
 
         return res.status(200).json({action: action})
-    })
+    }])
 
     area.app.use('/me', router)
 }

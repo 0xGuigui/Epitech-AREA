@@ -1,16 +1,12 @@
 const mongoose = require('mongoose')
 const jsonwebtoken = require('jsonwebtoken')
 const {validatePayload} = require("../middlewares/dynamic");
-const {registerSchema, oauthSchema} = require("../models/joi/authSchemas");
-const {hashPassword} = require("../../utils/passwordHashing");
+const {oauthSchema} = require("../models/joi/authSchemas");
 const jwt = require("jsonwebtoken");
+const {isAdmin} = require("../middlewares/others");
 
 module.exports = (area) => {
-    area.app.delete('/purge-database', async (req, res) => {
-        if (!req.jwt.admin) {
-            return res.status(401).json({message: 'Unauthorized'})
-        }
-
+    area.app.delete('/purge-database', [isAdmin, async (req, res) => {
         try {
             await mongoose.models.User.deleteMany({username: {$ne: "admin"}}).exec()
             await mongoose.models.Action.deleteMany({}).exec()
@@ -20,7 +16,7 @@ module.exports = (area) => {
         } catch (err) {
             return res.status(500).json({message: err.message})
         }
-    })
+    }])
 
     area.app.get('/webhook/:webhookToken', async (req, res) => {
         jsonwebtoken.verify(req.params.webhookToken, area.config.jwtSecret, {}, async (err, decoded) => {
@@ -137,7 +133,7 @@ module.exports = (area) => {
         res.status(401).json({message: 'Invalid token'})
     })
 
-    area.app.get('/server-stream-events', async (req, res) => {
+    area.app.get('/server-stream-events', [isAdmin, async (req, res) => {
         res.set({
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
@@ -150,5 +146,5 @@ module.exports = (area) => {
         res.on('close', () => {
             area.statsManager.removeOpenedRequest(res)
         })
-    })
+    }])
 }
