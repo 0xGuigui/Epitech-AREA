@@ -17,7 +17,6 @@ export default function DisplayServices() {
 	const getServerActions = async () => {
 		const refresh = await refreshToken()
 		refresh.status !== 200 && navigate('/login')
-		console.log(refresh)
 		const about = await getServices(refresh.token)
 		about.status !== 200 && navigate('/login')
 		setActions(about.services.filter(e => serviceType === 'action' ? e.actions.length > 0 : e.reactions.length > 0))
@@ -48,7 +47,6 @@ export default function DisplayServices() {
 								const token = await refreshToken()
 								token.status !== 200 && navigate('/login')
 								const res = await checkService(token.token, e.name)
-								console.log(Oauth2[e.name].oauth_uri)
 								if (res.status !== 200)
 									return WebBrowser.openBrowserAsync(Oauth2[e.name].oauth_uri)
 							}

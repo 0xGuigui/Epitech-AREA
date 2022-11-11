@@ -33,10 +33,6 @@ export default function ({action, setAction, serviceName, serviceType}) {
 		setData({...data, [key]: value})
 	}
 
-	console.log(action)
-	console.log('keys:', Object.keys(action))
-	console.log('values:', Object.values(action))
-
 	return (
 		<Modal
 			visible={true}
@@ -50,7 +46,7 @@ export default function ({action, setAction, serviceName, serviceType}) {
 			<View style={styles.modalContainer}>
 				<ScrollView style={styles.scrollView}>
 					<Text style={styles.actionTitle}>{action.name}</Text>
-					<Text style={styles.textStyle}> Do you want to add this action to your area ?</Text>
+					<Text style={styles.textStyle}>{action.description}</Text>
 					{numberOfFields > 0 && <Text style={styles.textStyle}>Please fill the fields below:</Text>}
 					{Object.keys(action.fields || {}).map((field, index) => {
 						return (
@@ -64,7 +60,7 @@ export default function ({action, setAction, serviceName, serviceType}) {
 					})}
 					<Pressable style={styles.saveButton} onPress={async () => {
 						let error = false
-						Object.keys(action.fields).forEach(e => {
+						Object.keys(action.fields || {}).forEach(e => {
 							if (!data[e]) {
 								error = true
 								Alert.alert(
@@ -87,18 +83,15 @@ export default function ({action, setAction, serviceName, serviceType}) {
 							return;
 						setArea({
 							...area,
-							actions: [
-								...area.actions,
-								{
-									name: action.name,
-									serviceName: serviceName,
-									serviceType: serviceType,
-									data: data
-								}
-							]
+							[serviceType]: {
+								name: action.name,
+								serviceName,
+								data
+							}
 						})
 						showToast('Action added to your area')
 						setAction(undefined)
+						navigate('/create')
 					}}>
 						<Text style={styles.saveButtonText}>Save</Text>
 					</Pressable>

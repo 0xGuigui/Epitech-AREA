@@ -94,6 +94,46 @@ module.exports = (area) => {
         return res.json({message: 'Processed'})
     })
 
+    area.app.delete('/oauth2/:service', async (req, res) => {
+        let token = req.headers['x-access-token'] || req.headers['authorization']
+
+        if (!token && req.query.token) {
+            token = "Bearer " + req.query.token
+        }
+
+        if (!token) {
+            return res.status(401).json({message: 'No token provided'})
+        }
+        const rawToken = token.split(' ')[1]
+        jwt.verify(rawToken, process.env.JWT_ACCESS_SECRET, {}, (err, decoded) => {
+            if (err || area.jwtDenyList.isTokenDenied(decoded.userId, decoded.iat)) {
+                return res.status(401).json({message: 'Unauthorized'})
+            }
+            req.jwt = decoded
+        })
+
+        let userId = req.jwt.userId
+
+        let user = await mongoose
+            .model("User")
+            .findById(userId)
+            .exec()
+
+        if (!user) {
+            return res.status(404).json({message: 'User not found'})
+        }
+
+        if (!(user.data || {})[req.params.service]) {
+            return res.status(401).json({message: 'No token to delete'})
+        }
+        const data = {...user.data}
+        delete data[req.params.service]
+        user.data = data
+        await user.save()
+
+        return res.json({message: 'Processed'})
+    })
+
     area.app.get('/oauth2/:service/check-token', async (req, res) => {
         let token = req.headers['x-access-token'] || req.headers['authorization']
 
