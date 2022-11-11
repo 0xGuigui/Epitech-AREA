@@ -11,11 +11,7 @@ export default function ({action, setAction, serviceName, serviceType}) {
 	const {area, setArea} = useContext(AreaContext)
 	const [data, setData] = useState({})
 	const navigate = useNavigate()
-	const numberOfFields = Object.keys(action.fields).length
-
-	console.log(action)
-	console.log('keys:', Object.keys(action))
-	console.log('values:', Object.values(action))
+	const numberOfFields = Object.keys(action.fields || {}).length
 
 	return (
 		<Modal
@@ -32,7 +28,7 @@ export default function ({action, setAction, serviceName, serviceType}) {
 					<Text style={styles.actionTitle}>{action.name}</Text>
 					<Text style={styles.textStyle}> Do you want to add this action to your area ?</Text>
 					{numberOfFields > 0 && <Text style={styles.textStyle}>Please fill the fields below:</Text>}
-					{Object.keys(action.fields).map((field, index) => {
+					{Object.keys(action.fields || {}).map((field, index) => {
 						return (
 							<TextInput
 								key={index}
