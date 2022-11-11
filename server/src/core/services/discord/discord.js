@@ -80,8 +80,8 @@ async function saveRefreshToken(refresh_token, userId, serviceName, ctx) {
 		[serviceName]: refresh_token
 	}
 	if (ctx)
-		ctx.actionData.user.data = {
-			...ctx.actionData.user.data,
+		ctx.actionData.user.valueOf().data = {
+			...ctx.actionData.user.valueOf().data,
 			[serviceName]: refresh_token
 		}
 	await user.save()
@@ -104,16 +104,16 @@ module.exports = (area, servicesManager) => {
 
 	const avatarChangeAction = new Action('avatarChange', 'when you change your avatar')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const me = await getMe(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			ctx.setActionData('discord_avatar_id', me.avatar)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const me = await getMe(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			if (me.avatar !== ctx.getActionData('discord_avatar_id')) {
 				ctx.setActionData('discord_avatar_id', me.avatar)
 				return await ctx.next()
@@ -122,16 +122,16 @@ module.exports = (area, servicesManager) => {
 		})
 	const usernameChangeAction = new Action('usernameChange', 'when you change your username')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const me = await getMe(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			ctx.setActionData('discord_username', me.username)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const me = await getMe(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			if (me.username !== ctx.getActionData('discord_username')) {
 				ctx.setActionData('discord_username', me.username)
 				return await ctx.next()
@@ -140,16 +140,16 @@ module.exports = (area, servicesManager) => {
 		})
 	const joinedServerAction = new Action('joinedNewServer', 'when you join a new server')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMyGuilds(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			ctx.setActionData('discord_guild_number', myGuilds.length)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMe(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			if (myGuilds.length > ctx.getActionData('discord_guild_number')) {
 				ctx.setActionData('discord_guild_number', myGuilds.length)
 				return await ctx.next()
@@ -159,16 +159,16 @@ module.exports = (area, servicesManager) => {
 		})
 	const leftServerAction = new Action('leftServer', 'when you leave a new server')
 		.on('create', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMyGuilds(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			ctx.setActionData('discord_guild_number', myGuilds.length)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMe(accessTokenData.access_token)
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			if (myGuilds.length < ctx.getActionData('discord_guild_number')) {
 				ctx.setActionData('discord_guild_number', myGuilds.length)
 				return await ctx.next()
@@ -183,8 +183,8 @@ module.exports = (area, servicesManager) => {
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user, discordService.name))
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user, discordService.name, ctx)
+			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
+			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name, ctx)
 			await changeUsername(accessTokenData.access_token, ctx.getActionData('discord_new_name'))
 			await ctx.end()
 		})
