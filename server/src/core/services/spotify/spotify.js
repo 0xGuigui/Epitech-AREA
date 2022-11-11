@@ -32,7 +32,7 @@ async function pauseMusic(ctx, spotifyService) {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${accessToken}`
+			'Authorization': `Bearer ${accessToken.access_token}`
 		}
 	})
 	await ctx.next()
@@ -44,7 +44,7 @@ async function resumeOrPlayMusic(ctx, spotifyService) {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${accessToken}`
+			'Authorization': `Bearer ${accessToken.access_token}`
 		}
 	})
 	await ctx.next()
@@ -56,7 +56,7 @@ async function nextMusic(ctx, spotifyService) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${accessToken}`
+			'Authorization': `Bearer ${accessToken.access_token}`
 		}
 	})
 	await ctx.next()
@@ -68,7 +68,7 @@ async function previousMusic(ctx, spotifyService) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${accessToken}`
+			'Authorization': `Bearer ${accessToken.access_token}`
 		}
 	})
 	await ctx.next()
@@ -80,7 +80,7 @@ async function loopMusic(ctx, spotifyService) {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `Bearer ${accessToken}`
+			'Authorization': `Bearer ${accessToken.access_token}`
 		}
 	})
 	await ctx.next()
