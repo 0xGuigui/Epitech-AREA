@@ -75,13 +75,8 @@ export default function Account({ userInfo, setUserInfo }) {
                 </Text>
                 <Divider />
                 <Text
-                    style={styles.clickableText} onPress={() => console.log("Coucou")}>
-                    Connect to a service
-                </Text>
-                <Divider/>
-                <Text
-                    style={styles.clickableText} onPress={() => console.log("Coucou")}>
-                    Disconnect from a service
+                    style={styles.clickableText} onPress={() => navigate('/manageServices')}>
+                    Manage services
                 </Text>
                 <Divider/>
                 <Text
