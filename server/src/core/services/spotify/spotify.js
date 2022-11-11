@@ -27,7 +27,7 @@ async function getAccessToken(refresh_token) {
 }
 
 async function pauseMusic(ctx, spotifyService) {
-	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/pause`, {
 		method: 'PUT',
 		headers: {
@@ -39,7 +39,7 @@ async function pauseMusic(ctx, spotifyService) {
 }
 
 async function resumeOrPlayMusic(ctx, spotifyService) {
-	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/play`, {
 		method: 'PUT',
 		headers: {
@@ -51,7 +51,7 @@ async function resumeOrPlayMusic(ctx, spotifyService) {
 }
 
 async function nextMusic(ctx, spotifyService) {
-	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/next`, {
 		method: 'POST',
 		headers: {
@@ -63,7 +63,7 @@ async function nextMusic(ctx, spotifyService) {
 }
 
 async function previousMusic(ctx, spotifyService) {
-	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/previous`, {
 		method: 'POST',
 		headers: {
@@ -75,7 +75,7 @@ async function previousMusic(ctx, spotifyService) {
 }
 
 async function loopMusic(ctx, spotifyService) {
-	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+	const accessToken = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 	const response = await fetch(`https://api.spotify.com/v1/me/player/repeat?state=track`, {
 		method: 'PUT',
 		headers: {
@@ -131,7 +131,7 @@ module.exports = (area, servicesManager) => {
 
 	const playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
 		.on('create', async ctx => {
-			const access_token = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+			const access_token = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 			const playlist = (await getMyPlaylists(access_token.access_token))
 				.find(p => p.name === ctx.payload.playlist_name)
 
@@ -140,7 +140,7 @@ module.exports = (area, servicesManager) => {
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
-			const access_token = await getAccessToken(await getUserServiceData(ctx.actionData.user, spotifyService.name))
+			const access_token = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 			const playlist = (await getMyPlaylists(access_token.access_token))
 				.find(p => p.name === ctx.getActionData('spotify_playlist_name'))
 
