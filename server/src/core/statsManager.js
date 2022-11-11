@@ -1,21 +1,25 @@
 const mongoose = require('mongoose');
 const logger = require('node-color-log')
-const STATS_QUEUE_SIZE = 10;
+const STATS_QUEUE_SIZE = 30;
 const STATS_DOCUMENT_REF_ID = 1;
 const writingMethods = ['insert', 'update', 'remove', 'delete', 'createIndex', 'updateOne']
 
-function resetStatsFactory() {
+function resetStatsFactory(oldStats) {
     return {
         actionsCount: 0,
         usersCount: 0,
         servicesCount: 0,
         servicesData: {},
         api: {
+            max: oldStats?.api?.max || 0,
+            average: oldStats?.api?.average || 0,
             total: 0,
             "4XX": 0,
             "5XX": 0
         },
         db: {
+            max: oldStats?.db?.max || 0,
+            average: oldStats?.db?.average || 0,
             total: 0,
             "write": 0,
             "read": 0
@@ -53,6 +57,14 @@ module.exports = class StatsManager {
                 statsDocument.statsQueue.shift()
             }
             statsDocument.statsQueue.push(newEntry)
+            statsDocument.statsQueue.forEach(entry => {
+                this.stats.api.average += entry.data.api.total
+                this.stats.api.max = Math.max(this.stats.api.max, entry.data.api.total)
+                this.stats.db.average += entry.data.db.total
+                this.stats.db.max = Math.max(this.stats.db.max, entry.data.db.total)
+            })
+            this.stats.api.average /= statsDocument.statsQueue.length
+            this.stats.db.average /= statsDocument.statsQueue.length
             await statsDocument.save()
             this.openedRequests.forEach(request => {
                 request.write(`data: ${JSON.stringify([newEntry])}\n\n`)
@@ -63,7 +75,7 @@ module.exports = class StatsManager {
     }
 
     async resetStats(area) {
-        this.stats = resetStatsFactory()
+        this.stats = resetStatsFactory(this.stats)
         this.stats.actionsCount = await mongoose.models.Action.countDocuments({}).exec()
         this.stats.usersCount = await mongoose.models.User.countDocuments({}).exec()
         this.stats.servicesCount = area.servicesManager.getServices().length
