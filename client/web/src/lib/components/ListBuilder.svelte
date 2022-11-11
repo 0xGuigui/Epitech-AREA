@@ -15,6 +15,7 @@
     const dispatch = createEventDispatcher();
     let selected = [];
     let selectedListState = "deselected";
+    let searchBarFocused = false;
 
     function computeListSelectedState() {
         const selectedCount = selected.filter((item) => item).length;
@@ -66,33 +67,48 @@
         }
     }
 
+    function transmitEvent(e) {
+        dispatch("actionTrigger", {
+            name: e.detail.name,
+            data: [dataList[e.detail.idx]]
+        });
+    }
+
+    function handleKeyPressed(e) {
+        if (e.key === "Escape") {
+            updateAllSelectedElement(false);
+        }
+    }
+
     $: dataList, onDataListChange();
 </script>
+
+<svelte:window on:keydown|preventDefault={handleKeyPressed} />
 
 <section class="w-full">
     <div
             class:bg-ui-blue={selectedListState !== "deselected"}
             class="transition-all duration-150 bg-opacity-10 relative h-14 w-full flex justify-center items-center drop-shadow-sm shadow shadow-gray-300 border-b border-gray-300 px-6">
-        {#each actions as action}
-            <div on:click={() => handleActionTrigger(action.name)}
-                 class="mx-3 flex items-center select-none rounded-lg transition-all duration-150 {selectedListState !== 'deselected' ? 'cursor-pointer hover:bg-ui-blue hover:bg-opacity-20' : 'opacity-50'} px-3 py-1.5">
-                <Fa icon={action.icon || icons.faArrowPointer} size={action.iconSize || "1x"}
-                    color={selectedListState !== 'deselected' ? 'rgb(26,115,232)' : 'rgb(156, 163, 175)'}/>
-                <span class="{selectedListState !== 'deselected' ? 'text-ui-blue' : 'text-[rgb(156, 163, 175)]'} ml-2 text-lg">{action.name}</span>
-            </div>
-        {/each}
         <div
                 on:click={() => dispatch("refresh")}
-             class="flex items-center select-none rounded-lg transition-all duration-150 cursor-pointer hover:bg-ui-blue hover:bg-opacity-20 px-3 py-1.5">
+                class="min-w-[100px] flex items-center select-none rounded-lg transition-all duration-150 cursor-pointer hover:bg-ui-blue hover:bg-opacity-20 px-3 mx-1.5 py-1.5">
             <Fa icon={icons.faRefresh} size="1x" color='rgb(26,115,232)'/>
-            <span class="text-ui-blue ml-2 text-lg">refresh</span>
+            <span class="text-ui-blue ml-2 text-lg mb-0.5">refresh</span>
         </div>
+        {#each actions as action}
+            <div on:click={() => handleActionTrigger(action.name)}
+                 class="min-w-[100px] mx-1.5 flex items-center justify-center select-none rounded-lg transition-all duration-150 {selectedListState !== 'deselected' ? 'cursor-pointer hover:bg-ui-blue hover:bg-opacity-20' : 'opacity-50'} px-3 py-1.5">
+                <Fa icon={action.icon || icons.faArrowPointer} size={action.iconSize || "1x"}
+                    color={selectedListState !== 'deselected' ? 'rgb(26,115,232)' : 'rgb(156, 163, 175)'}/>
+                <span class="{selectedListState !== 'deselected' ? 'text-ui-blue' : 'text-[rgb(156, 163, 175)]'} ml-2 text-lg mb-0.5">{action.name}</span>
+            </div>
+        {/each}
         <div class="flex justify-center items-center h-full absolute top-0 left-0 ml-3.5">
             {#if selectedListState !== "deselected"}
                 <div on:click={() => updateAllSelectedElement(false)}
                      class="flex items-center select-none cursor-pointer rounded-lg transition-all duration-150 hover:bg-ui-blue hover:bg-opacity-20 px-3 py-1.5">
                     <Fa icon={icons.faClose} size="1.5x" color="rgb(26,115,232)"/>
-                    <span class="text-ui-blue ml-2 text-lg mb-0.5">remove selection</span>
+                    <span class="text-ui-blue ml-2 font-light text-lg mb-0.5">remove selection</span>
                 </div>
             {/if}
         </div>
@@ -105,8 +121,8 @@
                     <ListCheckBox selected={selectedListState === "selected"}
                                   on:select={(e) => updateAllSelectedElement(e.detail)}/>
                 </div>
-                <div class="flex-1">
-                    <input placeholder="search element" class="px-3 py-1 w-full">
+                <div class="flex-1 ring-2 rounded-sm overflow-hidden transition-all duration-100 {searchBarFocused ? 'ring-ui-blue' : 'ring-black'}">
+                    <input on:focus={() => searchBarFocused = true} on:blur={() => searchBarFocused = false} placeholder="search element" class="px-3 py-1 w-full focus:outline-none">
                 </div>
                 <div class="flex-1">
 
@@ -119,7 +135,7 @@
                      in:fade={{duration: 150}}>
                     <ListCheckBox selected={selected[idx]} on:select={(e) => {selectElement(idx)}}/>
                     <svelte:component this={viewer} data={item}/>
-                    <ListDropdown/>
+                    <ListDropdown {actions} on:message={transmitEvent} index={idx} />
                 </div>
             {/each}
         {:else}
