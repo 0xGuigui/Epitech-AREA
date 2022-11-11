@@ -86,7 +86,7 @@ async function saveRefreshToken(refresh_token, userId, serviceName) {
 module.exports = (area, servicesManager) => {
 	const discordService = new Service('Discord', "Discord - your place to talk", {
 		mainColor: '#5f70f4',
-		secondaryColor: '#ffffff'
+		secondaryColor: '#acbcfc'
 	})
 
 	discordService.setAuthentification(async (code, redirect_uri) => {
