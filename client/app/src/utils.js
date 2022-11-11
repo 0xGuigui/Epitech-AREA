@@ -1,4 +1,4 @@
-const {ToastAndroid} = require("react-native");
+const { ToastAndroid } = require("react-native");
 
 function isEmail(email) {
 	const re =
@@ -71,5 +71,5 @@ module.exports = {
 	isPort,
 	generateCodeVerifier,
 	generateCodeChallengeFromVerifier,
-	showToast,
-}
+	showToast
+};
