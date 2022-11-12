@@ -57,7 +57,8 @@ class AREA {
                 let errors = configLoader.checkEnvConfig(config[service.name], false);
 
                 if (errors) {
-                    service.disable()
+                    service.updateState(false)
+                    service.lockState()
                     erroredServicesCount++
                     logger.warn(`${service.name} service has been disabled because of missing variables:`)
                     errors.forEach(error => logger.warn(error))

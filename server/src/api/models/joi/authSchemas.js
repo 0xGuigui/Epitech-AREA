@@ -28,3 +28,7 @@ module.exports.oauthSchema = joi.object({
     code: joi.string().required(),
     redirect_uri: joi.string().required()
 }).unknown(true)
+
+module.exports.updateServiceStateSchema = joi.object({
+    state: joi.bool().required(),
+}).unknown(true);

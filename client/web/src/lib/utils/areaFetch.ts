@@ -1,7 +1,6 @@
 import {accessToken, loggedIn, serverState} from "../../store";
-import {browser} from "$app/environment";
 
-function buildRequestFactory(url: string, method: string, body: object | null, token: string | null) {
+function buildRequest(url: string, method: string, body: object | null, token: string | null) {
     const config = {
         method,
         headers: {
@@ -12,23 +11,20 @@ function buildRequestFactory(url: string, method: string, body: object | null, t
     if (body) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        config["body"] = JSON.stringify(body)
+        config["body"] = JSON.stringify(body);
     }
     if (token) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         config.headers['Authorization'] = `Bearer ${token}`
     }
-    return {
-        fetch: () => fetch(url, config),
-    }
+    return fetch(url, config);
 }
 
 export async function refreshAccessToken(serverUrl: string): Promise<boolean> {
-    const request = buildRequestFactory(serverUrl + '/refresh', 'POST', {
+    const response = await buildRequest(serverUrl + '/refresh', 'POST', {
         jwt: localStorage.getItem('refreshToken') || '',
     }, null)
-    const response = await request.fetch()
 
     if (response.status === 200) {
         const data = await response.json()
@@ -40,7 +36,6 @@ export async function refreshAccessToken(serverUrl: string): Promise<boolean> {
 }
 
 export async function areaFetch(url: string, method = "GET", body = null): Promise<any> {
-    if (!browser) return;
     const token = localStorage.getItem("accessToken");
     const serverUrl = localStorage.getItem("serverURL");
 
@@ -48,14 +43,12 @@ export async function areaFetch(url: string, method = "GET", body = null): Promi
         throw new Error("No token or serverUrl");
     }
     try {
-        let request = buildRequestFactory(serverUrl + url, method, body, token);
-        let response = await request.fetch();
+        let response = await buildRequest(serverUrl + url, method, body, token);
 
         if (response.status === 401) {
             if (await refreshAccessToken(serverUrl)) {
                 const newToken = localStorage.getItem("accessToken");
-                request = buildRequestFactory(serverUrl + url, method, body, newToken);
-                response = await request.fetch();
+                response = await buildRequest(serverUrl + url, method, body, newToken);
 
                 if (response.status === 401) {
                     throw new Error("Unauthorized");
@@ -66,7 +59,10 @@ export async function areaFetch(url: string, method = "GET", body = null): Promi
             serverState.set("online");
         }
         return response;
-    } catch (e) {
-        serverState.set("error");
+    } catch (e: any) {
+        if (e.message === "Failed to fetch") {
+            serverState.set("offline");
+        }
+        throw e;
     }
 }

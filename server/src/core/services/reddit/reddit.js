@@ -121,8 +121,8 @@ async function readAllMessages(access_token) {
 
 module.exports = (area, servicesManager) => {
 	const redditService = new Service('Reddit', 'Reddit - Dive into anything', {
-		mainColor: '#ffffff',
-		secondaryColor: '#fe4500',
+		mainColor: '#fe4500',
+		secondaryColor: '#fff',
 	})
 
 	redditService.setAuthentification(async (code, redirect_uri, mobile) => {

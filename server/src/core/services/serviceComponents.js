@@ -30,6 +30,7 @@ class Reaction extends ServiceComponent {
 
 class Service {
     active = true
+    locked = false
 
     constructor(serviceName, serviceDescription = serviceName, colorPalette = {mainColor: '#FFFFFF', secondaryColor: '#000000'}) {
         this.name = serviceName;
@@ -83,12 +84,15 @@ class Service {
         }
     }
 
-    enable() {
-        this.active = true;
+    lockState() {
+        this.locked = true;
     }
 
-    disable() {
-        this.active = false;
+    updateState(newState) {
+        if (this.locked) return false;
+
+        this.active = newState;
+        return true;
     }
 }
 

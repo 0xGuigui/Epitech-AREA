@@ -2,6 +2,14 @@
 module.exports = {
 	mode: 'jit',
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+	safelist: [
+		'bg-red-500',
+		'bg-green-500',
+		'bg-orange-500',
+		'text-red-500',
+		'text-green-500',
+		'text-orange-500',
+	],
 	theme: {
 		extend: {
 			colors: {
