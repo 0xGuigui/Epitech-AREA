@@ -34,7 +34,7 @@
     {/await}
     {#await services}
         <div class="flex justify-center items-center">
-            <Fa icon={icons.faRefresh} size="5x"/>
+            <p></p>
         </div>
     {:then data}
         {#each data.services as service}
