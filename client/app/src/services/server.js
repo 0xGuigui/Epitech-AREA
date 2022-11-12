@@ -1,3 +1,5 @@
+const {serverUrl} = require("../../config");
+
 async function logUser(form) {
 	const {serverUrl} = require("../../config");
 	const response = await fetch(`${serverUrl}/login`, {
@@ -254,6 +256,20 @@ async function registerArea(token, area) {
 	}
 }
 
+async function getServiceByName(token, serviceName) {
+	const {serverUrl} = require("../../config");
+	const response = await fetch(`${serverUrl}/services/${serviceName}`, {
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -270,5 +286,6 @@ module.exports = {
 	deleteAction,
 	getActionByName,
 	getReactionByName,
-	registerArea
+	registerArea,
+	getServiceByName
 }
