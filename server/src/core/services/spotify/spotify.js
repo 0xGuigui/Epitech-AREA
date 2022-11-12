@@ -121,7 +121,7 @@ async function getMyPlaylists(access_token) {
 }
 
 module.exports = (area, servicesManager) => {
-	const spotifyService = new Service('Spotify', "Spotify - control your music", {
+	const spotifyService = new Service('Spotify', "Spotify is a digital music service that gives you access to millions of songs. Applets can help you save your Discover Weekly and Release Radar playlists, share your favorite tunes, and much more.", {
 		mainColor: '#2ebd59',
 		secondaryColor: '#000000'
 	})
