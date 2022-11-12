@@ -17,19 +17,19 @@
 <section class="w-full flex justify-between items-center">
     <div class="flex items-center">
         <div class="min-w-[45px]">
-            <Fa icon={icons["fa" + data.name] || icons.faGlobe} color="{data.colorPalette.mainColor || 'black'}" class="text-2xl mx-auto"/>
+            <Fa icon={icons["fa" + data.name] || icons.faGlobe} color="{data.colorPalette.mainColor || 'black'}" size="1.35x" class="text-2xl mx-auto"/>
         </div>
         <div class="font-light text-lg min-w-[100px]">
             {data.name}
         </div>
     </div>
     <div class="flex items-center justify-start w-full ml-10">
-        <div>actions: <b class="text-ui-blue">{data.actions.length}</b></div>
-        <div class="ml-12">reactions: <b class="text-ui-blue">{data.reactions.length}</b></div>
-        <div class="ml-12">state: <b class="{getStateColor('text-')}">{data.active ? 'enabled' : 'disabled'}{data.locked ? ', locked' : ''}</b></div>
+        <div><span class="select-none">actions: </span><b class="text-ui-blue">{data.actions.length}</b></div>
+        <div class="ml-12"><span class="select-none">reactions: </span><b class="text-ui-blue">{data.reactions.length}</b></div>
+        <div class="ml-12"><span class="select-none">state: </span><b class="{getStateColor('text-')}">{data.active ? 'enabled' : 'disabled'}{data.locked ? ', locked' : ''}</b></div>
     </div>
     <span class="relative flex h-3 w-3 ml-2">
-            {#if !data.locked}<span
+            {#if data.active}<span
                     class="animate-ping absolute inline-flex h-full w-full rounded-full {getStateColor()} opacity-75"></span>{/if}
         <span class="relative inline-flex rounded-full h-3 w-3 {getStateColor()}"></span>
         </span>

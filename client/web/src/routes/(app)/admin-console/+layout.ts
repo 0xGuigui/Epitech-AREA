@@ -1,5 +1,5 @@
 /** @type {import('./$types').PageLoad} */
-import {areaFetch} from "../../lib/utils/areaFetch";
+import {areaFetch} from "$lib/utils/areaFetch";
 
 export const ssr = false;
 

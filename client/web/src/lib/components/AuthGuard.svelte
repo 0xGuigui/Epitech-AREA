@@ -1,7 +1,7 @@
 <script lang="ts">
     import {page} from "$app/stores";
     import {fly} from "svelte/transition";
-    import {loggedIn, serverUrl, serverState} from "../../store";
+    import {loggedIn, serverUrl, serverState, accessToken} from "../../store";
     import {onMount} from "svelte";
     import {icons} from "../utils/fontAwesome";
     import {clickOutside} from "../utils/clickOutside";
@@ -37,6 +37,7 @@
         "Logout": () => {
             showDropdown = false;
             loggedIn.set(false);
+            accessToken.set("");
         }
     }
 
