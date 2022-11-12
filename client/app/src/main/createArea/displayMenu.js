@@ -6,6 +6,7 @@ import {HistoryContext} from "../../historyContext";
 import {AreaContext} from "./areaContext";
 import {Button} from "react-native-paper";
 import {getServiceByName, refreshToken, registerArea} from "../../services/server";
+import AreaModal from "./areaModal";
 
 export default function DisplayMenu() {
 	const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function DisplayMenu() {
 		action: null,
 		reaction: null
 	})
+	const [modal, setModal] = useState(false)
 
 	const getService = async () => {
 		const services = {
@@ -26,7 +28,7 @@ export default function DisplayMenu() {
 		if (area.action.name)
 			services.action = (await getServiceByName(token.token, area.action.serviceName)).service
 		if (area.reaction.name)
-			services.reaction = (await getServiceByName(token.token, area.action.serviceName)).service
+			services.reaction = (await getServiceByName(token.token, area.reaction.serviceName)).service
 		if (services.action || services.reaction)
 			setService({...services})
 	}
@@ -56,7 +58,7 @@ export default function DisplayMenu() {
 					}}>
 						<Text style={styles.actionsText}>{area.action.name || 'Choose an action'}</Text>
 					</Pressable>
-					<Pressable style={{...styles.actionsPressable, backgroundColor: service.reaction ? service.action.colorPalette.mainColor : 'transparent'}} onPress={() => {
+					<Pressable style={{...styles.actionsPressable, backgroundColor: service.reaction ? service.reaction.colorPalette.mainColor : 'transparent'}} onPress={() => {
 						navigate('/create/reaction')
 					}}>
 						<Text style={styles.actionsText}>{area.reaction.name || 'Choose a reaction'}</Text>
@@ -70,16 +72,13 @@ export default function DisplayMenu() {
 								roundness: 1,
 							}}
 							onPress={async () => {
-								if (area.name === '')
-									delete area.name
-								const token = await refreshToken()
-								token.status !== 200 && navigate('/login')
-								const res = await registerArea(token.token, area)
+								setModal(true)
 							}}>
 							REGISTER AREA
 						</Button>
 					}
 				</View>
+				{modal && <AreaModal action={modal} setAction={setModal} />}
 			</View>
 		</>
 	)

@@ -22,7 +22,7 @@ export default function Index() {
 		if (location.pathname !== '/')
 			return;
 		const token = await refreshToken()
-		if (token.status === 200) {
+		if (token?.status === 200) {
 			const me = await getMe(token.token)
 			if (me.status === 200) {
 				setUserInfo(me.user)
