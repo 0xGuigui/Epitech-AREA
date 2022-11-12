@@ -1,4 +1,4 @@
-const {serverUrl} = require("../../config");
+const {serverUrl, Oauth2} = require("../../config");
 
 async function logUser(form) {
 	const {serverUrl} = require("../../config");
@@ -285,6 +285,22 @@ async function getServiceByName(token, serviceName) {
 	}
 }
 
+async function unregisterService(token, serviceName) {
+	const {serverUrl} = require("../../config");
+	const response = await fetch(`${serverUrl}/oauth2/${serviceName}`, {
+		method: 'DELETE',
+		headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -302,5 +318,6 @@ module.exports = {
 	getActionByName,
 	getReactionByName,
 	registerArea,
-	getServiceByName
+	getServiceByName,
+	unregisterService
 }

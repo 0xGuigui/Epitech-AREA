@@ -37,7 +37,7 @@ export default function ({action, setAction, serviceName, serviceType}) {
 		<Modal
 			visible={true}
 			onDismiss={() => setAction(undefined)}
-			style={{...styles.modal, height: `${20 + numberOfFields * 10}%`}}
+			style={{...styles.modal, height: `${12}%`}}
 			theme={{
 				colors: {
 					backdrop: 'rgba(7,6,6,0.45)',
@@ -58,46 +58,48 @@ export default function ({action, setAction, serviceName, serviceType}) {
 							/>
 						)
 					})}
-					<Pressable style={styles.saveButton} onPress={async () => {
-						let error = false
-						Object.keys(action.fields || {}).forEach(e => {
-							if (!data[e]) {
-								error = true
-								Alert.alert(
-									"Error",
-									"Please fill all the fields",
-									[
-										{
-											text: "OK",
-											onPress: () => {
+					<View style={styles.buttons}>
+						<Pressable style={styles.saveButton} onPress={async () => {
+							let error = false
+							Object.keys(action.fields || {}).forEach(e => {
+								if (!data[e]) {
+									error = true
+									Alert.alert(
+										"Error",
+										"Please fill all the fields",
+										[
+											{
+												text: "OK",
+												onPress: () => {
 
+												},
 											},
-										},
 
-									],
-									{cancelable: false}
-								);
-							}
-						})
-						if (error)
-							return;
-						setArea({
-							...area,
-							[serviceType]: {
-								name: action.name,
-								serviceName,
-								data
-							}
-						})
-						showToast('Action added to your area')
-						setAction(undefined)
-						navigate('/create')
-					}}>
-						<Text style={styles.saveButtonText}>Save</Text>
-					</Pressable>
-					<Pressable style={styles.cancelButton} onPress={() => setAction(undefined)}>
-						<Text style={styles.cancelButtonText}>Cancel</Text>
-					</Pressable>
+										],
+										{cancelable: false}
+									);
+								}
+							})
+							if (error)
+								return;
+							setArea({
+								...area,
+								[serviceType]: {
+									name: action.name,
+									serviceName,
+									data
+								}
+							})
+							showToast('Action added to your area')
+							setAction(undefined)
+							navigate('/create')
+						}}>
+							<Text style={styles.saveButtonText}>Save</Text>
+						</Pressable>
+						<Pressable style={styles.cancelButton} onPress={() => setAction(undefined)}>
+							<Text style={styles.cancelButtonText}>Cancel</Text>
+						</Pressable>
+					</View>
 				</ScrollView>
 			</View>
 		</Modal>

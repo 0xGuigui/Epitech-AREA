@@ -6,7 +6,7 @@ import { isEmail, showToast } from '../../utils'
 import { HistoryContext } from "../../historyContext";
 import { DarkTheme, Oauth2 } from "../../../config";
 import * as React from "react";
-import {checkService, getServices, refreshToken} from "../../services/server";
+import {checkService, getServices, refreshToken, unregisterService} from "../../services/server";
 import DataDisplayer from "../../dataDisplayer";
 import * as WebBrowser from "expo-web-browser";
 
@@ -75,7 +75,7 @@ export default function ManageServices({userInfo, setUserInfo}) {
                                                         if (token) {
                                                             const res = await checkService(token.token, e.name)
                                                             if (res.status === 200) {
-                                                                await WebBrowser.openAuthSessionAsync(res.url)
+                                                                await unregisterService(e.name)
                                                                 showToast("Service disconnected")
                                                             }
                                                         }

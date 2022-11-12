@@ -11,7 +11,9 @@ export default function MainRoutes({ userInfo, setUserInfo }) {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		if (location.pathname === '/' && userInfo)
+		if (!userInfo.username)
+			navigate('/login')
+		else if (location.pathname === '/')
 			navigate('/main')
 	}, [location])
 
