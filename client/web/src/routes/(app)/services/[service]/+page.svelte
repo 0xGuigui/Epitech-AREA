@@ -33,7 +33,7 @@
             {#if service.name === $page.params.service}
                 <div style="background-color: {service.colorPalette.mainColor};" class="flex flex-col justify-end items-center h-[100vh] w-[100vw]">
                     <button class="absolute h-8 w-32 right-16 top-24 outline outline-offset-8 outline-4 backdrop-blur-sm white/50 text-xl text-white font-bold rounded-full hover:scale-110 transition-all duration-150 select-none cursor-pointer" type="submit"
-                            on:click={() => goto(`/services/${service.name}`)}>Visit {service.name}</button>
+                            on:click={() => goto(service.colorPalette.urlSite)}>Visit {service.name}</button>
                     <button class="absolute h-8 w-32 left-16 top-24 outline outline-offset-8 outline-4 backdrop-blur-sm white/50 text-xl text-white font-bold rounded-full hover:scale-110 transition-all duration-150 select-none cursor-pointer" type="submit"
                             on:click={() => goto(`/`)}>Back</button>
                     <div class="flex flex-col justify-center items-center">
