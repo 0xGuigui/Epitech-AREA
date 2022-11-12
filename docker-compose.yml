@@ -37,3 +37,12 @@ services:
       - ${AREA_WEB_CLIENT_PORT:?err}:3000
     depends_on:
       - area-server
+
+  area-app-client:
+    build: client/app
+    container_name: area-app-client
+    volumes:
+      - ./client/app:/usr/src/app
+    environment:
+      EXPO_TOKEN: ${EXPO_TOKEN:?err}
+
