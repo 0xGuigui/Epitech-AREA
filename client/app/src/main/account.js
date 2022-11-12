@@ -69,10 +69,6 @@ export default function Account({ userInfo, setUserInfo }) {
                     Services
                 </Text>
                 <Divider/>
-                <Text
-                    style={styles.clickableText} onPress={() => console.log("Coucou")}>
-                    Enable/Disable services
-                </Text>
                 <Divider />
                 <Text
                     style={styles.clickableText} onPress={() => navigate('/manageServices')}>
