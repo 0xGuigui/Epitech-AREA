@@ -31,7 +31,7 @@
         "Profil": () => {
             console.log("profile");
         },
-        "Mes actions": () => {
+        "My actions": () => {
             goto(`/me/actions`);
         },
         "Logout": () => {
