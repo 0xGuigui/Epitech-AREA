@@ -6,6 +6,7 @@ import {Button, TextInput, IconButton} from 'react-native-paper';
 import {getMe, logUser} from "../services/server";
 import logo from '../assets/logo/logo.png'
 import global from '../../config'
+import discordLogo from '../assets/icons/discord-mark-white.png'
 
 export default function Login({ setUserInfo }) {
 	const [form, setForm] = useState({
@@ -85,20 +86,15 @@ export default function Login({ setUserInfo }) {
 				</Button>
 				<Button
 					mode="contained"
-					icon={({ size }) => (
-						<Image
-							source={require('../assets/icons/google.png')}
-							style={{ width: size, height: size, borderRadius: size / 2 }}
-						/>
-					)}
+					icon={discordLogo}
 					theme={{
 						roundness: 1,
 					}}
 					onPress={() => {}}
-					buttonColor="#4285F4"
+					buttonColor="#5865F2"
 					style={styles.button}
 				>
-					Sign in with Google
+					Sign in with Discord
 				</Button>
 			</View>
 			<Text style={{...styles.forgotSection, color: 'white', paddingTop: 20, textAlign: 'center' }}> Actually connected to: {global.serverUrl} </Text>
