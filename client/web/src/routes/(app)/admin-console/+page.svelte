@@ -15,7 +15,7 @@
 	let selectedComponent = "Metrics";
 </script>
 
-<section class="w-screen h-screen flex flex-col">
+<section class="w-screen min-h-screen flex flex-col">
 	<!-- Navigation Menu -->
 	<div class="w-full flex justify-center items-center drop-shadow-sm shadow shadow-gray-300 border-b border-gray-300">
 		{#each Object.entries(components) as [key, value]}

@@ -6,20 +6,7 @@ module.exports = (area) => {
             },
             server: {
                 current_time: Date.now(),
-                services: area.servicesManager.services.map(service => ({
-                    name: service.name,
-                    actions: service.actions.map(action => ({
-                        name: action.name,
-                        description: action.description,
-                        webhook: action.webhook,
-
-                    })),
-                    reactions: service.reactions.map(reaction => ({
-                        name: reaction.name,
-                        description: reaction.description
-
-                    }))
-                }))
+                services: area.servicesManager.getServicesData()
             }
         })
     })

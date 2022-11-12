@@ -29,7 +29,7 @@ class Reaction extends ServiceComponent {
 }
 
 class Service {
-    #disabled = false
+    active = true
 
     constructor(serviceName, serviceDescription = serviceName, colorPalette = {mainColor: '#FFFFFF', secondaryColor: '#000000'}) {
         this.name = serviceName;
@@ -84,11 +84,11 @@ class Service {
     }
 
     enable() {
-        this.#disabled = false;
+        this.active = true;
     }
 
     disable() {
-        this.#disabled = true;
+        this.active = false;
     }
 }
 
