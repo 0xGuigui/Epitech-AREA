@@ -1,6 +1,7 @@
 <script>
     import {areaFetch} from "../../../../lib/utils/areaFetch";
     import {page} from "$app/stores";
+    import {goto} from "$app/navigation";
 
     let services = getServices();
     let user = getUser();
@@ -30,7 +31,16 @@
     {:then data}
         {#each data.services as service}
             {#if service.name === $page.params.service}
-                <div style="background-color: {service.colorPalette.mainColor};" class="h-[100vh] w-[100vw]"></div>
+                <div style="background-color: {service.colorPalette.mainColor};" class="flex flex-col justify-center items-center h-[100vh] w-[100vw]">
+                    <button class="absolute h-8 w-32 right-16 top-24 outline outline-offset-8 outline-4 backdrop-blur-sm white/50 text-xl text-white font-bold rounded-full hover:scale-110 transition-all duration-150 select-none cursor-pointer" type="submit"
+                            on:click={() => goto(`/services/${service.name}`)}>Visit {service.name}</button>
+                    <button class="absolute h-8 w-32 left-16 top-24 outline outline-offset-8 outline-4 backdrop-blur-sm white/50 text-xl text-white font-bold rounded-full hover:scale-110 transition-all duration-150 select-none cursor-pointer" type="submit"
+                            on:click={() => goto(`/`)}>Back</button>
+                    <div class="flex flex-col justify-center items-center">
+                        <h1 class="text-6xl text-white font-bold">{service.name}</h1>
+                        <p class="my-5 text-2xl text-white font-bold">{service.description}</p>
+                    </div>
+                </div>
             {/if}
         {/each}
     {/await}
