@@ -10,7 +10,10 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "developmentClient": false,
+      "distribution": "internal"
+    }
   },
   "submit": {
     "production": {}
