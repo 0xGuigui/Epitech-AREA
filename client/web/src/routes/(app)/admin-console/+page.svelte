@@ -12,7 +12,7 @@
 		"Actions": Actions,
 		"Services": Services
 	};
-	let selectedComponent = "Services";
+	let selectedComponent = "Metrics";
 </script>
 
 <section class="w-screen min-h-screen flex flex-col">
