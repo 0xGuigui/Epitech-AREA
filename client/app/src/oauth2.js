@@ -7,8 +7,8 @@ import spotifyLogo from './assets/img/spotify_logo.png'
 import discordLogo from './assets/img/discord_logo.png'
 import twitchLogo from './assets/img/twitch_logo.png'
 import redditLogo from './assets/img/reddit_logo.png'
-import leagueLogo from './assets/img/league_of_legends_logo.png'
 import steamLogo from './assets/img/steam_logo.png'
+import leagueLogo from './assets/img/League.png'
 import {HistoryContext} from "./historyContext";
 import {checkService, refreshToken, registerService} from "./services/server";
 
@@ -17,7 +17,7 @@ const logos = {
 	Spotify: spotifyLogo,
 	Reddit: redditLogo,
 	Twitch: twitchLogo,
-	"League of Legends": leagueLogo,
+	League: leagueLogo,
 	Steam: steamLogo
 }
 

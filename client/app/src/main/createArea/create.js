@@ -29,6 +29,9 @@ export default function CreateArea() {
 	return (
 		<View style={styles.mainSection}>
 			<Appbar.Header theme={DarkTheme}>
+				<Appbar.BackAction icon="arrow-left" color="white" onPress={() => {
+					navigate('/create')
+				}}/>
 				<Appbar.Content title="Create a new area" titleStyle={{color: 'white'}}/>
 			</Appbar.Header>
 			<Routes>

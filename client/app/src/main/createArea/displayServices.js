@@ -7,12 +7,26 @@ import {Oauth2} from '../../../config'
 import * as WebBrowser from 'expo-web-browser'
 import DataDisplayer from "../../dataDisplayer";
 import {HistoryContext} from "../../historyContext";
+import spotifyLogo from '../../assets/img/spotify_logo.png'
+import discordLogo from '../../assets/img/discord_logo.png'
+import redditLogo from '../../assets/img/reddit_logo.png'
+import steamLogo from '../../assets/img/steam_logo.png'
+import leagueLogo from '../../assets/img/League.png'
+
+const logos = {
+	Discord: discordLogo,
+	Spotify: spotifyLogo,
+	Reddit: redditLogo,
+	Steam: steamLogo,
+	League: leagueLogo
+}
 
 export default function DisplayServices() {
 	const [actions, setActions] = useState([])
 	const {serviceType} = useParams()
 	const navigate = useNavigate()
 	const history = useContext(HistoryContext)
+	const LeagueColor = '#044454'
 
 	const getServerActions = async () => {
 		const refresh = await refreshToken()
@@ -42,7 +56,7 @@ export default function DisplayServices() {
 			<View style={styles.actionsContainer}>
 				{actions.map((e, i) =>
 					<>
-						<DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} onPress={async () => {
+						<DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} icon={logos[e.name]} colorBackground={e.colorPalette.secondaryColor} onPress={async () => {
 							if (Oauth2[e.name]) {
 								const token = await refreshToken()
 								token.status !== 200 && navigate('/login')
@@ -83,7 +97,7 @@ const styles = StyleSheet.create({
 		color: 'white',
 		marginLeft: 'auto',
 		marginRight: 'auto',
-		marginTop: 'auto',
+		marginTop: '50%',
 		marginBottom: 'auto'
 	}
 })

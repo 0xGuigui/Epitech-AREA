@@ -49,11 +49,16 @@ export default function ChangeUserData({userInfo, setUserInfo}) {
 						style={styles.button}
 						buttonColor="#9a5373"
 						theme={{
+							roundness: 1,
 							colors: {
 								primary: '#9a5373',
 							},
 						}}
 						onPress={ async () => {
+							if (data === 'email' && !isEmail(userData) || data === 'password' && userData.length < 8 || data === 'username' && userData.length < 3 || data === 'username' && userData.length > 20) {
+								showToast(`Invalid ${data}`)
+								return
+							}
 							Alert.alert(
 								`Change ${data}`,
 								`Are you sure you want to change your ${data}`,
