@@ -110,7 +110,7 @@ async function getPosts(access_token) {
 }
 
 module.exports = (area, servicesManager) => {
-	const redditService = new Service('Reddit', 'Reddit - Dive into anything', {
+	const redditService = new Service('Reddit', 'Reddit is a social news website. Turn on Applets that help you discover and save the best content from "the front page of the Internet," and quickly and easily create your own posts.', {
 		mainColor: '#fe4500',
 		secondaryColor: '#fe4500',
 	})
