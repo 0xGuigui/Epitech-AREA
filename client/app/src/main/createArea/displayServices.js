@@ -12,6 +12,7 @@ import discordLogo from '../../assets/img/discord_logo.png'
 import redditLogo from '../../assets/img/reddit_logo.png'
 import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
+import * as React from "react";
 
 const logos = {
 	Discord: discordLogo,
@@ -52,7 +53,7 @@ export default function DisplayServices() {
 
 	return (
 		<>
-			<Text style={{fontSize: 40, color: 'white', textAlign: 'center'}}>Choose a service</Text>
+			<Text style={{fontSize: 40, color: 'white', textAlign: 'center', paddingBottom: 30}}>Choose a service</Text>
 			<View style={styles.actionsContainer}>
 				{actions.map((e, i) =>
 					<>

@@ -69,6 +69,10 @@ export default function Account({ userInfo, setUserInfo }) {
                     Services
                 </Text>
                 <Divider/>
+                <Text
+                    style={styles.clickableText} onPress={() => navigate('/listServices')}>
+                    Available Services
+                </Text>
                 <Divider />
                 <Text
                     style={styles.clickableText} onPress={() => navigate('/manageServices')}>
