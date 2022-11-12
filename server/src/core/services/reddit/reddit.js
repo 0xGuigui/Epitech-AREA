@@ -113,6 +113,7 @@ module.exports = (area, servicesManager) => {
 	const redditService = new Service('Reddit', 'Reddit is a social news website. Turn on Applets that help you discover and save the best content from "the front page of the Internet," and quickly and easily create your own posts.', {
 		mainColor: '#fe4500',
 		secondaryColor: '#fe4500',
+		urlSite: 'https://www.reddit.com/'
 	})
 
 	redditService.setAuthentification(async (code, redirect_uri, mobile) => {

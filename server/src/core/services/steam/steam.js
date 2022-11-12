@@ -37,8 +37,9 @@ async function getOwnedGames(steamId) {
 
 module.exports = (area, servicesManager) => {
 	const steamService = new Service('Steam', 'Steam', {
-		mainColor: '#7ca1bd',
-		secondaryColor: '#102553'
+		mainColor: '#102553',
+		secondaryColor: '#102553',
+		urlSite: 'https://store.steampowered.com/'
 	})
 
 	const newGameNewsAction = new Action('newGameNews', 'when a game gets a news')

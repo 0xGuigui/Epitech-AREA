@@ -87,7 +87,8 @@ module.exports = (area, servicesManager) => {
 	const discordService = new Service('Discord', "Whether you’re part of a school club, gaming group, worldwide art community, or just a handful of friends that want to spend time together, Discord makes it easy to talk every day and hang out more often.\n" +
 		"\n", {
 		mainColor: '#5f70f4',
-		secondaryColor: '#acbcfc'
+		secondaryColor: '#acbcfc',
+		urlSite: 'https://discord.com/'
 	})
 
 	discordService.setAuthentification(async (code, redirect_uri) => {
