@@ -6,13 +6,14 @@
     import Fa from "svelte-fa";
     import {icons} from "../../utils/fontAwesome";
 
+    const MAX_CHART_POINTS = 10;
+
     let sse: EventSource;
-    let maxBufferedData = 10;
     let chartRef: Chart;
     let chartRef2: Chart;
     let latestRawData;
-    let data = {
-        labels: ['_'],
+    let apiData: any = {
+        labels: ["Api"],
         datasets: [
             {
                 name: 'Total requests',
@@ -27,10 +28,10 @@
                 values: [0]
             },
         ],
-        yMarkers: [{ label: "Highest peak", value: 0 }, { label: "Average", value: 0 }],
+        yMarkers: [{label: "Highest peak", value: 0}, {label: "Average", value: 0}],
     };
-    let data2 = {
-        labels: ['_'],
+    let dbData = {
+        labels: ['Database'],
         datasets: [
             {
                 name: 'Total requests',
@@ -45,7 +46,7 @@
                 values: [0]
             },
         ],
-        yMarkers: [{ label: "Highest peak", value: 0 }, { label: "Average", value: 0 }],
+        yMarkers: [{label: "Highest peak", value: 0}, {label: "Average", value: 0}],
     };
 
     async function init() {
@@ -56,40 +57,38 @@
         sse = new EventSource($serverUrl + "/server-stream-events?token=" + $accessToken);
         sse.onmessage = function (event) {
             let rawData: object[] = JSON.parse(event.data);
-            let newData = data
-            let newData2 = data2
+            let newApiData = apiData;
+            let newDbData = dbData;
 
             rawData.forEach((item) => {
                 latestRawData = item;
                 let date = new Date(item.date)
 
-                newData2.yMarkers[0].value = item.data.db.max
-                newData2.yMarkers[1].value = item.data.db.average
-                newData.yMarkers[0].value = item.data.api.max
-                newData.yMarkers[1].value = item.data.api.average
-                newData.labels.push(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
-                newData.datasets[0].values.push(item.data.api.total);
-                newData.datasets[1].values.push(item.data.api['4xx']);
-                newData.datasets[2].values.push(item.data.api['5xx']);
-                if (newData.labels.length > maxBufferedData) {
-                    newData.labels.shift();
-                    newData.datasets[0].values.shift();
-                    newData.datasets[1].values.shift();
-                    newData.datasets[2].values.shift();
-                }
-                newData2.labels.push(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
-                newData2.datasets[0].values.push(item.data.db.total);
-                newData2.datasets[1].values.push(item.data.db.write);
-                newData2.datasets[2].values.push(item.data.db.read);
-                if (newData2.labels.length > maxBufferedData) {
-                    newData2.labels.shift();
-                    newData2.datasets[0].values.shift();
-                    newData2.datasets[1].values.shift();
-                    newData2.datasets[2].values.shift();
-                }
+                newDbData.yMarkers[0].value = item.data.db.max
+                newDbData.yMarkers[1].value = item.data.db.average
+                newApiData.yMarkers[0].value = item.data.api.max
+                newApiData.yMarkers[1].value = item.data.api.average
+                newApiData.labels.push(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+                newApiData.datasets[0].values.push(item.data.api.total);
+                newApiData.datasets[1].values.push(item.data.api['4xx']);
+                newApiData.datasets[2].values.push(item.data.api['5xx']);
+                newDbData.labels.push(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+                newDbData.datasets[0].values.push(item.data.db.total);
+                newDbData.datasets[1].values.push(item.data.db.write);
+                newDbData.datasets[2].values.push(item.data.db.read);
             });
-            data = newData;
-            data2 = newData2;
+            if (apiData.labels.length > MAX_CHART_POINTS) {
+                apiData.labels = apiData.labels.slice(apiData.labels.length - MAX_CHART_POINTS);
+                apiData.datasets[0].values = apiData.datasets[0].values.slice(apiData.datasets[0].values.length - MAX_CHART_POINTS);
+                apiData.datasets[1].values = apiData.datasets[1].values.slice(apiData.datasets[1].values.length - MAX_CHART_POINTS);
+                apiData.datasets[2].values = apiData.datasets[2].values.slice(apiData.datasets[2].values.length - MAX_CHART_POINTS);
+                dbData.labels = dbData.labels.slice(dbData.labels.length - MAX_CHART_POINTS);
+                dbData.datasets[0].values = dbData.datasets[0].values.slice(dbData.datasets[0].values.length - MAX_CHART_POINTS);
+                dbData.datasets[1].values = dbData.datasets[1].values.slice(dbData.datasets[1].values.length - MAX_CHART_POINTS);
+                dbData.datasets[2].values = dbData.datasets[2].values.slice(dbData.datasets[2].values.length - MAX_CHART_POINTS);
+            }
+            apiData = newApiData;
+            dbData = newDbData;
         };
     }
 
@@ -102,9 +101,9 @@
     })
 </script>
 
-<section class="pt-8 pb-16">
+<section class="pb-16">
     <div class="w-[1000px] mx-auto">
-        <div class="flex items-center font-semibold text-xl ml-7">
+        <div class="flex items-center font-semibold text-xl ml-7 mt-12">
             <Fa icon={icons.faChartArea} class="mr-2"/>
             <span>API requests</span>
         </div>
@@ -112,12 +111,12 @@
                 bind:this={chartRef}
                 type="line"
                 height={300}
-                data={data}
+                data={apiData}
                 colors={['#1abc9c', '#fdcb6e', '#d63031']}
                 lineOptions={{regionFill: 1}}
                 tooltipOptions={{formatTooltipX: d => (new Date(d)).toLocaleString(), formatTooltipY: d => d}}
         />
-        <div class="flex items-center font-semibold text-xl ml-7 mt-8">
+        <div class="flex items-center font-semibold text-xl ml-7 mt-12">
             <Fa icon={icons.faDatabase} class="mr-2"/>
             <span>DB requests</span>
         </div>
@@ -125,67 +124,32 @@
                 bind:this={chartRef2}
                 type="line"
                 height={300}
-                data={data2}
+                data={dbData}
                 colors={['#0984e3', '#e17055', '#00b894']}
                 lineOptions={{regionFill: 1}}
                 tooltipOptions={{formatTooltipX: d => (new Date(d)).toLocaleString(), formatTooltipY: d => d}}
         />
-        <div class="flex items-center font-semibold text-xl ml-7 mt-8">
+        <div class="flex items-center font-semibold text-xl ml-7 mt-12">
             <Fa icon={icons.faBook} class="mr-2"/>
             <span>Summary</span>
         </div>
-        <div class="flex justify-between items-center w-full border-[1px] mx-8 mt-4 rounded-sm">
-            <div class="relative w-1/2">
-                <Chart
-                        type="pie"
-                        height={300}
-                        data={{
-                            labels: ['Total requests', '4XX - client', '5XX - server'],
-                            datasets: [
-                                {
-                                    values: [1, 12, 34]
-                                }
-                            ]
-                        }}
-                        colors={['#1abc9c', '#fdcb6e', '#d63031']}
-                />
-            </div>
-            <div class="relative border-l-[1px] w-1/2">
-                <Chart
-                        type="pie"
-                        height={300}
-                        data={{
-                            labels: ['Total requests', '4XX - client', '5XX - server'],
-                            datasets: [
-                                {
-                                    values: [1, 12, 34]
-                                }
-                            ]
-                        }}
-                        colors={['#1abc9c', '#fdcb6e', '#d63031']}
-                />
-            </div>
-        </div>
-        <div class="flex justify-between items-center w-full h-20 border-gray-300 border-[1px] border-t-0 mx-8 rounded-sm">
-            <div class="flex-1 w-full h-full">
-                <div>{latestRawData?.data["usersCount"] || "0" }</div>
+        <div class="flex justify-between items-center w-full border-gray-300 border-[1px] mx-8 mt-5 rounded-sm py-4">
+            <div class="flex justify-center items-center flex-1 w-full h-full">
                 <div>
-                    <Fa icon={icons.faUser} class="mr-2"/>
-                    <span>Users</span>
+                    <Fa icon={icons.faUser} class="mx-auto mb-2" size="1.7x"/>
+                    <span>{latestRawData?.data["usersCount"] || "0" } users</span>
                 </div>
             </div>
-            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300">
-                <div>{latestRawData?.data["actionsCount"] || "0" }</div>
+            <div class="flex justify-center items-center flex-1 w-full h-full border-l-[1px] border-gray-300">
                 <div>
-                    <Fa icon={icons.faUser} class="mr-2"/>
-                    <span>Actions</span>
+                    <Fa icon={icons.faBolt} class="mx-auto mb-2" size="2x"/>
+                    <span>{latestRawData?.data["actionsCount"] || "0" } active actions</span>
                 </div>
             </div>
-            <div class="flex-1 w-full h-full border-l-[1px] border-gray-300">
-                <div>{latestRawData?.data["servicesCount"] || "0" }</div>
+            <div class="flex justify-center items-center flex-1 w-full h-full border-l-[1px] border-gray-300">
                 <div>
-                    <Fa icon={icons.faServicestack} class="mr-2"/>
-                    <span>Services</span>
+                    <Fa icon={icons.faPaperPlane} class="mx-auto mb-2" size="1.8x"/>
+                    <span>{latestRawData?.data["servicesCount"] || "0" } active Services</span>
                 </div>
             </div>
         </div>

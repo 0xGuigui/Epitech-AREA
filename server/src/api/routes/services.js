@@ -1,5 +1,6 @@
 const express = require('express')
 require('express-async-errors')
+const {isAdmin} = require("../middlewares/others");
 
 let formatService = (service) => {
     return {
@@ -26,7 +27,7 @@ let formatServiceComponent = (serviceComponent) => {
 
 module.exports = (area) => {
     const router = express.Router();
-    const actionRouter = express.Router({mergeParams: true});
+    const serviceRouter = express.Router({mergeParams: true});
 
     router.get('/', (req, res) => {
         res.status(200).json({
@@ -34,9 +35,9 @@ module.exports = (area) => {
         })
     })
 
-    router.use('/:service', actionRouter)
+    router.use('/:service', serviceRouter)
 
-    actionRouter.get('/', (req, res) => {
+    serviceRouter.get('/', (req, res) => {
         let service = area.servicesManager.getService(req.params.service)
 
         if (!service) {
@@ -45,7 +46,11 @@ module.exports = (area) => {
         res.status(200).json({service: formatService(service)})
     })
 
-    actionRouter.get('/actions', (req, res) => {
+    serviceRouter.get('/update-state', isAdmin, async (req, res) => {
+        res.send('ok')
+    })
+
+    serviceRouter.get('/actions', (req, res) => {
         let service = area.servicesManager.getService(req.params.service)
 
         if (!service) {
@@ -54,7 +59,7 @@ module.exports = (area) => {
         res.status(200).json({actions: service.actions.map(formatServiceComponent)})
     })
 
-    actionRouter.get('/reactions', (req, res) => {
+    serviceRouter.get('/reactions', (req, res) => {
         let service = area.servicesManager.getService(req.params.service)
 
         if (!service) {
@@ -63,7 +68,7 @@ module.exports = (area) => {
         res.status(200).json({reactions: service.reactions.map(formatServiceComponent)})
     })
 
-    actionRouter.get('/actions/:action', (req, res) => {
+    serviceRouter.get('/actions/:action', (req, res) => {
         let action = area.servicesManager.getServiceAction(req.params.service + '/' + req.params.action)
 
         if (!action) {
@@ -72,7 +77,7 @@ module.exports = (area) => {
         res.json({action: formatServiceComponent(action)})
     })
 
-    actionRouter.get('/reactions/:reaction', (req, res) => {
+    serviceRouter.get('/reactions/:reaction', (req, res) => {
         let reaction = area.servicesManager.getServiceReaction(req.params.service + '/' + req.params.reaction)
 
         if (!reaction) {
