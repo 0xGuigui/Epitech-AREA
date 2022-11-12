@@ -33,7 +33,7 @@
     }
 </script>
 
-<svelte:window on:keydown|preventDefault={closePopup}/>
+<svelte:window on:keydown={closePopup}/>
 
 {#if show}
     <section

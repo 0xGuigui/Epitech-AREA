@@ -83,6 +83,11 @@ class AREA {
             useUnifiedTopology: true,
         })
         logger.success("Connected to MongoDB")
+        mongoose.connection.on('error', (err) => {
+            logger.error(err.message)
+            process.exit(1)
+        })
+        logger.info("MongoDB error handler registered")
         // Init stats manager
         await this.statsManager.init(this)
     }

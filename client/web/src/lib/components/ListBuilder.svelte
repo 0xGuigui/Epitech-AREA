@@ -83,7 +83,7 @@
     $: dataList, onDataListChange();
 </script>
 
-<svelte:window on:keydown|preventDefault={handleKeyPressed} />
+<svelte:window on:keydown={handleKeyPressed} />
 
 <section class="w-full">
     <div
