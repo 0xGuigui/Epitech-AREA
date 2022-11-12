@@ -1,5 +1,12 @@
 const {MD3LightTheme} = require("react-native-paper");
 
+module.exports = {
+	assets: [
+		"./src/assets/fonts/",
+		],
+
+}
+
 const oauth2 = {
 	"Spotify": {
 		client_id: "e62780e3630e4439b855928a8514e977",

@@ -12,6 +12,8 @@ import Oauth2 from "./oauth2";
 import ChangeUserData from "./main/account/changeUserData"
 import * as Linking from 'expo-linking'
 import ManageServices from "./main/account/manageServices";
+import ListServices from "./main/createArea/listServices";
+import ServiceInfo from "./main/createArea/serviceInfo";
 
 export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
@@ -55,12 +57,14 @@ export default function Index() {
 		<HistoryProvider>
 			<View style={styles.app}>
 				<Routes>
+					<Route path="/info/:services" element={<ServiceInfo />} />
 					<Route path='/login' element={<Login setUserInfo={setUserInfo} />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
 					<Route path="/settings/*" element={<SettingsRoutes userInfo={userInfo}/>} />
 					<Route path='/oauth2/:service' element={<Oauth2 setUserInfo={setUserInfo} userInfo={userInfo} />} />
 					<Route path='/change/:data' element={<ChangeUserData userInfo={userInfo} setUserInfo={setUserInfo} />} />
+					<Route path='/listServices' element={<ListServices />} />
 					<Route path='/manageServices' element={<ManageServices />} />
 					<Route path="*" element={<MainRoutes userInfo={userInfo} setUserInfo={setUserInfo} />} />
 				</Routes>
