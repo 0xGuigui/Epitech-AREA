@@ -113,4 +113,22 @@ module.exports = class ServicesManager {
             return {error: e.message};
         }
     }
+
+    getServicesData() {
+        return this.services.map(service => ({
+            name: service.name,
+            description: service.description,
+            active: service.active,
+            actions: service.actions.map(action => ({
+                name: action.name,
+                description: action.description,
+                webhook: action.webhook,
+
+            })),
+            reactions: service.reactions.map(reaction => ({
+                name: reaction.name,
+                description: reaction.description
+            }))
+        }))
+    }
 }
