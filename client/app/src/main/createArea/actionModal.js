@@ -37,7 +37,7 @@ export default function ({action, setAction, serviceName, serviceType}) {
 		<Modal
 			visible={true}
 			onDismiss={() => setAction(undefined)}
-			style={{...styles.modal, height: `${12}%`}}
+			style={{...styles.modal, height: `${8 + numberOfFields * 10 + (numberOfFields > 0 ? 5 : 0)}%`}}
 			theme={{
 				colors: {
 					backdrop: 'rgba(7,6,6,0.45)',
@@ -46,14 +46,14 @@ export default function ({action, setAction, serviceName, serviceType}) {
 			<View style={styles.modalContainer}>
 				<ScrollView style={styles.scrollView}>
 					<Text style={styles.actionTitle}>{action.name}</Text>
-					<Text style={styles.textStyle}>{action.description}</Text>
+					<Text style={{...styles.textStyle, marginTop: '5%', fontStyle: 'italic'}}>{action.description}</Text>
 					{numberOfFields > 0 && <Text style={styles.textStyle}>Please fill the fields below:</Text>}
 					{Object.keys(action.fields || {}).map((field, index) => {
 						return (
 							<TextInput
 								key={index}
 								label={field}
-								style={{...styles.textInput, marginTop: index === 0 ? 20 : 0, marginLeft: 20, marginRight: 20}}
+								style={{...styles.textInput, marginTop: index === 0 ? 20 : 10, marginLeft: 20, marginRight: 20}}
 								onChangeText={text => setData({...data, [field]: text})}
 							/>
 						)
@@ -125,16 +125,15 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 20,
 		color: 'white',
-		marginTop: '5%'
+		marginTop: '5%',
 	},
 	textStyle: {
 		color: 'white',
-		fontSize: 20,
+		fontSize: 15,
 		position: 'relative',
 		marginTop: '10%',
 		marginBottom: 'auto',
-		marginLeft: '10%',
-		marginRight: 'auto',
+		textAlign: 'center'
 	},
 	saveButton: {
 		bottom: -20,
@@ -157,5 +156,8 @@ const styles = StyleSheet.create({
 	cancelButtonText: {
 		color: '#FFFFFF',
 		fontSize: 15
+	},
+	textInput: {
+		marginTop: '5%'
 	}
 })
