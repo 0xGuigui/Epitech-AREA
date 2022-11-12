@@ -6,7 +6,7 @@ class ActionContext {
 
     constructor(contextKind, actionData, action, reaction) {
         this.env = {};
-        this.#callStack = [action[contextKind].bind(action), reaction[contextKind].bind(reaction)];
+        this.#callStack = [action[contextKind].bind(action), reaction[contextKind].bind(reaction), this.updateActionLastRun];
 
         if (actionData instanceof mongoose.Model) {
             this.actionData = actionData;
@@ -67,6 +67,11 @@ class ActionContext {
             await this.actionData.save();
         }
         return this.actionData;
+    }
+
+    async updateActionLastRun(ctx) {
+        ctx.actionData.lastRun = new Date();
+        await ctx.next();
     }
 }
 

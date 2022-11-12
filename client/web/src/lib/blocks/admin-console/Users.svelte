@@ -37,7 +37,23 @@
 		await fetchUsers();
 	}
 
+	async function grantAdmin(usersData: object[]) {
+		let promises = usersData.map(user => {
+			return areaFetch("/users/" + user["_id"], "PUT", {
+				admin: "true",
+			});
+		});
+
+		await Promise.all(promises);
+		await fetchUsers();
+	}
+
 	const actions = [
+		{
+			name: "grant admin",
+			icon: icons.faShield,
+			action: grantAdmin,
+		},
 		{
 			name: "verify",
 			icon: icons.faCheck,

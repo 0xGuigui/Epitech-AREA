@@ -105,10 +105,11 @@ module.exports = class ServicesManager {
         let ctx = new TriggerActionContext(actionData, action, reaction);
 
         try {
-            await ctx.next()
+            await ctx.next();
             return {action: ctx.actionData, error: null};
         } catch (e) {
             ctx.actionData.error = e.message;
+            ctx.actionData.lastRun = new Date();
             await ctx.actionData.save();
             return {error: e.message};
         }

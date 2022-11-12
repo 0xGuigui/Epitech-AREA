@@ -36,7 +36,7 @@ module.exports = (area) => {
     router.post('/actions/:actionId/execute', [checkId("actionId"), async (req, res) => {
         let action = await mongoose
             .model('Action')
-            .findById(req.params.actionId)
+            .findByIdAndUpdate(req.params.actionId, {$unset: {error: 1}}, {new: true})
             .exec()
         let {error, action: actionData} = await area.servicesManager.triggerAction(action)
 
@@ -44,15 +44,6 @@ module.exports = (area) => {
             return res.status(400).json({error: error})
         }
         return res.status(200).json({action: actionData})
-    }])
-
-    router.post('/actions/:actionId/retry', [checkId("actionId"), async (req, res) => {
-        let action = await mongoose
-            .model('Action')
-            .findByIdAndUpdate(req.params.actionId, {$unset: {error: 1}}, {new: true})
-            .exec()
-
-        return res.status(200).json({action: action})
     }])
 
     area.app.use('/me', router)

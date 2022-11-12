@@ -5,15 +5,21 @@ export const ssr = false;
 
 export async function load() {
     if (localStorage.getItem('loggedIn') === "true") {
-        const response = await areaFetch('/me');
+        let response;
 
-        if (response.status === 200) {
-            const user = await response.json();
-            return {
-                user: user.user
-            };
+        try {
+            response = await areaFetch('/me');
+
+            if (response.status === 200) {
+                localStorage.setItem('serverState', "error");
+                const user = await response.json();
+                return {
+                    user: user.user
+                };
+            }
+        } catch (e) {
+            localStorage.setItem('serverState', "error");
         }
     }
-
     return {};
 }
