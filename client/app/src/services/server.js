@@ -157,6 +157,21 @@ async function updateUser(token, type, data, previousData) {
 	}
 }
 
+async function getServiceColor(token, service) {
+	const {serverUrl} = require("../../config");
+	const response = await fetch(`${serverUrl}/oauth2/${service}/color`, {
+		headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
+		}
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 async function registerService(token, service, code) {
 	const {serverUrl, Oauth2} = require("../../config");
 	const response = await fetch(`${serverUrl}/oauth2/${service}?mobile=true`, {
