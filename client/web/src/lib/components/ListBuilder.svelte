@@ -11,6 +11,7 @@
     export let hasExtraData = false;
     export let actions = [];
     export let page = 1;
+    export let kind = "short";
 
     const dispatch = createEventDispatcher();
     let selected = [];
@@ -51,6 +52,11 @@
             page: page,
             name: actionName,
             data: selected.map((item, idx) => item ? dataList[idx] : null).filter((item) => item)
+        }
+        if (kind === "long") {
+            selected.forEach((item, index) => {
+                dataList[index]["actionPending"] = item;
+            });
         }
         updateAllSelectedElement(false);
         dispatch("actionTrigger", event);
@@ -122,7 +128,7 @@
                                   on:select={(e) => updateAllSelectedElement(e.detail)}/>
                 </div>
                 <div class="flex-1 ring-2 rounded-sm overflow-hidden transition-all duration-100 {searchBarFocused ? 'ring-ui-blue' : 'ring-black'}">
-                    <input on:focus={() => searchBarFocused = true} on:blur={() => searchBarFocused = false} placeholder="search element" class="px-3 py-1 w-full focus:outline-none">
+                    <input spellcheck="false" on:focus={() => searchBarFocused = true} on:blur={() => searchBarFocused = false} placeholder="search element" class="px-3 py-1 w-full focus:outline-none">
                 </div>
                 <div class="flex-1">
 
@@ -131,7 +137,7 @@
         </div>
         {#if dataList.length > 0}
             {#each dataList as item, idx}
-                <div class="border-b flex justify-center items-center transition-all duration-150 border-gray-400"
+                <div class="relative border-b flex justify-center items-center transition-all duration-150 border-gray-400"
                      in:fade={{duration: 150}}>
                     <ListCheckBox selected={selected[idx]} on:select={(e) => {selectElement(idx)}}/>
                     <svelte:component this={viewer} data={item}/>

@@ -13,7 +13,7 @@
 		"Actions": Actions,
 		"Services": Services
 	};
-	let selectedComponent = "Users";
+	let selectedComponent = "Actions";
 </script>
 
 <section class="w-screen min-h-screen flex flex-col">

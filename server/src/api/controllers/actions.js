@@ -16,6 +16,7 @@ module.exports.getActions = async (req, res) => {
         .find()
         .skip((page - 1) * 10)
         .limit(10)
+        .populate("user", "username")
         .exec()
 
     return res.json({
@@ -31,6 +32,7 @@ module.exports.getAction = async (req, res) => {
         .findOne({
             _id: req.params.actionId
         })
+        .populate("user", "username")
         .exec()
 
     if (!action) {

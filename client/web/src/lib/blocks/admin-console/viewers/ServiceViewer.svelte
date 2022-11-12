@@ -16,8 +16,8 @@
 
 <section class="w-full flex justify-between items-center">
     <div class="flex items-center">
-        <div class="min-w-[45px]">
-            <Fa icon={icons["fa" + data.name] || icons.faGlobe} color="{data.colorPalette.mainColor || 'black'}" size="1.35x" class="text-2xl mx-auto"/>
+        <div class="min-w-[35px]">
+            <Fa icon={icons["fa" + data.name] || icons.faPaperPlane} color="{data.colorPalette.mainColor || 'black'}" size="1.25x"/>
         </div>
         <div class="font-light text-lg min-w-[100px]">
             {data.name}

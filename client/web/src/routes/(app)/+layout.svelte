@@ -5,7 +5,7 @@
     export let data;
 </script>
 
-<div class="area-fade2">
+<div class="area-fade2 max-w-screen overflow-x-hidden">
     <Header light={true} admin={data.user?.admin || false} />
     <slot/>
     <Footer />

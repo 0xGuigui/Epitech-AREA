@@ -10,12 +10,22 @@
     async function fetchActions(newPage = page) {
         page = newPage
         let response = await areaFetch("/actions?page=" + page);
+
         actionsPromise = response.json();
     }
 
     async function deleteActions(actionsData: object[]) {
         let promises = actionsData.map((actionData) => {
             return areaFetch("/actions/" + actionData["_id"], "DELETE");
+        });
+
+        await Promise.all(promises);
+        await fetchActions();
+    }
+
+    async function executeActions(actionsData: object[]) {
+        let promises = actionsData.map((actionData) => {
+            return areaFetch("/actions/" + actionData["_id"] + "/execute", "POST");
         });
 
         await Promise.all(promises);
@@ -32,21 +42,13 @@
         {
             name: "execute",
             icon: icons.faPlay,
-            action: () => {
-                console.log("execute");
-            }
-        },
-        {
-            name: "retry",
-            icon: icons.faRedo,
-            action: () => {
-                console.log("retry");
-            }
+            kind: "long",
+            action: executeActions,
         },
         {
             name: "delete",
             icon: icons.faTrashAlt,
-            action: deleteActions
+            action: deleteActions,
         },
     ];
 
@@ -63,6 +65,7 @@
                 dataList={actionsData.actions}
                 hasExtraData={actionsData.actions.length >= MAX_ELEMENTS}
                 viewer={ActionViewer}
+                kind="long"
                 {actions}
                 {page}
                 on:actionTrigger={matchTriggeredAction}

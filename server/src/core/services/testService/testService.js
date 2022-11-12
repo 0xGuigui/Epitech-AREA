@@ -27,6 +27,8 @@ module.exports = (area, servicesManager) => {
             await ctx.next()
         })
         .on('trigger', async (ctx) => {
+            // sleep for 5 seconds
+            await new Promise(resolve => setTimeout(resolve, 5000))
             await ctx.next()
         })
 

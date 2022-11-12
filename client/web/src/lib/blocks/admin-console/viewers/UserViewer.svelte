@@ -9,14 +9,14 @@
 <section class="w-full flex justify-start items-center">
     <div class="flex items-center">
         <div class="min-w-[35px]">
-            <Fa icon={data.admin ? icons.faUserGear : icons.faUser} class="text-2xl" size="1.25x"/>
+            <Fa icon={data.admin ? icons.faUserGear : icons.faUser} size="1.25x"/>
         </div>
         <div class="font-light text-lg min-w-[150px]">
             <a href="/users/{data._id}">
                 <span class="cursor-pointer relative hover:border-b hover:border-black transition-all duration-100">
                     {data.username}
                     {#if data.admin}
-                        <div class="select-none absolute top-0 -right-[53px] flex justify-center items-center text-green-700 text-sm h-4 w-12 ml-2 bg-green-400 border border-green-700 bg-opacity-70 rounded-sm">
+                        <div class="select-none absolute top-0 -right-[53px] flex justify-center items-center text-green-700 text-sm h-4 w-12 ml-2 bg-green-400 border border-green-700 bg-opacity-40 rounded-sm">
                             admin
                         </div>
                     {/if}
