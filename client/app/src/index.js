@@ -11,6 +11,7 @@ import SettingsRoutes from "./loginMenu/settings/settingsRoutes";
 import Oauth2 from "./oauth2";
 import ChangeUserData from "./main/account/changeUserData"
 import * as Linking from 'expo-linking'
+import ManageServices from "./main/account/manageServices";
 
 export default function Index() {
 	const [userInfo, setUserInfo] = useState({})
