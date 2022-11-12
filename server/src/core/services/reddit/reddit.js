@@ -109,16 +109,6 @@ async function getPosts(access_token) {
 	return await response.json()
 }
 
-async function readAllMessages(access_token) {
-	await fetch(`https://oauth.reddit.com/api/read_all_messages`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': `bearer ${access_token}`
-		}
-	})
-}
-
 module.exports = (area, servicesManager) => {
 	const redditService = new Service('Reddit', 'Reddit - Dive into anything', {
 		mainColor: '#fe4500',
@@ -159,6 +149,7 @@ module.exports = (area, servicesManager) => {
 		.on('trigger', async ctx => {
 			const accessTokenData = await getAccessToken(ctx.getActionData('reddit_refresh_token'))
 			const upvotedListData = await getUpvoted(accessTokenData.access_token)
+			console.log(upvotedListData.data.children[0].data.id)
 			if (upvotedListData.data.children[0].data.id !== ctx.getActionData('reddit_last_upvoted')) {
 				ctx.setActionData('reddit_last_upvoted', upvotedListData.data.children[0].data.id)
 				await ctx.next()
@@ -229,17 +220,6 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 
-	const readMessagesReaction = new Reaction('readMessages', 'marks all your messages as read')
-		.on('create', async ctx => {
-			ctx.setActionData('reddit_refresh_token', await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
-			await ctx.next()
-		})
-		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(ctx.getActionData('reddit_refresh_token'))
-			await readAllMessages(accessTokenData.access_token)
-			await ctx.next()
-		})
-
 	redditService.addAction(
 		avatarChangeAction,
 		newUpvoteAction,
@@ -248,8 +228,6 @@ module.exports = (area, servicesManager) => {
 		newCommentAction,
 		newPostAction
 	)
-
-	redditService.addReaction(readMessagesReaction)
 
 	servicesManager.addService(redditService)
 }

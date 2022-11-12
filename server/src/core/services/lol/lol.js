@@ -81,13 +81,13 @@ module.exports = (area, servicesManager) => {
 		.on('create', async ctx => {
 			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			ctx.setActionData('lol_puuid', playerData.puuid)
-			ctx.setActionData('lol_level', playerData.level)
+			ctx.setActionData('lol_level', playerData.summonerLevel)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
 			const playerData = await getAccountInfoByPuuid(ctx.getActionData('lol_puuid'))
-			if (playerData.level !== ctx.getActionData('lol_level')) {
-				ctx.setActionData('lol_level', playerData.level)
+			if (playerData.summonerLevel !== ctx.getActionData('lol_level')) {
+				ctx.setActionData('lol_level', playerData.summonerLevel)
 				await ctx.next()
 			}
 		})
@@ -110,13 +110,13 @@ module.exports = (area, servicesManager) => {
 			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			const lastMatch = await getLastMatch(playerData.puuid)
 			ctx.setActionData('lol_puuid', playerData.puuid)
-			ctx.setActionData('lol_match_id', lastMatch.matchId)
+			ctx.setActionData('lol_match_id', lastMatch.info.gameId)
 			await ctx.next()
 		})
 		.on('trigger', async ctx => {
 			const lastMatch = await getLastMatch(ctx.getActionData('lol_puuid'))
-			if (lastMatch.matchId !== ctx.getActionData('lol_match_id')) {
-				ctx.setActionData('lol_match_id', lastMatch.matchId)
+			if (lastMatch.info.gameId !== ctx.getActionData('lol_match_id')) {
+				ctx.setActionData('lol_match_id', lastMatch.info.gameId)
 				await ctx.next()
 			}
 		})
