@@ -9,24 +9,36 @@
         servicesPromise = response.json();
     }
 
-    async function disableService() {
-        console.log("ok");
+    async function disableServices(servicesData) {
+        let promises = servicesData.map(service => {
+            return areaFetch(`/services/${service.name}/update-state`, "POST", {
+                state: "false",
+            });
+        });
+        await Promise.all(promises);
+        await fetchServices();
     }
 
-    async function enableService() {
-        console.log("ok");
+    async function enableServices(data) {
+        let promises = data.map(service => {
+            return areaFetch(`/services/${service.name}/update-state`, "POST", {
+                state: "true",
+            });
+        });
+        await Promise.all(promises);
+        await fetchServices();
     }
 
     const actions = [
         {
             name: "disable",
             icon: icons.faBan,
-            action: disableService,
+            action: disableServices,
         },
         {
             name: "enable",
             icon: icons.faCheck,
-            action: enableService,
+            action: enableServices,
         }
     ];
 

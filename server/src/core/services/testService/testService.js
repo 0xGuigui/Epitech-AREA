@@ -2,7 +2,10 @@ const {Service, Action, Reaction} = require('../serviceComponents')
 const Joi = require('joi')
 
 module.exports = (area, servicesManager) => {
-    let testService = new Service('testService')
+    let testService = new Service('testService', "test", {
+        mainColor: '#2c3e50',
+        secondaryColor: '#34495e',
+    })
     let testAction = new Action('testAction')
         .on('create', async (ctx) => {
             ctx.setActionData("triggerCount", 0)

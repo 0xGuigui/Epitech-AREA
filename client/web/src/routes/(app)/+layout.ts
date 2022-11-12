@@ -2,6 +2,8 @@
 import {areaFetch} from "../../lib/utils/areaFetch";
 import {browser} from "$app/environment";
 
+export const ssr = false;
+
 export async function load() {
     if (browser && localStorage.getItem('loggedIn') === "true") {
         const response = await areaFetch('/me');
