@@ -176,30 +176,12 @@ module.exports = (area, servicesManager) => {
 			await ctx.end()
 		})
 
-	const changeUsernameReaction = new Reaction('changeUsername', 'changes your username')
-		.on('create', async ctx => {
-			ctx.setActionData('discord_new_name', ctx.payload["New Discord Username"])
-			await ctx.next()
-		})
-		.on('trigger', async ctx => {
-			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
-			await saveRefreshToken(accessTokenData.refresh_token, ctx.actionData.user.valueOf(), discordService.name)
-			await changeUsername(accessTokenData.access_token, ctx.getActionData('discord_new_name'))
-			await ctx.end()
-		})
-
-	changeUsernameReaction.validationSchema = Joi.object().keys({
-		"New Discord Username": Joi.string().required()
-	}).unknown(true)
-
 	discordService.addAction(
 		avatarChangeAction,
 		usernameChangeAction,
 		joinedServerAction,
 		leftServerAction
 	)
-
-	discordService.addReaction(changeUsernameReaction)
 
 	servicesManager.addService(discordService)
 }
