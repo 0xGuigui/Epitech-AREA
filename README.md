@@ -4,7 +4,7 @@
 </p>
 
 <h3 align="center">AREA Project</h3>
-[![Status - Finished](https://img.shields.io/badge/Status-Finished-2ea44f?style=for-the-badge&logo=Cachet)]()
+[![Status - Finished](https://img.shields.io/badge/Status-Finished-2ea44f?style=for-the-badge&logo=Cachet)](https://)
 [![FrontEnd - Svelte](https://img.shields.io/badge/FrontEnd-Svelte-FF3E00?style=for-the-badge&logo=Svelte)]()
 [![FrontMobile - React Native](https://img.shields.io/static/v1?label=FrontMobile&message=React+Native&color=%2361DAFB&style=for-the-badge&logo=React)]()
 [![Mobile App powered by - Expo](https://img.shields.io/static/v1?label=Mobile+App+powered+by&message=Expo&color=%23000020&style=for-the-badge&logo=Expo)]()
