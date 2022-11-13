@@ -7,14 +7,14 @@
     <!-- header -->
     <mj-section padding="0">
       <mj-column>
-        <mj-image src="http://localhost:3000/surround-mail-img.jpg" padding="0" alt="page start"></mj-image>
+        <mj-image src="http://92.148.23.72:8081/surround-mail-img.jpg" padding="0" alt="page start"></mj-image>
       </mj-column>
     </mj-section>
     <!-- main content -->
     <mj-section background-color="white" padding="40px 0 0 10px">
       <mj-group>
         <mj-column width="15%" padding="0" vertical-align="middle">
-          <mj-image src="http://localhost:3000/logo-area.png" width="55px" padding="0 0 0" align="right"></mj-image>
+          <mj-image src="http://92.148.23.72:8081/logo-area.png" width="55px" padding="0 0 0" align="right"></mj-image>
         </mj-column>
         <mj-column width="85%" padding="0" vertical-align="middle">
           <mj-text align="left" font-size="25px" padding="0 0 0 10px">AREA</mj-text>
@@ -23,14 +23,13 @@
     </mj-section>
     <mj-section background-color="#fff" padding="40px 0 0 15px">
       <mj-column>
-        <mj-text font-size="30px" font-weight="bold" font-family="Museo"><span style="color:#4B67C6;">{0}</span>, Verify your email ! </mj-text>
+        <mj-text font-size="30px" font-weight="bold" font-family="Museo"><span style="color:#4B67C6;">{0}</span>, verify your email ! </mj-text>
       </mj-column>
     </mj-section>
     <mj-section background-color="white" padding="20px 0 0 15px">
       <mj-column>
         <mj-text color="#636e72" line-height="22px" font-size="16px">
-          Hi {1} ! You registered to our service on: {2}<br/>
-          Please use the following link to complete your register !
+          Hi {1} ! You registered to our service on: {2}<br/> We are really happy to count your in our team, please use the following link to complete your register !
     
         </mj-text>
       </mj-column>
@@ -45,7 +44,7 @@
     <!-- footer -->
     <mj-section padding="0">
       <mj-column>
-        <mj-image src="http://localhost:3000/surround-mail-img-reversed.jpg" padding="0" alt="page bottom"></mj-image>
+        <mj-image src="http://92.148.23.72:8081/surround-mail-img-reversed.jpg" padding="0" alt="page bottom"></mj-image>
       </mj-column>
     </mj-section>
   </mj-body>

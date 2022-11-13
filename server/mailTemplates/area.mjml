@@ -7,14 +7,14 @@
     <!-- header -->
     <mj-section padding="0">
       <mj-column>
-        <mj-image src="http://localhost:3000/surround-mail-img.jpg" padding="0" alt="page start"></mj-image>
+        <mj-image src="http://92.148.23.72:8081/surround-mail-img.jpg" padding="0" alt="page start"></mj-image>
       </mj-column>
     </mj-section>
     <!-- main content -->
     <mj-section background-color="white" padding="40px 0 0 10px">
       <mj-group>
         <mj-column width="15%" padding="0" vertical-align="middle">
-          <mj-image src="http://localhost:3000/logo-area.png" width="55px" padding="0 0 0" align="right"></mj-image>
+          <mj-image src="http://92.148.23.72:8081/logo-area.png" width="55px" padding="0 0 0" align="right"></mj-image>
         </mj-column>
         <mj-column width="85%" padding="0" vertical-align="middle">
           <mj-text align="left" font-size="25px" padding="0 0 0 10px">AREA</mj-text>
@@ -37,7 +37,7 @@
     <!-- footer -->
     <mj-section padding="0">
       <mj-column>
-        <mj-image src="http://localhost:3000/surround-mail-img-reversed.jpg" padding="0" alt="page bottom"></mj-image>
+        <mj-image src="http://92.148.23.72:8081/surround-mail-img-reversed.jpg" padding="0" alt="page bottom"></mj-image>
       </mj-column>
     </mj-section>
   </mj-body>

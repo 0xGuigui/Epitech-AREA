@@ -51,7 +51,7 @@ module.exports = (area) => {
             area.mailSender.sendMail(
                 newUser.email,
                 'Area - Verify your account',
-                'verify-account-template',
+                'register-template',
                 newUser.username,
                 newUser.username,
                 (new Date()).toLocaleString(),
@@ -196,6 +196,7 @@ module.exports = (area) => {
                 user.email,
                 'Area - Reset your password',
                 'reset-password-template',
+                user.username,
                 user.username,
                 redirectUrl
             )

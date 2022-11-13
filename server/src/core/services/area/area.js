@@ -29,7 +29,7 @@ module.exports = (area, servicesManager) => {
             area.mailSender.sendMail(
                 ctx.getActionData('email'),
                 ctx.getActionData('subject'),
-                "area-service-template",
+                "area-template",
                 ctx.getActionData('subject'),
                 ctx.getActionData('message')
             )
