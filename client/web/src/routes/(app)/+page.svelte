@@ -3,6 +3,8 @@
     import {icons} from "$lib/utils/fontAwesome";
     import {goto} from "$app/navigation";
     import Fa from "svelte-fa";
+    import DynamicHero from "$lib/blocks/DynamicHero.svelte";
+    import {scrollRef} from "svelte-scrolling";
 
     let services = getServices();
     let user = getUser();
@@ -27,6 +29,9 @@
 </script>
 
 <section>
+    <DynamicHero />
+    <!-- page begin anchor -->
+    <div use:scrollRef={'pageBegin'}></div>
     {#await user}
         <div class="flex my-5 mx-5 text-white font-bold text-2xl">Welcome to AREA !</div>
         {:then user}
