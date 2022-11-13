@@ -16,8 +16,9 @@ import SpotifyLogo from '../../assets/icons/spotify-logo-white.png'
 import RedditLogo from '../../assets/icons/reddit-logo-white.png'
 import SteamLogo from '../../assets/icons/steam-logo-white.png'
 import LeagueLogo from '../../assets/icons/league-logo-white.png'
+import AreaLogo from '../../assets/logo/logo.png'
 import {checkService, refreshToken, unregisterService} from "../../services/server";
-import {Oauth2} from '../../../config'
+import {Oauth2, serverUrl} from '../../../config'
 import {showToast} from "../../utils";
 
 const data = {
@@ -55,6 +56,13 @@ const data = {
         backgroundColor: '#044454',
         headerLogo: LeagueLogo,
         logo: leagueLogo
+    },
+    area : {
+        description: 'AREA is a project that allows you to connect all your services in one place. You can create actions that will be triggered when a specific event occurs. For example, you can create an action that will send a message to your Discord server when you receive a new email.',
+        url: `${serverUrl}:8081`,
+        backgroundColor: '#000000',
+        headerLogo: AreaLogo,
+        logo: AreaLogo
     }
 }
 

@@ -3,9 +3,9 @@ const Joi = require('joi')
 const {createWebhookToken, createActionWebhook} = require('../../../utils/createWebhookToken')
 
 module.exports = (area, servicesManager) => {
-    let areaService = new Service('area', "use the power of area API to connect applications", {
+    let areaService = new Service('AREA', "use the power of area API to connect applications", {
         mainColor: '#2c3e50',
-        secondaryColor: '#34495e',
+        secondaryColor: '#000000',
         urlSite: 'http://92.148.23.72:8080/',
     })
 

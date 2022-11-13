@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
-import {useContext, useState} from 'react';
-import {useNavigate} from "react-router-native";
+import { useContext, useState } from 'react';
+import { useNavigate } from "react-router-native";
 import { Pressable } from "@react-native-material/core";
-import {Button, TextInput, IconButton} from 'react-native-paper';
-import {getMe, logUser} from "../services/server";
+import { Button, TextInput, IconButton} from 'react-native-paper';
+import { getMe, logUser } from "../services/server";
 import logo from '../assets/logo/logo.png'
 import global from '../../config'
 import discordLogo from '../assets/icons/discord-mark-white.png'
-import {LoginContext} from "../loginContext";
+import { LoginContext } from "../loginContext";
 import * as WebBrowser from 'expo-web-browser'
 
 export default function Login({ setUserInfo }) {

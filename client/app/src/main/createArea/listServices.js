@@ -13,12 +13,15 @@ import leagueLogo from '../../assets/img/League.png'
 import * as React from "react";
 import { DarkTheme } from "../../../config";
 import {showToast} from "../../utils";
+import AreaLogo from '../../assets/logo/logo.png'
+
 const logos = {
     Discord: discordLogo,
     Spotify: spotifyLogo,
     Reddit: redditLogo,
     Steam: steamLogo,
-    League: leagueLogo
+    League: leagueLogo,
+    area: AreaLogo
 }
 
 export default function ListServices() {
