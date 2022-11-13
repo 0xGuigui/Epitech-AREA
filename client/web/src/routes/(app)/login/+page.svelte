@@ -102,7 +102,7 @@
                     {#if $errors.password}
                         <small data-aos="fade-right" data-aos-duration="500" class="block flex justify-center text-red-600 font-semibold">{$errors.password}</small>
                     {/if}
-                    <a class="block flex justify-center my-0.5 font-bold text-area-header hover:underline" href="/">Forgot password</a>
+                    <a class="block flex justify-center my-0.5 font-bold text-area-header hover:underline" href="/reset-password">Forgot password</a>
                 </div>
             <button class="font-bold my-5 mr-2 py-2 px-6 bg-area-button hover:bg-area-header hover:scale-110 transition-all duration-150 rounded-lg text-white" type="submit">Submit</button>
         </form>
