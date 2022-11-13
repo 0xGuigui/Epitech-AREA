@@ -19,6 +19,14 @@
         if (!canCreate) return;
         processing = true;
     }
+
+    function handleServiceFilled(e) {
+        updatePopup();
+        actionContext[kind] = e.detail
+        if (actionContext.action && actionContext.reaction) {
+            canCreate = true;
+        }
+    }
 </script>
 
 <section class="flex justify-center items-center h-screen w-full pt-16">
@@ -27,6 +35,7 @@
             <ChooseServicePopup
                     context={actionContext}
                     on:close={updatePopup}
+                    on:message={handleServiceFilled}
                     {kind}
             />
         {:else}
@@ -36,26 +45,26 @@
                 <div class="mt-12 flex justify-center items-center px-10">
                     <div on:click={() => {kind = "action"; updatePopup()}}
                          class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl cursor-pointer transition-all duration-150 hover:scale-105">
-                        {#if actionContext.actionType}
-                            ok
+                        {#if actionContext.action}
+                            <span class="text-2xl text-white">ok</span>
                         {:else}
                             <div class="text-white text-2xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                Choose a action
+                                Choose action
                             </div>
                         {/if}
                     </div>
-                    <div class="mx-24 transition-all duration-300 {actionContext.actionType ? 'opacity-100' : 'opacity-0'}">
-                        <div class="{actionContext.reactionType ? '' : 'animate-bars'}">
+                    <div class="mx-24 transition-all duration-300 {actionContext.action ? 'opacity-100' : 'opacity-0'}">
+                        <div class="{actionContext.reaction ? '' : 'animate-bars'}">
                             <Fa icon={icons.faAnglesRight} size="5x" color="#262729"/>
                         </div>
                     </div>
-                    <div on:click={() => {if (actionContext.actionType) {kind = "reaction"; updatePopup()}}}
-                         class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl transition-all duration-150 {actionContext.actionType ? 'hover:scale-105 cursor-pointer' : 'cursor-not-allowed opacity-50'}">
-                        {#if actionContext.actionType}
-                            ok
+                    <div on:click={() => {if (actionContext.action) {kind = "reaction"; updatePopup()}}}
+                         class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl transition-all duration-150 {actionContext.action ? 'hover:scale-105 cursor-pointer' : 'cursor-not-allowed opacity-50'}">
+                        {#if actionContext.reaction}
+                            <span class="text-2xl text-white">ok</span>
                         {:else}
                             <div class="text-white text-2xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                Choose a reaction
+                                Choose reaction
                             </div>
                         {/if}
                     </div>
