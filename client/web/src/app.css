@@ -32,3 +32,10 @@ body {
 .area-fade3 {
     background-image: linear-gradient(to bottom, #373636, #3b3a3a, #3f3e3f, #434343, #474747, #4a4a4a, #4d4d4d, #505050, #525252, #555555, #575757, #5a5a5a);
 }
+
+.area-letter {
+    background: linear-gradient(to right top, #3a529e, #47529b, #515399, #5a5496, #615593, #715294, #814f93, #914a8f, #b03b83, #c9286c, #da194e, #e02527);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
