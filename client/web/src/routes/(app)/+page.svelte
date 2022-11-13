@@ -6,17 +6,8 @@
     import DynamicHero from "$lib/blocks/DynamicHero.svelte";
     import {scrollRef} from "svelte-scrolling";
 
+    export let data;
     let services = getServices();
-    let user = getUser();
-
-    async function getUser() {
-        const response = await areaFetch('/me')
-        const json = await response.json()
-        return {
-            status: response.status,
-            ...json
-        };
-    }
 
     async function getServices() {
         const response = await areaFetch('/services')
@@ -29,14 +20,10 @@
 </script>
 
 <section>
-    <DynamicHero />
+    <DynamicHero/>
     <!-- page begin anchor -->
     <div use:scrollRef={'pageBegin'}></div>
-    {#await user}
-        <div class="flex my-5 mx-5 text-white font-bold text-2xl">Welcome to AREA !</div>
-        {:then user}
-            <div class="flex my-5 mx-5 text-white font-bold text-2xl">Welcome to AREA {user.user.username} !</div>
-    {/await}
+    <div>Welcome to AREA{data.user ? ", " + data.user.username : ""} !</div>
     {#await services}
         <div class="flex justify-center items-center">
             <p></p>
@@ -46,9 +33,10 @@
             <div on:click={() => goto(`/services/${service.name}`)}
                  style="background-color: {service.colorPalette.secondaryColor};"
                  class="inline-grid w-[300px] h-[200px] my-7 ml-16 font-bold text-white text-2xl flex shadow-2xl justify-center items-center backdrop-blur-sm bg-white/40 rounded-2xl hover:scale-110 transition-all duration-300 select-none cursor-pointer">
-                <img src={"/" + service.name + ".png"} onerror="this.onerror=null;this.src='/logo-area.png'" class="flex justify-center items-center h-20 w-20" alt="service"/>
+                <img src={"/" + service.name + ".png"} onerror="this.onerror=null;this.src='/logo-area.png'"
+                     class="flex justify-center items-center h-20 w-20" alt="service"/>
                 <div class="w-full h-full justify-center items-center flex"
-                    >{service.name}
+                >{service.name}
                 </div>
             </div>
         {/each}

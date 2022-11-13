@@ -1,6 +1,4 @@
 <script lang="ts">
-    import {fade} from "svelte/transition";
-
     let sentences = [
         "Powerful",
         "Elegant",
@@ -40,7 +38,7 @@
             <img src="/tailwind.png" alt="Tailwind logo" class="w-[170px]">
         </a>
     </div>
-    <div class:opacity-0={!show} class="transition-all duration-300 ease-in area-letter text-[120px] py-10 mb-10 px-4" style="font-family: 'Pacifico', cursive;">
+    <div class:opacity-0={!show} class="select-none transition-all duration-300 ease-in area-letter text-[120px] py-10 mb-10 px-4" style="font-family: 'Pacifico', cursive;">
         {sentence}
     </div>
 </section>
