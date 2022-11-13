@@ -101,12 +101,14 @@ export default function Account({ userInfo, setUserInfo }) {
                     Change email
                 </Text>
                 <Divider />
-                <Text
-                    style={styles.clickableText} onPress={() => {
-                    navigate('/change/password')
-                }}>
-                    Change password
-                </Text>
+                { !userInfo.oauth &&
+                    <Text
+                        style={styles.clickableText} onPress={() => {
+                        navigate('/change/password')
+                    }}>
+                        Change password
+                    </Text>
+                }
                 <Divider />
                 <Text
                     style={styles.clickableText} onPress={() => {

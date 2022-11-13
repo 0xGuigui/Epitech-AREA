@@ -75,8 +75,8 @@ export default function ManageServices({userInfo, setUserInfo}) {
                                                         if (token) {
                                                             const res = await checkService(token.token, e.name)
                                                             if (res.status === 200) {
-                                                                await unregisterService(e.name)
-                                                                showToast("Service disconnected")
+                                                                const res = await unregisterService(token.token, e.name)
+                                                                showToast(res.status === 200 ? "Service disconnected" : "An error occurred")
                                                             }
                                                         }
                                                     }
