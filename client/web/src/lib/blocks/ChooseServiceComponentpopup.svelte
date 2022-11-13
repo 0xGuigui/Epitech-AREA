@@ -1,13 +1,10 @@
 <script lang="ts">
     import {createEventDispatcher} from "svelte";
-    import {fly} from "svelte/transition";
     import {icons} from "../utils/fontAwesome";
     import Fa from "svelte-fa";
     import {areaFetch} from "../utils/areaFetch";
-    import {goto} from "$app/navigation";
     import FillServiceComponentDataPopup from "./FillServiceComponentDataPopup.svelte";
 
-    export let context: any;
     export let kind: string;
     export let service;
 
@@ -17,9 +14,7 @@
     let showPopup = false;
 
     async function getServiceComponents() {
-        let apiEndpoint = `/services/${service.name}/${kind}s`;
-        console.log(apiEndpoint);
-        let response = await areaFetch(apiEndpoint);
+        let response = await areaFetch(`/services/${service.name}/${kind}s`);
 
         componentsPromise = await response.json();
     }
@@ -41,6 +36,7 @@
                 service={service}
                 component={selectedComponent}
                 on:message={transmitEvent}
+                {kind}
         />
     {:else}
         <div on:click={() => dispatch("close")} class="absolute top-3.5 left-5">
@@ -48,7 +44,7 @@
                 class="text-2xl text-area-header cursor-pointer hover:scale-125 transition-all duration-150"
                 size="2.5x"/>
         </div>
-        <div class="select-none font-bold text-3xl mt-10 text-area-header w-full text-center">Create a new {kind}:</div>
+        <div class="select-none font-bold text-3xl mt-10 text-white w-full text-center">Create a new {kind}:</div>
         <div class="w-full mt-10">
             {#await componentsPromise}
                 <div></div>

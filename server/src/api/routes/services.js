@@ -3,32 +3,7 @@ require('express-async-errors')
 const {isAdmin} = require("../middlewares/others");
 const {validatePayload} = require("../middlewares/dynamic");
 const {updateServiceStateSchema} = require("../models/joi/authSchemas");
-
-let formatService = (service) => {
-    return {
-        name: service.name,
-        active: service.active,
-        locked: service.locked,
-        description: service.description,
-        actions: service.actions.map((action) => {
-            return action.name
-        }),
-        reactions: service.reactions.map((reaction) => {
-            return reaction.name
-        }),
-        colorPalette: service.colorPalette
-    }
-}
-
-let formatServiceComponent = (serviceComponent) => {
-    let componentFields = serviceComponent.validationSchema ? serviceComponent.validationSchema.describe().keys : null
-
-    return {
-        name: serviceComponent.name,
-        description: serviceComponent.description,
-        fields: componentFields,
-    }
-}
+const {formatService, formatServiceComponent} = require("../../utils/services");
 
 module.exports = (area) => {
     const router = express.Router();

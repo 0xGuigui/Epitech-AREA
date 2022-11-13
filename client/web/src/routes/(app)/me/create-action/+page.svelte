@@ -7,11 +7,15 @@
     let processing = false;
     let actionContext = {
         name: "new action",
+        data: {}
     };
     let kind = "action";
     let showPopup = false;
 
     function updatePopup() {
+        if (!showPopup && processing) {
+            return;
+        }
         showPopup = !showPopup;
     }
 
@@ -22,7 +26,14 @@
 
     function handleServiceFilled(e) {
         updatePopup();
-        actionContext[kind] = e.detail
+        actionContext[kind] = {
+            service: e.detail.service,
+            component: e.detail.component,
+        }
+        actionContext.data = {
+            ...actionContext.data,
+            ...e.detail.data
+        }
         if (actionContext.action && actionContext.reaction) {
             canCreate = true;
         }
@@ -40,13 +51,17 @@
             />
         {:else}
             <div>
-                <div class="font-bold text-3xl mt-10 text-area-header w-full text-center">Create a new action:</div>
+                <div class="font-bold text-3xl mt-10 w-full text-center text-white">Create a new action:</div>
                 <div class="px-10 w-full mt-5"><input bind:value={actionContext.name}/></div>
                 <div class="mt-12 flex justify-center items-center px-10">
                     <div on:click={() => {kind = "action"; updatePopup()}}
-                         class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl cursor-pointer transition-all duration-150 hover:scale-105">
+                         class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl cursor-pointer transition-all duration-150 {processing ? 'opacity-50' : 'hover:scale-105'} overflow-hidden">
                         {#if actionContext.action}
-                            <span class="text-2xl text-white">ok</span>
+                            <div class="flex flex-col items-center justify-center w-full h-full" style="background-color: {actionContext.action.service.colorPalette.secondaryColor}">
+                                <img src={"/" + actionContext.action.service.name + ".png"} onerror="this.onerror=null;this.src='/logo-area.png'"
+                                     class="flex justify-center items-center h-28 w-28 mx-auto my-4" alt="service"/>
+                                <div class="text-white text-2xl font-bold mx-auto mb-14">{actionContext.data.actionType}</div>
+                            </div>
                         {:else}
                             <div class="text-white text-2xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                                 Choose action
@@ -54,14 +69,20 @@
                         {/if}
                     </div>
                     <div class="mx-24 transition-all duration-300 {actionContext.action ? 'opacity-100' : 'opacity-0'}">
-                        <div class="{actionContext.reaction ? '' : 'animate-bars'}">
+                        <div class:animate-bars={!actionContext.reaction} class:opacity-50={processing}>
                             <Fa icon={icons.faAnglesRight} size="5x" color="#262729"/>
                         </div>
                     </div>
                     <div on:click={() => {if (actionContext.action) {kind = "reaction"; updatePopup()}}}
-                         class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl transition-all duration-150 {actionContext.action ? 'hover:scale-105 cursor-pointer' : 'cursor-not-allowed opacity-50'}">
+                         class:hover:scale-105={!processing && actionContext.action}
+                         class:opacity-50={processing || !actionContext.action}
+                         class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl transition-all duration-150 {actionContext.action ? 'cursor-pointer' : 'cursor-not-allowed'} overflow-hidden">
                         {#if actionContext.reaction}
-                            <span class="text-2xl text-white">ok</span>
+                            <div class="flex flex-col items-center justify-center w-full h-full" style="background-color: {actionContext.reaction.service.colorPalette.secondaryColor}">
+                                <img src={"/" + actionContext.reaction.service.name + ".png"} onerror="this.onerror=null;this.src='/logo-area.png'"
+                                     class="flex justify-center items-center h-28 w-28 mx-auto my-4" alt="service"/>
+                                <div class="text-white text-2xl font-bold mb-14">{actionContext.data.reactionType}</div>
+                            </div>
                         {:else}
                             <div class="text-white text-2xl font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                                 Choose reaction

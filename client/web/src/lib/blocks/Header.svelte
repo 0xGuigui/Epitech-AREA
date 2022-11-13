@@ -22,7 +22,7 @@
         class="fixed z-50 top-0 left-0 flex justify-between items-center w-full h-16 px-5 bg-area-header transition-all duration-200">
     <div>
         <a href="/" class="flex items-center">
-            <img src="/logo-area.png" class="mr-2 h-6 sm:h-8 hover:scale-110 duration-150" alt="area_logo"/>
+            <img src="/logo-area.png" class="mr-2 h-12 hover:scale-110 duration-150" alt="area_logo"/>
             <span class="text-xl font-bold dark:text-white">AREA</span>
         </a>
     </div>
