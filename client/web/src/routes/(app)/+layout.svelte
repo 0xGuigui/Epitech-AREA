@@ -12,7 +12,7 @@
 </script>
 
 <Header light={true} {admin} />
-<div class="area-fade2 min-w-screen min-h-screen overflow-x-hidden pt-16">
+<div class="area-fade2 min-w-screen min-h-screen overflow-x-hidden">
     <slot/>
 </div>
 <Footer />

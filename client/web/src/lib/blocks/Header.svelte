@@ -7,7 +7,7 @@
     let scrollY = 0;
     let lastScrollY = 0;
     let direction = "down";
-    let hideBreakpoint = 100;
+    let hideBreakpoint = 200;
 
     let computeScrollDirection = () => {
         direction = scrollY > lastScrollY ? 'down' : 'up';
