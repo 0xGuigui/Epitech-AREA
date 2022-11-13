@@ -5,6 +5,8 @@
     import {page} from "$app/stores";
     import {browser} from "$app/environment";
     import config from "$lib/data/config"
+    import Fa from "svelte-fa";
+    import {icons} from "$lib/utils/fontAwesome";
 
     let errs = {};
     async function logUser(form) {
@@ -58,6 +60,15 @@
             }
         }
     });
+	const authDiscord = () => {
+		if ($form.serverUrl === '') {
+			$errors.serverUrl = "Invalid server address"
+			return;
+        }
+		serverUrl.set($form.serverUrl);
+		localStorage.setItem('discord_login', "true")
+		window.open(config.Oauth2.Discord.login_uri, "_blank")
+	}
 </script>
 
 <section class="h-[100vh] w-[100vw] flex justify-center items-center">
@@ -104,7 +115,10 @@
                     {/if}
                     <a class="block flex justify-center my-0.5 font-bold text-area-header hover:underline" href="/reset-password">Forgot password</a>
                 </div>
-            <button class="font-bold my-5 mr-2 py-2 px-6 bg-area-button hover:bg-area-header hover:scale-110 transition-all duration-150 rounded-lg text-white" type="submit">Submit</button>
+            <div class="flex justify-center items-center">
+                <button class="font-bold my-5 mr-2 py-2 px-6 bg-area-button hover:bg-area-header hover:scale-110 transition-all duration-150 rounded-lg text-white" type="submit">Submit</button>
+                <div class="font-bold mr-2 py-2 px-6 bg-area-purple2 hover:bg-area-header hover:scale-110 transition-all duration-150 rounded-lg text-white" on:click={authDiscord}><Fa size="1.5x" icon={icons.faDiscord}/></div>
+            </div>
         </form>
     </div>
 </section>
