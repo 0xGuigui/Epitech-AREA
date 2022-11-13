@@ -1,10 +1,8 @@
-import {createContext, useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-native";
+import {createContext, useState} from "react";
 
 export const LoginContext = createContext()
 
 export const LoginProvider = ({ children }) => {
-	const location = useLocation()
 	const [oauth2, setOauth2] = useState(false)
 
 	return (

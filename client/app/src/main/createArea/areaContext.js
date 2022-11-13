@@ -1,5 +1,4 @@
-import {createContext, useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-native";
+import {createContext, useState} from "react";
 
 export const AreaContext = createContext()
 
@@ -9,10 +8,6 @@ export const AreaProvider = ({ children }) => {
 		reaction: {},
 		name: ''
 	})
-
-	useEffect(() => {
-		console.log('area', area)
-	}, [area])
 
 	return (
 		<AreaContext.Provider value={{area, setArea}}>

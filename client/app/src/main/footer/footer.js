@@ -1,7 +1,6 @@
 import {StyleSheet, View} from "react-native";
 import {useLocation, useNavigate} from "react-router-native";
 import {IconButton} from "react-native-paper";
-import {useEffect, useState} from "react";
 
 const buttonsConfig = [
 	{

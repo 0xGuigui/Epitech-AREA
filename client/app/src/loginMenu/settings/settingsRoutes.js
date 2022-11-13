@@ -3,7 +3,7 @@ import Settings from "./settings";
 import {useContext, useEffect, useState} from "react";
 import {HistoryContext} from "../../historyContext";
 
-export default function SettingsRoutes({userInfo}) {
+export default function SettingsRoutes() {
 	const history = useContext(HistoryContext)
 	const location = useLocation()
 	const [prevHistory, setPrevHistory] = useState(history.prev)

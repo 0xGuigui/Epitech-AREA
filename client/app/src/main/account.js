@@ -3,7 +3,7 @@ import {Appbar, Divider} from 'react-native-paper';
 import { DarkTheme } from "../../config";
 import * as React from "react";
 import { useNavigate } from "react-router-native";
-import { refreshToken, logOut, deleteAccount, resetPassword } from "../services/server";
+import { refreshToken, logOut, deleteAccount } from "../services/server";
 import { showToast } from '../utils'
 import {useContext, useEffect} from "react";
 import {HistoryContext} from "../historyContext";
@@ -66,16 +66,6 @@ export default function Account({ userInfo, setUserInfo }) {
             <ScrollView>
                 <Text
                     style={styles.titleText}>
-                    Help
-                </Text>
-                <Divider />
-                <Text
-                    style={styles.clickableText} onPress={() => navigate('/listServices')}>
-                    What is Area?
-                </Text>
-                <Divider />
-                <Text
-                    style={styles.titleText}>
                     Services
                 </Text>
                 <Divider/>
@@ -84,10 +74,6 @@ export default function Account({ userInfo, setUserInfo }) {
                     Available Services
                 </Text>
                 <Divider />
-                <Text
-                    style={styles.clickableText} onPress={() => navigate('/manageServices')}>
-                    Manage services
-                </Text>
                 <Divider/>
                 <Text
                     style={styles.titleText}>
@@ -120,6 +106,7 @@ export default function Account({ userInfo, setUserInfo }) {
                 <Text
                     style={{...styles.clickableText, color: 'red'}} onPress={async () => {
                     const token = await refreshToken()
+                    token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
                     const res = await logOut(token.token)
                     if (res.status === 200) {
                         setUserInfo({})

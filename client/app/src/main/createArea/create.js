@@ -1,9 +1,7 @@
-import {StyleSheet, Text, View, Linking, BackHandler} from "react-native";
-import {Pressable} from "@react-native-material/core";
+import {StyleSheet, View, BackHandler} from "react-native";
 import {Appbar} from "react-native-paper";
 import {DarkTheme} from "../../../config";
 import * as React from "react";
-import * as WebBrowser from 'expo-web-browser'
 import {Route, Routes, useNavigate} from "react-router-native";
 import DisplayMenu from "./displayMenu";
 import DisplayServices from "./displayServices";

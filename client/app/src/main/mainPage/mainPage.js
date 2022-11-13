@@ -2,15 +2,15 @@ import { BackHandler, StyleSheet, Text, View } from "react-native";
 import { useNavigate } from "react-router-native";
 import { useContext, useEffect, useState } from "react";
 import { HistoryContext } from "../../historyContext";
-import { getActions, getMe, refreshToken } from "../../services/server";
+import { getActions, refreshToken } from "../../services/server";
 import { Pressable } from "@react-native-material/core";
 import DataDisplayer from "../../dataDisplayer";
 import ActionModal from "./ActionModal";
 import { DarkTheme } from "../../../config";
 import { Appbar } from "react-native-paper";
 import areaLogo from '../../assets/logo/logo.png'
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import * as React from "react";
+import {showToast} from "../../utils";
 
 export default function mainPage({userInfo}) {
 	const navigate = useNavigate()
@@ -24,10 +24,9 @@ export default function mainPage({userInfo}) {
 
 	const getUserActions = async () => {
 		const token = await refreshToken()
-		console.log(token)
-		token.status !== 200 && navigate('/login')
+		token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		const actions = await getActions(token.token)
-		actions.status !== 200 && navigate('/login')
+		actions.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		setActions([...actions.actions])
 	}
 

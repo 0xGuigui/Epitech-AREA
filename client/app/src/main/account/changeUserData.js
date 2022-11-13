@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import {Alert, BackHandler, Platform, StyleSheet, Text, View} from "react-native";
+import { useContext, useState } from "react";
+import {Alert, StyleSheet, Text, View} from "react-native";
 import {useNavigate, useParams} from "react-router-native";
-import {updateUser, logOut, refreshToken, resetPassword} from "../../services/server";
+import {updateUser, refreshToken} from "../../services/server";
 import { Appbar, Button, TextInput } from "react-native-paper";
 import {isEmail, showToast} from '../../utils'
 import { HistoryContext } from "../../historyContext";
@@ -65,7 +65,7 @@ export default function ChangeUserData({userInfo, setUserInfo}) {
 								[
 									{
 										text: "Cancel",
-										onPress: () => console.log("Cancel Pressed"),
+										onPress: () => {},
 										style: "cancel"
 									},
 									{ text: "OK", onPress: async () => {

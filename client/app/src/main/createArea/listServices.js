@@ -1,8 +1,8 @@
 import {View, StyleSheet, BackHandler} from "react-native";
 import {Appbar, Text} from "react-native-paper";
 import {useContext, useEffect, useState} from "react";
-import {checkService, getServices, refreshToken} from "../../services/server";
-import {useNavigate, useParams} from "react-router-native";
+import {getServices, refreshToken} from "../../services/server";
+import {useNavigate} from "react-router-native";
 import DataDisplayer from "../../dataDisplayer";
 import {HistoryContext} from "../../historyContext";
 import spotifyLogo from '../../assets/img/spotify_logo.png'
@@ -12,6 +12,7 @@ import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
 import * as React from "react";
 import { DarkTheme } from "../../../config";
+import {showToast} from "../../utils";
 const logos = {
     Discord: discordLogo,
     Spotify: spotifyLogo,
@@ -27,9 +28,9 @@ export default function ListServices() {
 
     const getServerActions = async () => {
         const refresh = await refreshToken()
-        refresh.status !== 200 && navigate('/login')
+        refresh.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
         const about = await getServices(refresh.token)
-        about.status !== 200 && navigate('/login')
+        about.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
         setActions(about.services)
     }
 

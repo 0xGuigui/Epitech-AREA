@@ -1,6 +1,5 @@
-import {Alert, StyleSheet, View, Text, ScrollView, KeyboardAvoidingView} from "react-native";
+import {Alert, StyleSheet, View, Text, ScrollView} from "react-native";
 import { Pressable } from "@react-native-material/core";
-import { deleteAction, refreshToken } from "../../services/server";
 import { Modal, TextInput } from "react-native-paper";
 import { useContext, useState } from "react";
 import { AreaContext } from "./areaContext";
@@ -12,26 +11,6 @@ export default function ({action, setAction, serviceName, serviceType}) {
 	const [data, setData] = useState({})
 	const navigate = useNavigate()
 	const numberOfFields = Object.keys(action.fields || {}).length
-
-	const handleDelete = async () => {
-		const token = await refreshToken()
-		token.status !== 200 && navigate('/login')
-		const res = await deleteAction(token.token, action.id)
-		res.status === 200 && setAction({})
-	}
-
-	const handleSave = () => {
-		setAction({...action, fields: data})
-		setArea({...area, action: {...action, fields: data}})
-	}
-
-	const handleCancel = () => {
-		setAction({})
-	}
-
-	const handleFieldChange = (key, value) => {
-		setData({...data, [key]: value})
-	}
 
 	return (
 		<Modal
