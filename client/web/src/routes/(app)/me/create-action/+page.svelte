@@ -2,6 +2,7 @@
     import {icons} from "$lib/utils/fontAwesome";
     import Fa from "svelte-fa";
     import ChooseServicePopup from "$lib/blocks/ChooseServicePopup.svelte";
+    import {areaFetch} from "$lib/utils/areaFetch";
 
     let canCreate = false;
     let processing = false;
@@ -19,9 +20,15 @@
         showPopup = !showPopup;
     }
 
-    function submitAction() {
-        if (!canCreate) return;
+    async function submitAction() {
+        if (!canCreate || actionContext.name.trim() === "") return;
         processing = true;
+
+        const response = await areaFetch("/me/actions", "POST", actionContext.data);
+        const data = await response.json();
+
+        console.log(data);
+        processing = false;
     }
 
     function handleServiceFilled(e) {
