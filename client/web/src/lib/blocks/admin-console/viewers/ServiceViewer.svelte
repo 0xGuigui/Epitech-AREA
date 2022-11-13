@@ -17,7 +17,7 @@
 <section class="w-full flex justify-between items-center">
     <div class="flex items-center">
         <div class="min-w-[35px]">
-            <Fa icon={icons["fa" + data.name] || icons.faPaperPlane} color="{data.colorPalette.mainColor || 'black'}" size="1.25x"/>
+            <Fa icon={data.name === "area" ? icons.faEnvelope : (icons["fa" + data.name] || icons.faPaperPlane)} color="{data.colorPalette.mainColor || 'black'}" size="1.25x"/>
         </div>
         <div class="font-light text-lg min-w-[100px]">
             {data.name}

@@ -13,6 +13,7 @@ let ActionSchema = new mongoose.Schema({
     data: Mixed,
     error: String,
     lastRun: Date,
+    webhookUrl: String,
     createdAt: { type: Date, default: Date.now },
 })
 

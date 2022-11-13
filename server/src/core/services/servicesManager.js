@@ -51,6 +51,12 @@ module.exports = class ServicesManager {
         return this.services.find(service => service.name === serviceName);
     }
 
+    checkServiceState(serviceName) {
+        let service = this.getService(serviceName);
+
+        return !!(service && service.active && !service.locked);
+    }
+
     getServiceAction(actionName) {
         let split = actionName.split('/');
         let service = this.getService(split[0]);
@@ -77,6 +83,12 @@ module.exports = class ServicesManager {
 
         if (!action || !reaction) {
             return { action: null, error: 'Invalid action or reaction' };
+        }
+        if (this.checkServiceState(payload.actionType.split('/')[0]) === false) {
+            return { action: null, error: 'Action service is not active' };
+        }
+        if (this.checkServiceState(payload.reactionType.split('/')[0]) === false) {
+            return { action: null, error: 'Reaction service is not active' };
         }
         if (action.validationSchema?.validate(payload).error || reaction.validationSchema?.validate(payload).error) {
             return { action: null, error: 'Invalid payload' };
