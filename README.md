@@ -4,15 +4,8 @@
 </p>
 
 <h3 align="center">AREA Project</h3>
-[![Status - Finished](https://img.shields.io/badge/Status-Finished-2ea44f?style=for-the-badge&logo=Cachet)](https://)
-[![FrontEnd - Svelte](https://img.shields.io/badge/FrontEnd-Svelte-FF3E00?style=for-the-badge&logo=Svelte)]()
-[![FrontMobile - React Native](https://img.shields.io/static/v1?label=FrontMobile&message=React+Native&color=%2361DAFB&style=for-the-badge&logo=React)]()
-[![Mobile App powered by - Expo](https://img.shields.io/static/v1?label=Mobile+App+powered+by&message=Expo&color=%23000020&style=for-the-badge&logo=Expo)]()
-[![BackEnd - Express](https://img.shields.io/static/v1?label=BackEnd&message=Express&color=%23F7DF1E&style=for-the-badge&logo=express)]()
-[![Made for - Epitech](https://img.shields.io/static/v1?label=Made+for&message=Epitech&color=%23004088&style=for-the-badge&logo=Epitech)]()
-[![Database - Mongo 4.4.6](https://img.shields.io/static/v1?label=Database&message=Mongo+4.4.6&color=%2347A248&style=for-the-badge&logo=MongoDB)]()
-[![Deployment - Docker](https://img.shields.io/static/v1?label=Deployment&message=Docker&color=%232496ED&style=for-the-badge&logo=Docker)]()
-[![Made with a little grain of salt](https://img.shields.io/static/v1?label=&message=Made+with+a+little+grain+of+salt&color=%23E71D29&style=for-the-badge&logo=Undertale)]()
+[![Foo - Bar](https://img.shields.io/badge/Foo-Bar-2ea44f?style=for-the-badge)](https://)
+
 <div align="center">
 
 
