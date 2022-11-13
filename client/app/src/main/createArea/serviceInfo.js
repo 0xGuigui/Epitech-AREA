@@ -57,7 +57,7 @@ const data = {
         headerLogo: LeagueLogo,
         logo: leagueLogo
     },
-    Area : {
+    AREA: {
         description: 'AREA is a project that allows you to connect all your services in one place. You can create actions that will be triggered when a specific event occurs. For example, you can create an action that will send a message to your Discord server when you receive a new email.',
         url: `${serverUrl}:8081`,
         backgroundColor: '#000000',

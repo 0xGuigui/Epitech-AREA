@@ -22,7 +22,7 @@ const logos = {
 	Reddit: redditLogo,
 	Steam: steamLogo,
 	League: leagueLogo,
-	Area: areaLogo
+	AREA: areaLogo
 }
 
 export default function DisplayServices() {

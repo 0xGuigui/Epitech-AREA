@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "app",
+    "name": "area",
     "slug": "app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/app_logo.png",
+    "icon": "./src/assets/logo/app_logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/logo.png",
+      "image": "./src/assets/logo/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -27,7 +27,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/app_logo.png",
+        "foregroundImage": "./src/assets/logo/app_logo.png",
         "backgroundColor": "#000000"
       },
       "package": "com.area"
