@@ -34,7 +34,7 @@
         {:else}
             <div data-aos="fade-down" data-aos-duration="700">
                 <div class="bg-transparent hover:scale-110 select-none cursor-pointer transition-all duration-150"
-                     on:click={() => goto(`/me/create-actions`)}>
+                     on:click={() => goto(`/me/create-action`)}>
                     <Fa icon={icons.faPlus} size="5x" primaryColor="#262729"/>
                 </div>
             </div>

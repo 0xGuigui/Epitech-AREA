@@ -40,7 +40,7 @@
                         <h1 class="text-6xl text-white font-bold">{service.name}</h1>
                         <p class="my-7 max-w-[600px] text-xl text-center text-white font-semibold">{service.description}</p>
                         <button class="mb-72 my-7 py-3 px-5 flex block justify-center items-center bg-white text-2xl text-area-header font-bold rounded-full hover:bg-gray-300 hover:scale-110 transition-all duration-150 select-none cursor-pointer shadow-md" type="submit"
-                                on:click={() => goto(`/me/actions`)}>Create {service.name} action</button>
+                                on:click={() => goto(`/me/create-action`)}>Create {service.name} action</button>
                     </div>
                 </div>
                 <div class="flex flex-col justify-center items-center bg-white w-full">
