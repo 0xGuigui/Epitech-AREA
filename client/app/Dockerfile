@@ -41,5 +41,5 @@ RUN npm install -g eas-cli
 COPY . .
 RUN git init
 #RUN eas build:configure
-CMD ["eas", "build", "--profile", "development", "--platform", "android"]
+CMD ["eas", "build", "--profile", "production", "--platform", "android"]
 #CMD ["sh"]
