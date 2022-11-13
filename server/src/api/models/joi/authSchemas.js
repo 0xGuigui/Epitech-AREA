@@ -32,3 +32,8 @@ module.exports.oauthSchema = joi.object({
 module.exports.updateServiceStateSchema = joi.object({
     state: joi.bool().required(),
 }).unknown(true);
+
+module.exports.loginDiscordSchema = joi.object({
+    code: joi.string().required(),
+    redirect_uri: joi.string().required()
+})
