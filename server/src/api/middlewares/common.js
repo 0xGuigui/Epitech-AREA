@@ -2,6 +2,8 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
+const path = require('path')
+const express = require('express')
 
 module.exports = (area) => {
     area.app.use((req, res, next) => {

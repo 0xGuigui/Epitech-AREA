@@ -16,13 +16,6 @@
 </section>
 
 <style>
-    .area-letter {
-        background: linear-gradient(to right top, #3a529e, #47529b, #515399, #5a5496, #615593, #715294, #814f93, #914a8f, #b03b83, #c9286c, #da194e, #e02527);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
     .dynamic-size {
         width: calc(100% + 6px);
         height: calc(100% + 6px);
