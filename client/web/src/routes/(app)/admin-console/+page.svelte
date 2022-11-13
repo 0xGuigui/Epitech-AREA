@@ -4,6 +4,7 @@
 	import Users from "../../../lib/blocks/admin-console/Users.svelte";
 	import Services from "../../../lib/blocks/admin-console/Services.svelte";
 	import {loggedIn} from "../../../store";
+	import {goto} from "$app/navigation";
 
 	export let data: object;
 
@@ -32,8 +33,8 @@
 		<!-- Dynamic component -->
 		<svelte:component data={data} this={components[selectedComponent]} />
 	{:else}
-		<div class="w-full h-screen flex justify-center items-center">
-			test
+		<div class="cursor-pointer text-3xl w-full h-screen flex justify-center items-center" on:click={async () => await goto("/login")}>
+			<div>you must be <span class="text-ui-blue font-bold mx-2 pb-1 hover:border-b-4 hover:border-ui-blue transition-all duration-150"> logged in </span> to see this</div>
 		</div>
 	{/if}
 </section>
