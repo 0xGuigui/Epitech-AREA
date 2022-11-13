@@ -28,8 +28,8 @@
         }
     };
     let dropDownActions = {
-        "Profil": () => {
-            console.log("profile");
+        "Profile": () => {
+            goto("/me");
         },
         "My actions": () => {
             goto(`/me/actions`);
