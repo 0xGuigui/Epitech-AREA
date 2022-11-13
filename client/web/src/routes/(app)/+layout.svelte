@@ -3,10 +3,16 @@
     import Footer from "$lib/blocks/Footer.svelte";
 
     export let data;
+
+    let admin = data.user?.admin;
+
+    $: if (admin) {
+    	admin = data.user?.admin;
+    }
 </script>
 
-<div class="area-fade2 max-w-screen overflow-x-hidden">
-    <Header light={true} admin={data.user?.admin || false} />
+<Header light={true} {admin} />
+<div class="area-fade2 min-w-screen min-h-screen overflow-x-hidden pt-16">
     <slot/>
-    <Footer />
 </div>
+<Footer />
