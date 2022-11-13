@@ -57,7 +57,7 @@ const data = {
         headerLogo: LeagueLogo,
         logo: leagueLogo
     },
-    area : {
+    Area : {
         description: 'AREA is a project that allows you to connect all your services in one place. You can create actions that will be triggered when a specific event occurs. For example, you can create an action that will send a message to your Discord server when you receive a new email.',
         url: `${serverUrl}:8081`,
         backgroundColor: '#000000',
@@ -94,6 +94,7 @@ export default function ServiceInfo() {
             BackHandler.removeEventListener("hardwareBackPress", backAction);
     }, [history])
 
+    console.log(service)
     return (
         <>
             <View style={{backgroundColor: data[service].backgroundColor}}>

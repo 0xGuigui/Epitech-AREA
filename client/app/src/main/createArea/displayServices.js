@@ -12,6 +12,7 @@ import discordLogo from '../../assets/img/discord_logo.png'
 import redditLogo from '../../assets/img/reddit_logo.png'
 import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
+import areaLogo from '../../assets/logo/logo.png'
 import * as React from "react";
 import {showToast} from "../../utils";
 
@@ -20,7 +21,8 @@ const logos = {
 	Spotify: spotifyLogo,
 	Reddit: redditLogo,
 	Steam: steamLogo,
-	League: leagueLogo
+	League: leagueLogo,
+	Area: areaLogo
 }
 
 export default function DisplayServices() {
