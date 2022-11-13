@@ -25,6 +25,10 @@ let userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    oauth: {
+        type: String,
+        default: null
+    },
     data: Mixed
 });
 
