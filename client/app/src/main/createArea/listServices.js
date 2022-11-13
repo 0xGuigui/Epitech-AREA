@@ -60,7 +60,7 @@ export default function ListServices() {
                 {actions.map((e, i) =>
                     <>
                         <DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} icon={logos[e.name]} colorBackground={e.colorPalette.secondaryColor} onPress={async () => {
-                            navigate(`/${e.name}`)
+                            navigate('/info/' + e.name)
                         }} />
                     </>
                 )}
