@@ -23,21 +23,24 @@
     {#await userActions}
         <p></p>
     {:then userActions}
-        {#if userActions.actions.length > 0}
-            {#each userActions.actions as action}
-                <div data-aos="fade-down" data-aos-duration="700">
-                    <div class="bg-transparent hover:scale-110 select-none cursor-pointer transition-all duration-150">
-                        <Fa icon={icons.faPlus} size="5x" primaryColor="#262729"/>
+        <div class="w-full flex flex-wrap justify-center items-center">
+            {#if userActions.actions.length > 0}
+                {#each userActions.actions as action}
+                    <div data-aos="fade-right" data-aos-duration="700">
+                        <div
+                                class="mx-5 flex my-5 w-[300px] h-[200px] font-bold text-white text-2xl shadow-2xl justify-center items-center rounded-2xl select-none cursor-pointer hover:scale-110 transition-all duration-300 text-center backdrop-blur-sm bg-white/30"
+                        >
+                            {action.name}
+                        </div>
                     </div>
-                </div>
-            {/each}
-        {:else}
-            <div data-aos="fade-down" data-aos-duration="700">
-                <div class="bg-transparent hover:scale-110 select-none cursor-pointer transition-all duration-150"
+                {/each}
+            {/if}
+            <div data-aos="fade-left" data-aos-duration="700">
+                <div class="mx-5 bg-transparent hover:scale-110 select-none cursor-pointer transition-all duration-150"
                      on:click={() => goto(`/me/create-action`)}>
                     <Fa icon={icons.faPlus} size="5x" primaryColor="#262729"/>
                 </div>
             </div>
-        {/if}
+        </div>
     {/await}
 </section>
