@@ -44,7 +44,7 @@
                 class="text-2xl text-area-header cursor-pointer hover:scale-125 transition-all duration-150"
                 size="2.5x"/>
         </div>
-        <div class="select-none font-bold text-3xl mt-10 text-area-header w-full text-center">Create a new {kind}:</div>
+        <div class="select-none font-bold text-3xl mt-10 text-white w-full text-center">Create a new {kind}:</div>
         <div class="w-full mt-10">
             {#await servicesPromise}
                 <div></div>

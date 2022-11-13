@@ -1,3 +1,5 @@
+const {formatService} = require("../../utils/services");
+
 module.exports = (area) => {
     area.app.get('/about.json', (req, res) => {
         res.json({
@@ -6,7 +8,7 @@ module.exports = (area) => {
             },
             server: {
                 current_time: Date.now(),
-                services: area.servicesManager.getServicesData()
+                services: area.servicesManager.getServices().map(formatService)
             }
         })
     })
