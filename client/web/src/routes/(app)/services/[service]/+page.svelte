@@ -61,6 +61,9 @@
                             <div style="background-color: {service.colorPalette.secondaryColor};"
                                  class="mx-5 flex my-5 w-[300px] h-[200px] font-bold text-white text-2xl shadow-2xl justify-center items-center rounded-2xl select-none cursor-pointer hover:scale-110 transition-all duration-300">
                                 {reaction}
+                                <div    on:click={() => {service.name.actions.description}}
+                                        class="">
+                                </div>
                             </div>
                         {/each}
                     </div>
