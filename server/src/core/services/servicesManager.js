@@ -141,7 +141,8 @@ module.exports = class ServicesManager {
             reactions: service.reactions.map(reaction => ({
                 name: reaction.name,
                 description: reaction.description
-            }))
+            })),
+            colorPalette: service.colorPalette
         }))
     }
 }
