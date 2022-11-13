@@ -16,7 +16,7 @@
 <a href="https://www.epitech.eu/"><img src="https://img.shields.io/static/v1?label=Subject+by&message=Epitech&color=006bb2&style=for-the-badge" alt="Subject by - Epitech"></a>
 <a href="https://www.docker.com/"><img src="https://img.shields.io/static/v1?label=Deployment&message=Docker&color=%232496ED&style=for-the-badge&logo=Docker" alt="Deployment - Docker"></a>
 </br></br>
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://img.shields.io/static/v1?label=&message=Made+by+us+with+a+little+grain+of+salt&color=%23E71D29&style=for-the-badge&logo=Undertale" alt="Made by us with a little grain of salt"></a>
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://img.shields.io/static/v1?label=&message=Made+with+a+little+grain+of+salt&color=%23E71D29&style=for-the-badge&logo=Undertale" alt="Made by us with a little grain of salt"></a>
 </div>
 
 ---
