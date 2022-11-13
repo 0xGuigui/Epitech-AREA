@@ -3,13 +3,15 @@
     import Fa from "svelte-fa";
     import ChooseServicePopup from "$lib/blocks/ChooseServicePopup.svelte";
     import {areaFetch} from "$lib/utils/areaFetch";
+    import {fly} from "svelte/transition";
 
     let canCreate = false;
     let processing = false;
+    let name = "new action";
     let actionContext = {
-        name: "new action",
         data: {}
     };
+    let submitted = false;
     let kind = "action";
     let showPopup = false;
 
@@ -21,14 +23,14 @@
     }
 
     async function submitAction() {
-        if (!canCreate || actionContext.name.trim() === "") return;
+        if (!canCreate || name.trim() === "") return;
         processing = true;
+        actionContext.data.name = name;
 
         const response = await areaFetch("/me/actions", "POST", actionContext.data);
         const data = await response.json();
-
-        console.log(data);
         processing = false;
+        submitted = true;
     }
 
     function handleServiceFilled(e) {
@@ -56,10 +58,15 @@
                     on:message={handleServiceFilled}
                     {kind}
             />
+        {:else if submitted}
+            <div in:fly={{duration: 150}} class=" h-full w-full flex flex-col justify-center items-center">
+                <div class="font-bold text-6xl">Action successfully created !</div>
+                <div class="text-xl mt-16 w-56 h-16 flex justify-center items-center area-fade2 text-white rounded-xl font-bold transition-all duration-150 hover:scale-110"><a href="/me/actions">Check my actions !</a></div>
+            </div>
         {:else}
             <div>
                 <div class="font-bold text-3xl mt-10 w-full text-center text-white">Create a new action:</div>
-                <div class="px-10 w-full mt-5"><input bind:value={actionContext.name}/></div>
+                <div class="px-10 w-full mt-5"><input bind:value={name}/></div>
                 <div class="mt-12 flex justify-around items-center px-10">
                     <div on:click={() => {kind = "action"; updatePopup()}}
                          class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl cursor-pointer transition-all duration-150 {processing ? 'opacity-50' : 'hover:scale-105'} overflow-hidden">

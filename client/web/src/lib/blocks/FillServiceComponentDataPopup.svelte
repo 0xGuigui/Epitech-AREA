@@ -42,7 +42,7 @@
     }
 </script>
 
-<section class="overflow-scroll">
+<section class="overflow-y-scroll w-full h-full">
     <div on:click={() => dispatch("close")} class="absolute top-3.5 left-5">
         <Fa icon={icons.faArrowLeft}
             class="text-2xl text-area-header cursor-pointer hover:scale-125 transition-all duration-150"
@@ -60,7 +60,7 @@
             Choose {kind}
         {/if}
     </div>
-    <div class="w-full mt-16 mx-14">
+    <div class="mt-16 mx-14">
         <span class="font-bold text-3xl text-white">Description: <span
                 class="text-2xl font-semibold">{component.description}</span></span>
     </div>
@@ -79,7 +79,7 @@
             </div>
         </div>
     {:else}
-        <div class="w-full h-full flex justify-center items-center w-full h-[400px]">
+        <div class="mx-auto h-full flex justify-center items-center h-[400px]">
             <span class="font-bold text-white text-4xl">No data to enter, you're good to go !</span>
         </div>
     {/if}
