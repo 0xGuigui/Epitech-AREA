@@ -11,7 +11,7 @@ module.exports = class MailSender {
     failedEmails = {}
 
     constructor() {
-        let templatesDir = path.join(__dirname, '../../mailTemplates');
+        let templatesDir = path.join(__dirname, '../../mailTemplates/bin');
 
         fs.readdirSync(templatesDir).forEach(file => {
             if (file.endsWith('.html')) {

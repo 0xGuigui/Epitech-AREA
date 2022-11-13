@@ -105,7 +105,6 @@ class AREA {
             upsert: true, setDefaultsOnInsert: true
         }).exec()
         logger.debug("Admin user created, check your .env for credentials")
-
         return this.app.listen(process.env.PORT || process.env.AREA_SERVER_PORT, callback)
     }
 }
