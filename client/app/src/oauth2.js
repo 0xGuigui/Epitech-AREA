@@ -10,7 +10,8 @@ import redditLogo from './assets/img/reddit_logo.png'
 import steamLogo from './assets/img/steam_logo.png'
 import leagueLogo from './assets/img/League.png'
 import {HistoryContext} from "./historyContext";
-import {checkService, refreshToken, registerService} from "./services/server";
+import {checkService, getMe, loginDiscord, refreshToken, registerService} from "./services/server";
+import {LoginContext} from "./loginContext";
 
 const logos = {
 	Discord: discordLogo,
@@ -22,17 +23,28 @@ const logos = {
 }
 
 export default function Oauth2({userInfo, setUserInfo}) {
-	const location = useLocation()
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams();
 	const history = useContext(HistoryContext)
 	const navigate = useNavigate()
+	const {oauth2, setOauth2} = useContext(LoginContext)
 
 	const registerCode = async () => {
-		const token = await refreshToken()
-		token.status !== 200 && navigate('/login')
-		const res = await registerService(token.token, params.service, searchParams.get('code'))
-		console.log(res)
+		if (oauth2) {
+			setOauth2(false)
+			const token = await loginDiscord(searchParams.get('code'))
+			if (token.status !== 200) {
+				alert(token.message)
+				return navigate('/login')
+			}
+			const me = await getMe(token.token)
+			setUserInfo(me.user)
+			navigate('/')
+		} else {
+			const token = await refreshToken()
+			token.status !== 200 && navigate('/login')
+			const res = await registerService(token.token, params.service, searchParams.get('code'))
+		}
 	}
 
 	useEffect(() => {

@@ -79,10 +79,6 @@ async function getMe(token) {
 
 async function getActions(token, page = 1) {
 	const {serverUrl} = require("../../config");
-	console.log(serverUrl)
-	console.log(serverUrl)
-	console.log(serverUrl)
-	console.log(serverUrl)
 	const response = await fetch(`${serverUrl}/me/actions?page=${page}`, {
 		headers: {
 			'Authorization': `Bearer ${token}`
@@ -301,6 +297,25 @@ async function unregisterService(token, serviceName) {
 	}
 }
 
+async function loginDiscord(code) {
+	const {serverUrl, Oauth2} = require("../../config");
+	const response = await fetch(`${serverUrl}/login/Discord`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			code,
+			redirect_uri: Oauth2.Discord.redirect_uri
+		})
+	})
+	const json = await response.json()
+	return {
+		status: response.status,
+		...json
+	}
+}
+
 module.exports = {
 	logUser,
 	registerUser,
@@ -319,5 +334,6 @@ module.exports = {
 	getReactionByName,
 	registerArea,
 	getServiceByName,
-	unregisterService
+	unregisterService,
+	loginDiscord
 }

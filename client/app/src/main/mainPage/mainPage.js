@@ -24,6 +24,7 @@ export default function mainPage({userInfo}) {
 
 	const getUserActions = async () => {
 		const token = await refreshToken()
+		console.log(token)
 		token.status !== 200 && navigate('/login')
 		const actions = await getActions(token.token)
 		actions.status !== 200 && navigate('/login')

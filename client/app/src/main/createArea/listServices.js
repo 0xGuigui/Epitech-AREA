@@ -22,10 +22,8 @@ const logos = {
 
 export default function ListServices() {
     const [actions, setActions] = useState([])
-    const {serviceType} = useParams()
     const navigate = useNavigate()
     const history = useContext(HistoryContext)
-    const LeagueColor = '#044454'
 
     const getServerActions = async () => {
         const refresh = await refreshToken()
@@ -53,9 +51,8 @@ export default function ListServices() {
         <>
             <Appbar.Header theme={DarkTheme}>
                 <Appbar.Action icon="arrow-left-thick" color={'white'} onPress={() => { navigate('/account') }} />
-                <Appbar.Content title="Available services" titleStyle={{ color: 'white' }} />
             </Appbar.Header>
-            <Text style={{fontSize: 40, color: 'white', textAlign: 'center', paddingBottom: 30}}>Choose a service</Text>
+            <Text style={{fontSize: 40, color: 'white', textAlign: 'center', paddingBottom: 30}}>Available services</Text>
             <View style={styles.actionsContainer}>
                 {actions.map((e, i) =>
                     <>
