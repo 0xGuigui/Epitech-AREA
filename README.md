@@ -4,7 +4,7 @@
 </p>
 
 <h3 align="center">AREA Project</h3>
-[![Foo - Bar](https://img.shields.io/badge/Foo-Bar-2ea44f?style=for-the-badge)](https://)
+[![Foo - Bar](https://img.shields.io/badge/Foo-Bar-2ea44f?style=for-the-badge)]
 
 <div align="center">
 
