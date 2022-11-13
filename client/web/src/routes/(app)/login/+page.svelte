@@ -54,7 +54,7 @@
                 if (browser) {
                     localStorage.setItem("refreshToken", response.refreshToken);
                 }
-                await goto($page.url.searchParams.get("redirect-url") || "/");
+                window.location.href = $page.url.searchParams.get("redirect-url") || "/";
             }
         }
     });
