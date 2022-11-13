@@ -57,7 +57,7 @@ export default function Index() {
 		<HistoryProvider>
 			<View style={styles.app}>
 				<Routes>
-					<Route path="/info/:services" element={<ServiceInfo />} />
+					<Route path="/info/:service" element={<ServiceInfo />} />
 					<Route path='/login' element={<Login setUserInfo={setUserInfo} />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/forgot' element={<Forgot />} />
