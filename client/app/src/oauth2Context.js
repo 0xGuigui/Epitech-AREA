@@ -1,5 +1,4 @@
 import {createContext, useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-native";
 
 export const Oauth2Context = createContext()
 

@@ -1,7 +1,6 @@
-import {View, StyleSheet, BackHandler, Image, ScrollView} from "react-native";
+import {View, StyleSheet, BackHandler, Image, ScrollView, Linking} from "react-native";
 import {Appbar, Text, Button} from "react-native-paper";
 import {useContext, useEffect, useState} from "react";
-import {checkService, getServices, refreshToken} from "../../services/server";
 import {useNavigate, useParams} from "react-router-native";
 import {HistoryContext} from "../../historyContext";
 import spotifyLogo from '../../assets/img/spotify_logo.png'
@@ -41,6 +40,14 @@ const backgrounds = {
     League: '#044454'
 }
 
+const url = {
+    Discord: 'https://discord.com/',
+    Spotify: 'https://www.spotify.com/',
+    Reddit: 'https://www.reddit.com/',
+    Steam: 'https://store.steampowered.com/',
+    League: 'https://euw.leagueoflegends.com/'
+}
+
 const text = {
     Discord: 'Discord is a proprietary freeware VoIP application and digital distribution platform designed for video gaming communities, that specializes in text, image, video and audio communication between users in a chat channel. Discord runs on Windows, macOS, Android, iOS, Linux, and in web browsers.\n\nWhether you’re part of a school club, gaming group, worldwide art community, or just a handful of friends that want to spend time together, Discord makes it easy to talk every day and hang out more often.',
     Spotify: 'Spotify is a digital music, podcast, and video streaming service that gives you access to millions of songs and other content from artists all over the world. With Spotify, you can listen to millions of songs and podcasts for free. Listen to the songs and podcasts you love and find music from all over the world.\n\nSpotify is all the music you’ll ever need.',
@@ -76,12 +83,12 @@ export default function ServiceInfo() {
                 <Image source={headers[service]} style={{width: 200, height: 18, paddingTop: 30, paddingBottom: 30, marginTop: 25, marginBottom: 25, resizeMode: 'contain', alignSelf: 'center'}}/>
                 <ScrollView>
                     <Text style={{backgroundColor: backgrounds[service], color: 'white', textAlign: 'center', justifyContent: 'center', fontSize: 20, marginBottom: 20, marginLeft: 20, marginRight: 20}}>{text[service]}</Text>
-                    {actions.map((e, i) =>
+                    {/*{actions.map((e, i) =>*/}
                             <Button
                                 buttonColor={'white'}
                                 textColor={'black'}
                                 mode="contained"
-                                key={i}
+                                // key={i}
                                 theme={{
                                     roundness: 100,
                                 }}
@@ -92,7 +99,8 @@ export default function ServiceInfo() {
                             >
                                 Connect to {service}
                             </Button>
-                    )}
+                    {/*)}*/}
+                    <Text style={{backgroundColor: backgrounds[service], color: 'white', textAlign: 'center', justifyContent: 'center', fontSize: 15, marginBottom: 20, marginLeft: 20, marginRight: 20, marginTop: 20, fontStyle: 'italic', textDecorationLine: 'underline'}} onPress={() => { Linking.openURL(url[service]) }}>{url[service]}</Text>
                     <Text style={{backgroundColor: backgrounds[service], color: 'white', textAlign: 'center', fontSize: 20, marginBottom: 20, padding: 150}}></Text>
                 </ScrollView>
             </View>
