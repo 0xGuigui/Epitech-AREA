@@ -26,7 +26,7 @@
     }
 </script>
 
-<section class="h-[100vh] w-[100vw]">
+<section>
     {#await user}
         <div class="flex my-5 mx-5 text-white font-bold text-2xl">Welcome to AREA !</div>
         {:then user}

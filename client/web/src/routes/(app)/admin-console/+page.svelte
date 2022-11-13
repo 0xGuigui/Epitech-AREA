@@ -16,7 +16,7 @@
 	let selectedComponent = "Actions";
 </script>
 
-<section class="w-screen min-h-screen flex flex-col">
+<section class="w-full h-full flex flex-col">
 	{#if $loggedIn && data.user?.admin}
 		<!-- Navigation Menu -->
 		<div class="w-full flex justify-center items-center drop-shadow-sm shadow shadow-gray-300 border-b border-gray-300">

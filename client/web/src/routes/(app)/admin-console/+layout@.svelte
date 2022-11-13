@@ -3,8 +3,8 @@
     import Footer from "$lib/blocks/Footer.svelte";
 </script>
 
-<div class="bg-white max-w-screen overflow-x-hidden">
-    <Header light={false}/>
+<Header light={false}/>
+<div class="bg-white min-w-screen min-h-screen bg-white overflow-x-hidden pt-16">
     <slot/>
-    <Footer/>
 </div>
+<Footer/>
