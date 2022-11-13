@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {icons} from "$lib/utils/fontAwesome.js";
+    import {icons} from "$lib/utils/fontAwesome";
     import {createEventDispatcher} from "svelte";
     import Fa from "svelte-fa";
 
@@ -9,23 +9,37 @@
 
     const dispatch = createEventDispatcher();
     let processing = false;
-    let canCreate = true;
+    let canCreate = !component.fields;
     let data = {};
-    let inputArray = [];
+    let inputArray = Array(component.fields ? component.fields.length : 0);
 
     function submitData() {
-        if (canCreate) {
-            data[kind + "Type"] = service.name + "/" + component.name
-            processing = true;
-            dispatch("message", {
-                component,
-                service,
-                data,
-            })
+        let error = inputArray.some((input) => {
+            return !input || input.value === "";
+        });
+        if (error) {
+            canCreate = false;
+            return;
         }
+        processing = true;
+        data[kind + "Type"] = service.name + "/" + component.name
+        let k: keyof typeof component.fields;
+        let i = 0;
+        for (k in component.fields) {
+            data[k] = inputArray[i];
+            i++;
+        }
+        dispatch("message", {
+            component,
+            service,
+            data,
+        })
+        processing = false;
     }
 
-    console.log(component)
+    function unErrorInputs(e) {
+        canCreate = e.target.value !== "";
+    }
 </script>
 
 <section class="overflow-scroll">
@@ -34,7 +48,8 @@
             class="text-2xl text-area-header cursor-pointer hover:scale-125 transition-all duration-150"
             size="2.5x"/>
     </div>
-    <div class="select-none font-bold text-3xl mt-10 text-white w-full text-center">{service.name} - {component.name}</div>
+    <div class="select-none font-bold text-3xl mt-10 text-white w-full text-center">{service.name}
+        - {component.name}</div>
     <div on:click={submitData}
          class="{processing || !canCreate ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 cursor-pointer'} select-none text-white font-bold text-2xl flex justify-center items-center absolute bottom-3.5 right-5 w-64 h-14 bg-[#695690] rounded-lg transition-all duration-150">
         {#if processing}
@@ -46,16 +61,20 @@
         {/if}
     </div>
     <div class="w-full mt-16 mx-14">
-        <span class="font-bold text-3xl text-white">Description: <span class="text-2xl font-semibold">{component.description}</span></span>
+        <span class="font-bold text-3xl text-white">Description: <span
+                class="text-2xl font-semibold">{component.description}</span></span>
     </div>
     {#if component.fields}
         <div class="mx-14">
             <div class="mt-10 text-white font-bold text-3xl">
                 Data:
             </div>
-            <div class="flex flex-wrap items-start">
-                {#each Object.entries(component.fields) as [key, value]}
-                    {key} - {value}
+            <div class="flex flex-wrap items-start pt-10">
+                {#each Object.entries(component.fields) as [key, value], idx}
+                    <div class="flex flex-col">
+                        <span class="text-white font-bold text-2xl area-letter">{key}</span>
+                        <input bind:value={inputArray[idx]} on:input={unErrorInputs}/>
+                    </div>
                 {/each}
             </div>
         </div>
