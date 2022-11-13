@@ -42,7 +42,7 @@ module.exports = (area, servicesManager) => {
 		urlSite: 'https://store.steampowered.com/'
 	})
 
-	const newGameNewsAction = new Action('newGameNews', 'when a game gets a news')
+	const newGameNewsAction = new Action('Update on game news', 'Triggers when a game recieves news')
 		.on('create', async ctx => {
 			const game = await getGameByName(ctx.payload["Game name"])
 			const news = await getGameNews(game.appid)
@@ -56,7 +56,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newAchievementAction = new Action('newAchievement', 'new achievement on a game')
+	const newAchievementAction = new Action('New achievement', 'Triggers when you get a new achievement on a game')
 		.on('create', async ctx => {
 			const game = await getGameByName(ctx.payload["Game name"])
 			const steamId = await getId(ctx.payload["Profile url"])
@@ -72,7 +72,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newOwnedGameAction = new Action('newOwnedGame', 'new owned game')
+	const newOwnedGameAction = new Action('New owned game', 'Triggers when you own a new game')
 		.on('create', async ctx => {
 			const steamId = await getId(ctx.payload["Profile url"])
 			const ownedGames = await getOwnedGames(steamId)

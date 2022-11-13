@@ -9,7 +9,7 @@ module.exports = (area, servicesManager) => {
         urlSite: 'http://92.148.23.72:8080/',
     })
 
-    let freeWebhookAction = new Action('freeWebhook', 'get a webhook link that can be triggered anywhere by any of your custom applications', true)
+    let freeWebhookAction = new Action('free webhook', 'get a webhook link that can be triggered anywhere by any of your custom applications', true)
         .on('create', async (ctx) => {
             createActionWebhook(area, ctx)
             await ctx.next()
@@ -18,7 +18,7 @@ module.exports = (area, servicesManager) => {
             await ctx.next()
         })
 
-    let sendEmail = new Reaction('sendEmail', 'send an email to a specific address')
+    let sendEmail = new Reaction('send email', 'send an email to a specific address')
         .on('create', async (ctx) => {
             ctx.setActionData('email', ctx.payload.email)
             ctx.setActionData('subject', ctx.payload.subject)

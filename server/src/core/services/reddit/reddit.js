@@ -123,7 +123,7 @@ module.exports = (area, servicesManager) => {
 
 	redditService.setCheckToken(async token => await getAccessToken(token))
 
-	const avatarChangeAction = new Action('avatarChange', 'when you change your avatar')
+	const avatarChangeAction = new Action('Avatar changed', 'Triggers when you change your avatar')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
 			const me = await getMe(accessTokenData.access_token)
@@ -139,7 +139,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newUpvoteAction = new Action('newUpvote', 'new upvoted message by you')
+	const newUpvoteAction = new Action('New upvoted message', 'Triggers when you upvote a message')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
 			const upvotedListData = await getUpvoted(accessTokenData.access_token)
@@ -156,7 +156,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newDownvoteAction = new Action('newDownvote', 'new downvoted message by you')
+	const newDownvoteAction = new Action('New downvoted message', 'Triggers when you downvote a message')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
 			const downvotedListData = await getDownvoted(accessTokenData.access_token)
@@ -172,7 +172,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newSavedAction = new Action('newSaved', 'new saved message by you')
+	const newSavedAction = new Action('New saved message', 'Triggers when you save a message')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
 			const savedListData = await getSaved(accessTokenData.access_token)
@@ -188,7 +188,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newCommentAction = new Action('newComment', 'new comment by you')
+	const newCommentAction = new Action('New comment', 'Triggers when you write a comment')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
 			const commentListData = await getComments(accessTokenData.access_token)
@@ -204,7 +204,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newPostAction = new Action('newPost', 'new post by you')
+	const newPostAction = new Action('New post', 'Triggers when you write a post')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), redditService.name))
 			const postListData = await getPosts(accessTokenData.access_token)

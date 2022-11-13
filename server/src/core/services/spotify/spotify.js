@@ -124,7 +124,7 @@ module.exports = (area, servicesManager) => {
 	const spotifyService = new Service('Spotify', "Spotify is a digital music service that gives you access to millions of songs. Applets can help you save your Discover Weekly and Release Radar playlists, share your favorite tunes, and much more.", {
 		mainColor: '#2ebd59',
 		secondaryColor: '#000000',
-		urlSite: 'https://www.spotify.com/fr/'
+		urlSite: 'https://www.spotify.com/'
 	})
 
 	spotifyService.setAuthentification(async (code, redirect_uri) => {
@@ -134,7 +134,7 @@ module.exports = (area, servicesManager) => {
 
 	spotifyService.setCheckToken(async token => await getAccessToken(token))
 
-	const playlistChangeAction = new Action('onPlaylistChange', 'catch playlist changes', false)
+	const playlistChangeAction = new Action('Playlist changed', 'Triggers when a given playlist has a song added / removed', false)
 		.on('create', async ctx => {
 			const access_token = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), spotifyService.name))
 			const playlist = (await getMyPlaylists(access_token.access_token))
@@ -155,19 +155,19 @@ module.exports = (area, servicesManager) => {
 			}
 		})
 
-	const pauseMusicReaction = new Reaction('pauseMusic', 'pause your music when your action is triggered')
+	const pauseMusicReaction = new Reaction('Pause music', 'Pause your music when triggered')
 		.on('create', async (ctx) => await ctx.next())
 		.on('trigger', (ctx) => pauseMusic(ctx, spotifyService))
-	const playOrResumeReaction = new Reaction('playOrResume', 'play or resume your music when your action is triggered')
+	const playOrResumeReaction = new Reaction('Play or resume', 'Play or resume your music when triggered')
 		.on('create', async (ctx) => await ctx.next())
 		.on('trigger', (ctx) => resumeOrPlayMusic(ctx, spotifyService))
-	const nextMusicReaction = new Reaction('nextMusic', 'skip your current music when your action is triggered')
+	const nextMusicReaction = new Reaction('Next music', 'Skip your current music when triggered')
 		.on('create', async (ctx) => await ctx.next())
 		.on('trigger', (ctx) => nextMusic(ctx, spotifyService))
-	const previousMusicReaction = new Reaction('previousMusic', 'go to previous music when your action is triggered')
+	const previousMusicReaction = new Reaction('Previous music', 'Go to previous music when triggered')
 		.on('create', async (ctx) => await ctx.next())
 		.on('trigger', (ctx) => previousMusic(ctx, spotifyService))
-	const loopMusicReaction = new Reaction('loopMusic', 'loop your current music when your action is triggered')
+	const loopMusicReaction = new Reaction('Loop music', 'Loop your current music when triggered')
 		.on('create', async (ctx) => await ctx.next())
 		.on('trigger', (ctx) => loopMusic(ctx, spotifyService))
 
