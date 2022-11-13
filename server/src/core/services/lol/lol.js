@@ -78,7 +78,7 @@ module.exports = (area, servicesManager) => {
 		urlSite: 'https://euw.leagueoflegends.com/fr-fr/'
 	})
 
-	const levelUpAction = new Action('levelUp', 'when you level up in game')
+	const levelUpAction = new Action('Summoner level increase', 'Triggers when the summoner level increase')
 		.on('create', async ctx => {
 			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			ctx.setActionData('lol_puuid', playerData.puuid)
@@ -92,7 +92,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const nameChangeAction = new Action('nameChange', 'when you change your name')
+	const nameChangeAction = new Action('Change summoner name', 'Triggers when your summoner name change')
 		.on('create', async ctx => {
 			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			ctx.setActionData('lol_puuid', playerData.puuid)
@@ -106,7 +106,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newGameAction = new Action('newGame', 'when you finish a new game')
+	const newGameAction = new Action('Finished game', 'Triggers when you finish a game')
 		.on('create', async (ctx) => {
 			const playerData = await getAccountInfoByName(ctx.payload["Summoner name"])
 			const lastMatch = await getLastMatch(playerData.puuid)
@@ -121,7 +121,7 @@ module.exports = (area, servicesManager) => {
 				await ctx.next()
 			}
 		})
-	const newRotationAction = new Action('newRotation', 'when new champions are available')
+	const newRotationAction = new Action('New rotation of champions', 'Triggers when the rotation of champions change')
 		.on('create', async ctx => {
 			const rotationData = await getRotation()
 			let rotation = ""

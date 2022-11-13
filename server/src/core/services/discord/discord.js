@@ -103,7 +103,7 @@ module.exports = (area, servicesManager) => {
 		return accessTokenData
 	})
 
-	const avatarChangeAction = new Action('avatarChange', 'when you change your avatar')
+	const avatarChangeAction = new Action('Change your Discord avatar', 'Triggers when you change your avatar')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const me = await getMe(accessTokenData.access_token)
@@ -121,7 +121,7 @@ module.exports = (area, servicesManager) => {
 			}
 			await ctx.end()
 		})
-	const usernameChangeAction = new Action('usernameChange', 'when you change your username')
+	const usernameChangeAction = new Action('Change your Discord username', 'Triggers when you change your username')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const me = await getMe(accessTokenData.access_token)
@@ -139,7 +139,7 @@ module.exports = (area, servicesManager) => {
 			}
 			await ctx.end()
 		})
-	const joinedServerAction = new Action('joinedNewServer', 'when you join a new server')
+	const joinedServerAction = new Action('Join a new Discord server', 'Triggers when you join a new server')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMyGuilds(accessTokenData.access_token)
@@ -158,7 +158,7 @@ module.exports = (area, servicesManager) => {
 			ctx.setActionData('discord_guild_number', myGuilds.length)
 			await ctx.end()
 		})
-	const leftServerAction = new Action('leftServer', 'when you leave a new server')
+	const leftServerAction = new Action('Left a Discord server', 'Triggers when you leave a server')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMyGuilds(accessTokenData.access_token)
