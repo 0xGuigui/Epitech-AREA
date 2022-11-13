@@ -5,8 +5,9 @@ import {useContext, useEffect, useState} from "react";
 import {HistoryContext} from "../../historyContext";
 import {AreaContext} from "./areaContext";
 import {Button} from "react-native-paper";
-import {getServiceByName, refreshToken, registerArea} from "../../services/server";
+import {getServiceByName, refreshToken} from "../../services/server";
 import AreaModal from "./areaModal";
+import {showToast} from "../../utils";
 
 export default function DisplayMenu() {
 	const navigate = useNavigate()
@@ -24,7 +25,7 @@ export default function DisplayMenu() {
 			reaction: null
 		}
 		const token = await refreshToken()
-		token.status !== 200 && navigate('/login')
+		token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		if (area.action.name)
 			services.action = (await getServiceByName(token.token, area.action.serviceName)).service
 		if (area.reaction.name)
@@ -36,8 +37,6 @@ export default function DisplayMenu() {
 	useEffect(() => {
 		getService()
 	}, [area])
-
-	console.log(service)
 
 	const backAction = () => {
 	}

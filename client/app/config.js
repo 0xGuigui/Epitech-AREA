@@ -1,12 +1,5 @@
 const {MD3LightTheme} = require("react-native-paper");
 
-module.exports = {
-	assets: [
-		"./src/assets/fonts/",
-		],
-
-}
-
 const oauth2 = {
 	"Spotify": {
 		client_id: "e62780e3630e4439b855928a8514e977",
@@ -16,7 +9,8 @@ const oauth2 = {
 	"Discord": {
 		client_id: "1022518270202499072",
 		redirect_uri: "http://92.148.23.72:8080/oauth2/Discord",
-		scopes: "identify email guilds guilds.members.read connections"
+		scopes: "identify email guilds guilds.members.read connections",
+		login_scopes: "identify email"
 	},
 	"Reddit": {
 		client_id: "jw-vAdRZIVhcdojFkr2iuw",
@@ -26,9 +20,10 @@ const oauth2 = {
 	}
 }
 
-//TODO check client_id (discord is not valid)
-
 module.exports = process.globals = {
+	assets: [
+		"./src/assets/fonts/",
+	],
 	"defaultServerUrl": "http://92.148.23.72:8080",
 	"serverUrl": "http://92.148.23.72:8080",
 	"DarkTheme": {
@@ -57,7 +52,8 @@ module.exports = process.globals = {
 		},
 		"Discord": {
 			...oauth2.Discord,
-			oauth_uri: `https://discord.com/api/oauth2/authorize?client_id=${oauth2.Discord.client_id}&redirect_uri=${oauth2.Discord.redirect_uri}&response_type=code&scope=${oauth2.Discord.scopes}`
+			oauth_uri: `https://discord.com/api/oauth2/authorize?client_id=${oauth2.Discord.client_id}&redirect_uri=${oauth2.Discord.redirect_uri}&response_type=code&scope=${oauth2.Discord.scopes}`,
+			login_uri: `https://discord.com/api/oauth2/authorize?client_id=${oauth2.Discord.client_id}&redirect_uri=${oauth2.Discord.redirect_uri}&response_type=code&scope=${oauth2.Discord.login_scopes}`
 		},
 		"Reddit": {
 			...oauth2.Reddit,

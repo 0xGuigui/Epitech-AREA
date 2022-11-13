@@ -21,7 +21,7 @@ export default function Settings() {
 			title,
 			message,
 			[
-				{ text: "OK", onPress: () => console.log("OK Pressed") }
+				{ text: "OK", onPress: () => {} }
 			]
 		);
 	}

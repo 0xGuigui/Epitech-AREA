@@ -1,5 +1,5 @@
 import {useContext, useEffect} from "react";
-import {useLocation, useNavigate, useParams, useSearchParams} from "react-router-native";
+import {useNavigate, useParams, useSearchParams} from "react-router-native";
 import { DarkTheme } from "../config";
 import {Image, StyleSheet, View, BackHandler} from "react-native";
 import {Button, Text} from "react-native-paper";
@@ -10,8 +10,9 @@ import redditLogo from './assets/img/reddit_logo.png'
 import steamLogo from './assets/img/steam_logo.png'
 import leagueLogo from './assets/img/League.png'
 import {HistoryContext} from "./historyContext";
-import {checkService, getMe, loginDiscord, refreshToken, registerService} from "./services/server";
+import {getMe, loginDiscord, refreshToken, registerService} from "./services/server";
 import {LoginContext} from "./loginContext";
+import {showToast} from "./utils";
 
 const logos = {
 	Discord: discordLogo,
@@ -22,7 +23,7 @@ const logos = {
 	Steam: steamLogo
 }
 
-export default function Oauth2({userInfo, setUserInfo}) {
+export default function Oauth2({setUserInfo}) {
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams();
 	const history = useContext(HistoryContext)
@@ -42,8 +43,8 @@ export default function Oauth2({userInfo, setUserInfo}) {
 			navigate('/')
 		} else {
 			const token = await refreshToken()
-			token.status !== 200 && navigate('/login')
-			const res = await registerService(token.token, params.service, searchParams.get('code'))
+			token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
+			await registerService(token.token, params.service, searchParams.get('code'))
 		}
 	}
 

@@ -13,6 +13,7 @@ import redditLogo from '../../assets/img/reddit_logo.png'
 import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
 import * as React from "react";
+import {showToast} from "../../utils";
 
 const logos = {
 	Discord: discordLogo,
@@ -27,13 +28,12 @@ export default function DisplayServices() {
 	const {serviceType} = useParams()
 	const navigate = useNavigate()
 	const history = useContext(HistoryContext)
-	const LeagueColor = '#044454'
 
 	const getServerActions = async () => {
 		const refresh = await refreshToken()
-		refresh.status !== 200 && navigate('/login')
+		refresh.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		const about = await getServices(refresh.token)
-		about.status !== 200 && navigate('/login')
+		about.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		setActions(about.services.filter(e => serviceType === 'action' ? e.actions.length > 0 : e.reactions.length > 0))
 	}
 
@@ -60,7 +60,7 @@ export default function DisplayServices() {
 						<DataDisplayer keyProp={i} text={e.name} style={styles.actions} textStyle={styles.actionsText} icon={logos[e.name]} colorBackground={e.colorPalette.secondaryColor} onPress={async () => {
 							if (Oauth2[e.name]) {
 								const token = await refreshToken()
-								token.status !== 200 && navigate('/login')
+								token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 								const res = await checkService(token.token, e.name)
 								if (res.status !== 200)
 									return WebBrowser.openBrowserAsync(Oauth2[e.name].oauth_uri)

@@ -1,6 +1,6 @@
-import {Alert, StyleSheet, View, Text, ScrollView, KeyboardAvoidingView} from "react-native";
+import {StyleSheet, View, Text, ScrollView} from "react-native";
 import { Pressable } from "@react-native-material/core";
-import {deleteAction, refreshToken, registerArea} from "../../services/server";
+import {refreshToken, registerArea} from "../../services/server";
 import { Modal, TextInput } from "react-native-paper";
 import { useContext, useState } from "react";
 import { AreaContext } from "./areaContext";
@@ -35,8 +35,8 @@ export default function ({action, setAction}) {
 						if (area.name === '')
 							delete area.name
 						const token = await refreshToken()
-						token.status !== 200 && navigate('/login')
-						const res = await registerArea(token.token, area)
+						token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
+						await registerArea(token.token, area)
 						showToast('Area created')
 						setArea({
 							action: {},

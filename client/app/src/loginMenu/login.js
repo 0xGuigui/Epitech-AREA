@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
-import {useContext, useEffect, useState} from 'react';
-import {useLocation, useNavigate, useSearchParams} from "react-router-native";
+import {useContext, useState} from 'react';
+import {useNavigate} from "react-router-native";
 import { Pressable } from "@react-native-material/core";
 import {Button, TextInput, IconButton} from 'react-native-paper';
 import {getMe, logUser} from "../services/server";
@@ -10,7 +10,7 @@ import discordLogo from '../assets/icons/discord-mark-white.png'
 import {LoginContext} from "../loginContext";
 import * as WebBrowser from 'expo-web-browser'
 
-export default function Login({ userInfo, setUserInfo }) {
+export default function Login({ setUserInfo }) {
 	const [form, setForm] = useState({
 		email: "",
 		password: ""
@@ -95,7 +95,7 @@ export default function Login({ userInfo, setUserInfo }) {
 					}}
 					onPress={() => {
 						setOauth2(true)
-						WebBrowser.openBrowserAsync(global.Oauth2.Discord.oauth_uri)
+						WebBrowser.openBrowserAsync(global.Oauth2.Discord.login_uri)
 					}}
 					buttonColor="#5865F2"
 					style={styles.button}

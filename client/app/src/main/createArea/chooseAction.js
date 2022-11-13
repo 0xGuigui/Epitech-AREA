@@ -1,20 +1,17 @@
 import {useNavigate, useParams} from "react-router-native";
 import {
-	checkService,
-	getAbout,
 	getActionByName,
 	getReactionByName,
 	getServices,
 	refreshToken
 } from "../../services/server";
 import {useContext, useEffect, useState} from "react";
-import {Oauth2} from "../../../config";
-import * as WebBrowser from "expo-web-browser";
 import {BackHandler, StyleSheet, View} from "react-native";
 import DataDisplayer from "../../dataDisplayer";
 import {Text} from "react-native-paper";
 import ActionModal from "./actionModal";
 import {HistoryContext} from "../../historyContext";
+import {showToast} from "../../utils";
 
 export default function ChooseAction() {
 	const {serviceType, serviceName} = useParams()
@@ -25,9 +22,9 @@ export default function ChooseAction() {
 
 	const getServerActions = async () => {
 		const token = await refreshToken()
-		token.status !== 200 && navigate('/login')
+		token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		const about = await getServices(token.token)
-		about.status !== 200 && navigate('/login')
+		about.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 		const serviceActions = about.services.find(e => e.name === serviceName)[serviceType === "action" ? "actions" : "reactions"]
 		const actionsData = await Promise.all(serviceActions.map(async e => {
 			const action = await (serviceType === 'action' ? getActionByName(token.token, serviceName, e) : getReactionByName(token.token, serviceName, e))

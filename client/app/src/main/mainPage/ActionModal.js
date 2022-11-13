@@ -1,11 +1,11 @@
 import { Modal } from "react-native-paper";
-import {Alert, Image, StyleSheet, Text, View} from "react-native";
-import { Button, Pressable } from "@react-native-material/core";
-import {useNavigate, useParams} from "react-router-native";
+import {Alert, StyleSheet, Text, View} from "react-native";
+import { Pressable } from "@react-native-material/core";
+import {useNavigate} from "react-router-native";
 import { deleteAction, refreshToken } from "../../services/server";
+import {showToast} from "../../utils";
 
 export default function ActionModal({action, setAction}) {
-	const params = useParams()
 	const navigate = useNavigate()
 
 	return (
@@ -35,7 +35,7 @@ export default function ActionModal({action, setAction}) {
 									text: "OK",
 									onPress: async () => {
 										const token = await refreshToken()
-										token.status !== 200 && navigate('/login')
+										token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
 										const res = await deleteAction(token.token, action._id)
 										res.status !== 200
 											? alert('Error while deleting action')
@@ -88,15 +88,6 @@ const styles = StyleSheet.create({
 		marginLeft: 'auto',
 		marginRight: 'auto'
 	},
-	// saveButton: {
-	// 	position: 'absolute',
-	// 	bottom: '5%',
-	// 	left: '8%'
-	// },
-	// saveButtonText: {
-	// 	color: '#FFFFFF',
-	// 	fontSize: 15
-	// },
 	deleteButton: {
 		position: 'absolute',
 		bottom: '10%',

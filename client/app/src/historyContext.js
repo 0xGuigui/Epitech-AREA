@@ -1,5 +1,5 @@
 import {createContext, useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-native";
+import {useLocation} from "react-router-native";
 
 export const HistoryContext = createContext()
 
@@ -16,7 +16,6 @@ export const HistoryProvider = ({ children }) => {
 			prev: history[history.path === location.pathname ? 'prev' : 'path']
 		}
 		setHistory(newHistory)
-		console.log(newHistory)
 	}, [location])
 
 	return (

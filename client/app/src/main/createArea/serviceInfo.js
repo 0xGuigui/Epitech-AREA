@@ -16,8 +16,9 @@ import SpotifyLogo from '../../assets/icons/spotify-logo-white.png'
 import RedditLogo from '../../assets/icons/reddit-logo-white.png'
 import SteamLogo from '../../assets/icons/steam-logo-white.png'
 import LeagueLogo from '../../assets/icons/league-logo-white.png'
-import {checkService, getServiceByName, refreshToken} from "../../services/server";
+import {checkService, refreshToken, unregisterService} from "../../services/server";
 import {Oauth2} from '../../../config'
+import {showToast} from "../../utils";
 
 const data = {
     Discord: {
@@ -71,7 +72,7 @@ export default function ServiceInfo() {
             if (!Oauth2[service])
                 return;
             const token = await refreshToken()
-            token.status !== 200 && navigate('/login')
+            token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
             const checkToken = await checkService(token.token, service)
             checkToken.status !== 200 && setIsConnected(false)
         }
@@ -95,20 +96,27 @@ export default function ServiceInfo() {
                 <Image source={data[service].headerLogo} style={{width: 200, height: 18, paddingTop: 30, paddingBottom: 30, marginTop: 25, marginBottom: 25, resizeMode: 'contain', alignSelf: 'center'}}/>
                 <ScrollView>
                     <Text style={{backgroundColor: data[service].backgroundColor, color: 'white', textAlign: 'center', justifyContent: 'center', fontSize: 20, marginBottom: 20, marginLeft: 20, marginRight: 20}}>{data[service].description}</Text>
-                    {!isConnected && <Button
+                    {(!isConnected || Oauth2[service]) && <Button
                         buttonColor={'white'}
                         textColor={'black'}
                         mode="contained"
-                        // key={i}
                         theme={{
                             roundness: 100,
                         }}
-                        onPress={() => {
-                            WebBrowser.openBrowserAsync(Oauth2[service].oauth_uri)
+                        onPress={async () => {
+                            if (isConnected) {
+                                const token = await refreshToken()
+                                token.status !== 200 && showToast('Disconnected from the server') && navigate('/login')
+                                const res = await unregisterService(token.token, service)
+                                showToast(res.status === 200 ? "Service disconnected" : "An error occurred")
+                                setIsConnected(false)
+                            } else {
+                                WebBrowser.openBrowserAsync(Oauth2[service].oauth_uri)
+                            }
                         }}
                         style={styles.button}
                     >
-                        Connect to {service}
+                        {(isConnected ? 'Disconnect from ' : 'Connect to ') + service}
                     </Button>}
                     <Text style={{backgroundColor: data[service].backgroundColor, color: 'white', textAlign: 'center', justifyContent: 'center', fontSize: 15, marginBottom: 20, marginLeft: 20, marginRight: 20, marginTop: 20, fontStyle: 'italic', textDecorationLine: 'underline'}} onPress={() => { WebBrowser.openBrowserAsync(data[service].url) }}>{data[service].url}</Text>
                     <Text style={{backgroundColor: data[service].backgroundColor, color: 'white', textAlign: 'center', fontSize: 20, marginBottom: 20, padding: 150}}></Text>
@@ -145,7 +153,7 @@ const styles = StyleSheet.create({
         marginBottom: 'auto'
     },
     button: {
-        width: '50%',
+        width: 'auto',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: '5%',
