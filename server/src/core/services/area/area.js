@@ -37,7 +37,7 @@ module.exports = (area, servicesManager) => {
         })
 
     sendEmail.validationSchema = Joi.object().keys({
-        email: Joi.string().email().required(),
+        email: Joi.string().required(),
         subject: Joi.string().required(),
         message: Joi.string().required(),
     }).unknown(true)
