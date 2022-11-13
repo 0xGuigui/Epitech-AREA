@@ -23,23 +23,15 @@
     </mj-section>
     <mj-section background-color="#fff" padding="40px 0 0 15px">
       <mj-column>
-        <mj-text font-size="30px" font-weight="bold" font-family="Museo"><span style="color:#4B67C6;">{0}</span>, Verify your email ! </mj-text>
+        <mj-text font-size="30px" font-weight="bold" font-family="Museo"><span style="color:#4B67C6;">{0}</span></mj-text>
       </mj-column>
     </mj-section>
-    <mj-section background-color="white" padding="20px 0 0 15px">
+    <mj-section background-color="white" padding="20px 0 30px 15px">
       <mj-column>
         <mj-text color="#636e72" line-height="22px" font-size="16px">
-          Hi {1} ! You registered to our service on: {2}<br/>
-          Please use the following link to complete your register !
+          {1}
     
         </mj-text>
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="white" padding="50px 0 60px 0">
-      <mj-column>
-        <mj-button background-color="#4B67C6" font-size="30px" font-family="Museo, Arial, sans-serif" border-radius="10px" inner-padding="10px 40px" href="{3}">
-          verify email
-        </mj-button>
       </mj-column>
     </mj-section>
     <!-- footer -->

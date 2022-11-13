@@ -19,7 +19,7 @@ module.exports = (area) => {
     }])
 
     area.app.get('/webhook/:webhookToken', async (req, res) => {
-        jsonwebtoken.verify(req.params.webhookToken, area.config.jwtSecret, {}, async (err, decoded) => {
+        jsonwebtoken.verify(req.params.webhookToken, process.env.JWT_SECRET, {}, async (err, decoded) => {
             if (err) {
                 return res.status(401).json({message: 'Unauthorized'})
             }
@@ -28,10 +28,12 @@ module.exports = (area) => {
             if (!actionData) {
                 return res.status(404).json({message: 'Unauthorized'})
             }
-            let reaction = area.servicesManager.getServiceReaction(actionData.reaction.type.service, actionData.reaction.type.name)
+            let {error, action} = await area.servicesManager.triggerAction(actionData);
 
-            reaction.onTrigger?.(actionData, req.body)
-            return res.status(200).json({message: 'Webhook triggered'})
+            if (error) {
+                return res.status(500).json({message: error.message})
+            }
+            return res.status(200).json({message: 'Reaction triggered'})
         })
     })
 

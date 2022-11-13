@@ -59,14 +59,14 @@
         <div in:fade={{duration: 150, delay: 2000}} class="text-white text-5xl mt-10 z-10" style="font-family: 'Pacifico', cursive;">
             automate your workflow
         </div>
-        <a in:fade={{duration: 150, delay: 2300}} use:scrollTo={{ref: 'pageBegin', duration: 850}} class="absolute bottom-1 left-1/2 -translate-x-1/2 mb-4 z-10">
+        <a in:fade={{duration: 150, delay: 2600}} use:scrollTo={{ref: 'pageBegin', duration: 850}} class="absolute bottom-1 left-1/2 -translate-x-1/2 mb-4 z-10">
             <div class="flex flex-col justify-center items-center hover:scale-110 transition-all">
                 <div class="animate-bounce animation-controller"><Fa icon={icons.faAnglesDown} color="#eee" size="4x"/></div>
             </div>
         </a>
         {#each coordinates as coordinate, index}
             <div class="absolute" style="top: {coordinate[0]}%; left: {coordinate[1]}%; transform: translate(-50%, -50%);">
-                <div in:fade={{duration: 550, delay: randomInRange(600, 1500)}}><Fa icon={iconsData[index]} size="2.7x" color="#576574" class="transition-all duration-150" /></div>
+                <div in:fade={{duration: 550, delay: randomInRange(300, 1200)}}><Fa icon={iconsData[index]} size="2.7x" color="#576574" class="transition-all duration-150" /></div>
             </div>
         {/each}
     {/if}

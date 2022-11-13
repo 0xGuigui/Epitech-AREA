@@ -4,6 +4,7 @@
     import {clickOutside} from "../../../utils/clickOutside";
     import {beautifyDate, beautifyFullDate} from "$lib/utils/formatDate.js";
     import {fly} from "svelte/transition";
+    import {serverUrl} from "../../../../store";
 
     export let data;
 
@@ -19,6 +20,8 @@
 
         return `${actionType} -> ${reactionType}`;
     }
+
+    let webhookUrl = data.webhookUrl ? `${$serverUrl}${data.webhookUrl}` : undefined;
 </script>
 
 
@@ -41,12 +44,18 @@
             <span class="select-none">last run: </span><span
                 class="data-value">{data.lastRun ? beautifyFullDate(data.lastRun) : 'action not triggered yet'}</span>
         </div>
-        <div>
-            <span class="select-none">webhook: </span><span class="data-value">{data.webhook ? 'true' : 'false'}</span>
-        </div>
+        <a href="{webhookUrl}" class="flex items-center cursor-pointer hover:border-b-[2px] border-ui-blue transition-all duration-150 relative">
+            <span class="select-none">webhook: </span><span
+                class="data-value">{data.webhook ? 'true' : 'false'}</span>
+            {#if data.webhook}
+                <Fa icon={icons.faLink} size="0.85x" color="black" class="ml-1"/>
+            {/if}
+        </a>
         {#if data.actionPending}
             <div class="relative flex items-center pl-2.5 pr-5">
-                <div class="pending-action-class mr-3"><Fa icon={icons.faHourglass} size="1.25x"/></div>
+                <div class="pending-action-class mr-3">
+                    <Fa icon={icons.faHourglass} size="1.25x"/>
+                </div>
                 <span>pending ...</span>
             </div>
         {:else}
@@ -91,7 +100,8 @@
                 {#if data.data}
                     {#each Object.entries(data.data) as dataEntry}
                         <div class="my-1.5 mr-6">
-                            <span class="select-none">{dataEntry[0]}: </span><span class="data-value">{dataEntry[1]}</span>
+                            <span class="select-none">{dataEntry[0]}: </span><span
+                                class="data-value">{dataEntry[1]}</span>
                         </div>
                     {/each}
                 {:else}
@@ -116,7 +126,7 @@
     .pending-action-class {
         animation: pending-action 1.7s ease-in-out infinite;
     }
-    
+
     @keyframes pending-action {
         0% {
             transform: rotate(0deg);
