@@ -139,7 +139,7 @@ module.exports = (area, servicesManager) => {
 			}
 			await ctx.end()
 		})
-	const joinedServerAction = new Action('Join a new Discord server', 'Triggers when you join a new server')
+	const joinedServerAction = new Action('Joined a new Discord server', 'Triggers when you join a new server')
 		.on('create', async ctx => {
 			const accessTokenData = await getAccessToken(await getUserServiceData(ctx.actionData.user.valueOf(), discordService.name))
 			const myGuilds = await getMyGuilds(accessTokenData.access_token)
