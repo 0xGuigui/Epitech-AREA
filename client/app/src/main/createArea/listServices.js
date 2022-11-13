@@ -5,14 +5,14 @@ import {getServices, refreshToken} from "../../services/server";
 import {useNavigate} from "react-router-native";
 import DataDisplayer from "../../dataDisplayer";
 import {HistoryContext} from "../../historyContext";
+import * as React from "react";
+import { DarkTheme } from "../../../config";
+import {showToast} from "../../utils";
 import spotifyLogo from '../../assets/img/spotify_logo.png'
 import discordLogo from '../../assets/img/discord_logo.png'
 import redditLogo from '../../assets/img/reddit_logo.png'
 import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
-import * as React from "react";
-import { DarkTheme } from "../../../config";
-import {showToast} from "../../utils";
 import AreaLogo from '../../assets/logo/logo.png'
 
 const logos = {

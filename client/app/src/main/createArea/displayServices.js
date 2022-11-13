@@ -1,3 +1,4 @@
+import * as React from "react";
 import {View, StyleSheet, BackHandler} from "react-native";
 import {Text} from "react-native-paper";
 import {useContext, useEffect, useState} from "react";
@@ -7,14 +8,15 @@ import {Oauth2} from '../../../config'
 import * as WebBrowser from 'expo-web-browser'
 import DataDisplayer from "../../dataDisplayer";
 import {HistoryContext} from "../../historyContext";
+import {showToast} from "../../utils";
+
+
 import spotifyLogo from '../../assets/img/spotify_logo.png'
 import discordLogo from '../../assets/img/discord_logo.png'
 import redditLogo from '../../assets/img/reddit_logo.png'
 import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
 import areaLogo from '../../assets/logo/logo.png'
-import * as React from "react";
-import {showToast} from "../../utils";
 
 const logos = {
 	Discord: discordLogo,
