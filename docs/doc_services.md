@@ -124,7 +124,7 @@ To implement a new service inside the application, you need to previously implem
 In fact, your service is automatically detected by the application client. You just need to implement the icon and the description of your service inside the application.
 
 
-- First, navigate to the core of the application
+- First, navigate to the application folder
 
 ```bash
     cd client/app/
@@ -211,5 +211,45 @@ In fact, your service is automatically detected by the application client. You j
 ```
 <br/>
 Done, if you correctly followed the steps, your service will be displayed in the application client without any problems. You can now test your service and create actions/reactions with it.
+
+## 👩‍💻 Implement a service in web client <a name='implement-service-in-web' />
+
+- First, navigate to the application folder
+
+```bash
+    cd client/web/
+```
+
+- Then navigate to the folder where the file managing logo is
+
+```bash
+    cd src/lib/blocks
+```
+
+- Open DynamicHero.svelte and add your icon in the `iconsData` variable
+
+```js
+let iconsData = [
+    icons.faDocker,
+    //add your icon here
+]
+```
+
+- Navigate to the second folder where icon management is
+
+```bash
+    cd ../data
+```
+
+- Open DynamicHeader.svelte and add your icon in the `possibleIcons` variable
+
+```js
+export const possibleIcons = {
+	"Docker": icons.faDocker
+    //add your icon here
+}
+```
+
+That's it !
 
 ### ⚠️ Please, don't forget to implement your service in the server side before implementing it in the application client.
