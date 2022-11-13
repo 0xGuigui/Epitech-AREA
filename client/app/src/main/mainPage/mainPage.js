@@ -9,6 +9,7 @@ import ActionModal from "./ActionModal";
 import { DarkTheme } from "../../../config";
 import { Appbar } from "react-native-paper";
 import areaLogo from '../../assets/logo/logo.png'
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import * as React from "react";
 
 export default function mainPage({userInfo}) {
