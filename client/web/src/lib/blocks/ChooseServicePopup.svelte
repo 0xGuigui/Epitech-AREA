@@ -4,6 +4,7 @@
     import Fa from "svelte-fa";
     import {areaFetch} from "../utils/areaFetch";
     import ChooseServiceComponentPopup from "$lib/blocks/ChooseServiceComponentpopup.svelte";
+    import config from "../data/config";
 
     export let context: any;
     export let kind: string;
@@ -19,7 +20,14 @@
         servicesPromise = await response.json();
     }
 
-    function updatePopup(service = undefined) {
+    async function updatePopup(service = undefined) {
+        if (service && config.Oauth2[service.name]) {
+            try {
+                await areaFetch(`/oauth2/${service.name}/check-token`)
+            } catch (e) {
+                return window.open(config.Oauth2[service.name].oauth_uri, "_blank")
+            }
+        }
         selectedservice = service;
         showPopup = !showPopup;
     }

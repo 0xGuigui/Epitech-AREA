@@ -32,7 +32,7 @@ export default {
         },
         "Reddit": {
             ...oauth2.Reddit,
-            oauth_uri: `https://www.reddit.com/api/v1/authorize.compact?client_id=${oauth2.Reddit.client_id}&response_type=code&state=${oauth2.Reddit.state}&redirect_uri=${oauth2.Reddit.redirect_uri}&duration=permanent&scope=${oauth2.Reddit.scopes}`
+            oauth_uri: `https://www.reddit.com/api/v1/authorize?client_id=${oauth2.Reddit.client_id}&response_type=code&state=${oauth2.Reddit.state}&redirect_uri=${oauth2.Reddit.redirect_uri}&duration=permanent&scope=${oauth2.Reddit.scopes}`
         }
     }
 }
