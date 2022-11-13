@@ -29,9 +29,11 @@
     };
     let dropDownActions = {
         "Profile": () => {
+            showDropdown = false;
             goto("/me");
         },
         "My actions": () => {
+            showDropdown = false;
             goto(`/me/actions`);
         },
         "Logout": () => {

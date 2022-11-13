@@ -4,12 +4,12 @@
     import {page} from '$app/stores';
     import {possibleIcons} from "$lib/data/dynamicHeader";
     import config from '$lib/data/config'
-    import {accessToken, loggedIn} from "../../../../store";
+    import {accessToken, loggedIn, serverUrl} from "../../../../store";
     import {areaFetch} from "$lib/utils/areaFetch";
     import {browser} from '$app/environment'
 
     async function loginDiscord(code) {
-        const response = await fetch(`${config.defaultServerUrl}/login/Discord`, {
+        const response = await fetch(`${$serverUrl || config.defaultServerUrl}/login/Discord`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

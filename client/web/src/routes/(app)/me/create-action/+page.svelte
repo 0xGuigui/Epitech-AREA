@@ -53,7 +53,7 @@
             <div>
                 <div class="font-bold text-3xl mt-10 w-full text-center text-white">Create a new action:</div>
                 <div class="px-10 w-full mt-5"><input bind:value={actionContext.name}/></div>
-                <div class="mt-12 flex justify-center items-center px-10">
+                <div class="mt-12 flex justify-around items-center px-10">
                     <div on:click={() => {kind = "action"; updatePopup()}}
                          class="select-none w-[32%] relative aspect-square shadow-xl bg-area-header rounded-xl cursor-pointer transition-all duration-150 {processing ? 'opacity-50' : 'hover:scale-105'} overflow-hidden">
                         {#if actionContext.action}
@@ -68,7 +68,7 @@
                             </div>
                         {/if}
                     </div>
-                    <div class="mx-24 transition-all duration-300 {actionContext.action ? 'opacity-100' : 'opacity-0'}">
+                    <div class="transition-all duration-300 {actionContext.action ? 'opacity-100' : 'opacity-0'}">
                         <div class:animate-bars={!actionContext.reaction} class:opacity-50={processing}>
                             <Fa icon={icons.faAnglesRight} size="5x" color="#262729"/>
                         </div>

@@ -137,7 +137,8 @@ module.exports = (area) => {
             new mongoose.models.User({
                 username: user.username,
                 email: user.email,
-                oauth: user.id
+                oauth: user.id,
+                verified: true
             }).save().then(newUser => {
                 const payload = {
                     userId: newUser.id,

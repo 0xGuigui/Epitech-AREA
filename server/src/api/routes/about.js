@@ -8,7 +8,7 @@ module.exports = (area) => {
             },
             server: {
                 current_time: Date.now(),
-                services: area.servicesManager.getServices().map(formatService)
+                services: area.servicesManager.getServicesData()
             }
         })
     })

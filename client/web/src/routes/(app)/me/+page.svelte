@@ -1,5 +1,5 @@
 <script>
-    import {areaFetch} from "../../../lib/utils/areaFetch";
+    import {areaFetch} from "$lib/utils/areaFetch";
 
     export let data;
 
@@ -14,7 +14,6 @@
             ...json
         };
     }
-    console.log(user);
 </script>
 
 <section class="h-[125vh] w-[100vw] flex justify-center items-center">
@@ -42,5 +41,7 @@
                         </div>
                 </div>
             </div>
+    {:catch error}
+        ok
     {/await}
 </section>
