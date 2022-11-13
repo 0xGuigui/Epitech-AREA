@@ -32,8 +32,6 @@
 - [Deployment](#deployment)
 - [Usage](#usage)
 - [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
@@ -76,7 +74,7 @@ cd client/web && npm install && cd ../app && npm install && cd ../../server && n
 docker-compose up -d
 ```
 
-Now you can access the website at http://localhost:8080
+Now you can access the website at http://localhost:8081
 
 The APK is available on Expo Website
 
@@ -115,7 +113,7 @@ cd client/web && npm install && cd ../app && npm install && cd ../../server && n
 docker-compose up -d
 ```
 
-Now you can access the website at http(s)://yourdomain.com
+Now you can access the website at http(s)://yourip:8081
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
@@ -139,9 +137,9 @@ Now you can access the website at http(s)://yourdomain.com
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
-- Thanks all team members for their hard work
-- Thanks [@Paul Gervais](https://github.com/Gagonlaire) for backend Architecture, Routing, Docker and DB
-- Thanks [@Florian Garnier](https://github.com/Suolumi) for OAuth2, API, Mobile Frontend Functionalities
-- Thanks [@Julien Hennion](https://github.com/Yusisako) for Frontend Architecture and Design
-- Thanks [@Antoine Paul](https://github.com/PAn-27) for Android Docker Deployment
-- Thanks [@Guilhem Jéhanno](https://github.com/Nysioko) for Mobile Frontend Architecture and Design, Docker and Mobile Frontend Functionalities
+- Thanks to all team members for their hard work
+- Thanks to [@Paul Gervais](https://github.com/Gagonlaire) for backend Architecture, Routing, Docker and DB
+- Thanks to [@Florian Garnier](https://github.com/Suolumi) for OAuth2, API, Mobile Frontend Functionalities
+- Thanks to [@Julien Hennion](https://github.com/Yusisako) for Frontend Architecture and Design
+- Thanks to [@Antoine Paul](https://github.com/PAn-27) for Android Docker Deployment
+- Thanks to [@Guilhem Jéhanno](https://github.com/Nysioko) for Mobile Frontend Architecture and Design, Docker and Mobile Frontend Functionalities
