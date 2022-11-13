@@ -46,7 +46,6 @@
                 errs["email"] = "Email or password is invalid";
             else
                 window.location="/";
-            console.log(response);
         }
     });
 </script>

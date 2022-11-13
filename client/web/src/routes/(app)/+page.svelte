@@ -26,7 +26,7 @@
     });
 
     services.then((data) => {
-        console.log(data);
+
     });
 
     onDestroy(() => {

@@ -31,14 +31,12 @@
 
     async function stuff(code) {
         const res = await areaFetch(`/oauth2/${service}`, 'POST', {"code": code, "redirect_uri": config.Oauth2[service].redirect_uri})
-        console.log(res)
     }
 
     let service = $page.params.service;
     const code = $page.url.searchParams.get('code')
 
     if (browser) {
-        console.log(localStorage.getItem('discord_login'))
         if (localStorage.getItem('discord_login') === "true") {
             loginDiscord(code)
             localStorage.removeItem('discord_login')

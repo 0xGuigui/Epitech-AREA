@@ -10,7 +10,6 @@
     async function getServices() {
         const response = await fetch($serverUrl + '/about.json')
         const json = await response.json()
-	    console.log(json)
         return {
             status: response.status,
             ...json
