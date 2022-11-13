@@ -21,7 +21,7 @@ const logos = {
     Reddit: redditLogo,
     Steam: steamLogo,
     League: leagueLogo,
-    Area: AreaLogo
+    AREA: AreaLogo
 }
 
 export default function ListServices() {
