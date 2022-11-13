@@ -66,6 +66,16 @@ export default function Account({ userInfo, setUserInfo }) {
             <ScrollView>
                 <Text
                     style={styles.titleText}>
+                    Help
+                </Text>
+                <Divider />
+                <Text
+                    style={styles.clickableText} onPress={() => navigate('/listServices')}>
+                    What is Area?
+                </Text>
+                <Divider />
+                <Text
+                    style={styles.titleText}>
                     Services
                 </Text>
                 <Divider/>
@@ -114,6 +124,8 @@ export default function Account({ userInfo, setUserInfo }) {
                         navigate('/login')
                         if (Platform.OS === 'android')
                             showToast('You have been logged out')
+                    } if (res.status !== 200 || !res || !token) {
+                        showToast('Something went wrong')
                     }
                 }}>
                     Log out
@@ -128,6 +140,7 @@ export default function Account({ userInfo, setUserInfo }) {
                     Delete account
                 </Text>
                 <Divider />
+                <Text style={styles.endOfScroll}/>
             </ScrollView>
         </View>
     )
