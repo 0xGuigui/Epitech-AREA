@@ -42,8 +42,8 @@
 				you an link to reset your password
 			</div>
 			<div class="rounded-full h-0.5 w-5/6 bg-gray-400 mx-auto my-8"></div>
-			<label for="email" class="text-left w-full">Email</label>
-			<input type="text" id="email" bind:value={$recoveryEmail.value}>
+			<label for="email" class="font-bold text-area-header w-full">Email</label>
+			<input class="rounded focus:ring-2 focus:outline-none focus:ring-area-header px-1" type="text" id="email" bind:value={$recoveryEmail.value}>
 			<div class="w-full h-full flex flex-col justify-end items-center pb-2">
 				<button class="w-72 h-14 bg-gray-500 text-white rounded-xl hover:scale-105 transition-all items-center"
 						on:click={submit}>
@@ -51,7 +51,7 @@
 						<img src="/loaders/three-dots.svg" alt="Loader" transition:fade={{duration: 200}} width="60px"
 							 class="mx-auto">
 					{:else}
-						Submit
+						<p class="font-bold text-white">Submit</p>
 					{/if}
 				</button>
 				<div class="text-red-500 text-sm {error ? '' : 'invisible'}">{error}</div>
