@@ -36,7 +36,7 @@ async function getOwnedGames(steamId) {
 }
 
 module.exports = (area, servicesManager) => {
-	const discordService = new Service('Steam', "Steam is a digital distribution platform developed by Valve Corporation, which offers digital rights management (DRM), multiplayer gaming, video streaming and social networking services. It also provides the user with installation and automatic updating of games, and community features such as friends lists and groups, cloud saving, and in-game voice and chat functionality.\n" +
+	const steamService = new Service('Steam', "Steam is a digital distribution platform developed by Valve Corporation, which offers digital rights management (DRM), multiplayer gaming, video streaming and social networking services. It also provides the user with installation and automatic updating of games, and community features such as friends lists and groups, cloud saving, and in-game voice and chat functionality.\n" +
 		"\n", {
 		mainColor: '#102553',
 		secondaryColor: '#102553',
