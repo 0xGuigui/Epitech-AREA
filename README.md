@@ -138,8 +138,8 @@ Now you can access the website at http(s)://yourip:8081
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
 - Thanks to all team members for their hard work
-- Thanks to [@Paul Gervais](https://github.com/Gagonlaire) for backend Architecture, Routing, Docker and DB
-- Thanks to [@Florian Garnier](https://github.com/Suolumi) for OAuth2, API, Mobile Frontend Functionalities
-- Thanks to [@Julien Hennion](https://github.com/Yusisako) for Frontend Architecture and Design
+- Thanks to [@Paul Gervais](https://github.com/Gagonlaire) for backend Architecture, Routing, Dockers, database, server and Frontend Architecture Design
+- Thanks to [@Florian Garnier](https://github.com/Suolumi) for OAuth2, API, Mobile Frontend Architecture and Functionalities
+- Thanks to [@Julien Hennion](https://github.com/Yusisako) for Frontend Architecture, Design and Functionalities
 - Thanks to [@Antoine Paul](https://github.com/PAn-27) for Android Docker Deployment
-- Thanks to [@Guilhem Jéhanno](https://github.com/Nysioko) for Mobile Frontend Architecture and Design, Docker and Mobile Frontend Functionalities
+- Thanks to [@Guilhem Jéhanno](https://github.com/Nysioko) for Mobile Frontend Architecture and Design, Dockers and Mobile Frontend Functionalities
