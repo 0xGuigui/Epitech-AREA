@@ -4,22 +4,23 @@ import {Appbar, Text, Button} from "react-native-paper";
 import {useContext, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-native";
 import {HistoryContext} from "../../historyContext";
+import * as React from "react";
+import { DarkTheme } from "../../../config";
+import {checkService, refreshToken, unregisterService} from "../../services/server";
+import {Oauth2, serverUrl} from '../../../config'
+import {showToast} from "../../utils";
 import spotifyLogo from '../../assets/img/spotify_logo.png'
 import discordLogo from '../../assets/img/discord_logo.png'
 import redditLogo from '../../assets/img/reddit_logo.png'
 import steamLogo from '../../assets/img/steam_logo.png'
 import leagueLogo from '../../assets/img/League.png'
-import * as React from "react";
-import { DarkTheme } from "../../../config";
 import DiscordLogo from '../../assets/icons/discord-logo-white.png'
 import SpotifyLogo from '../../assets/icons/spotify-logo-white.png'
 import RedditLogo from '../../assets/icons/reddit-logo-white.png'
 import SteamLogo from '../../assets/icons/steam-logo-white.png'
 import LeagueLogo from '../../assets/icons/league-logo-white.png'
 import AreaLogo from '../../assets/logo/logo.png'
-import {checkService, refreshToken, unregisterService} from "../../services/server";
-import {Oauth2, serverUrl} from '../../../config'
-import {showToast} from "../../utils";
+
 
 const data = {
     Discord: {
