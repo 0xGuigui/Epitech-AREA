@@ -72,7 +72,8 @@ async function getRotation() {
 }
 
 module.exports = (area, servicesManager) => {
-	const lolService = new Service('League', 'League of Legends', {
+	const discordService = new Service('League', "League of Legends is a multiplayer online battle arena video game developed and published by Riot Games for Microsoft Windows and macOS. Inspired by the Warcraft III: The Frozen Throne mod Defense of the Ancients, the game follows a freemium model and is supported by microtransactions, and was inspired by the Warcraft III: The Frozen Throne mod Defense of the Ancients.\n" +
+		"\n", {
 		mainColor: '#b88c3e',
 		secondaryColor: '#044454',
 		urlSite: 'https://euw.leagueoflegends.com/fr-fr/'
