@@ -1,9 +1,10 @@
 <script lang="ts">
     import {scrollTo} from "svelte-scrolling";
-    import {icons} from "../utils/fontAwesome";
     import Fa from "svelte-fa";
     import {fade} from "svelte/transition";
     import {onMount} from "svelte";
+    import {possibleIcons, possibleIconsLength} from "../data/dynamicHeader";
+    import {icons} from "../utils/fontAwesome";
 
     function randomInRange(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -53,13 +54,13 @@
 
 <section class="relative flex flex-col justify-center items-center w-full h-screen bg-area-header overflow-hidden">
     {#if show}
-        <div in:fade={{duration: 150, delay: 1700}} class="font-bold text-[200px] z-20 area-letter leading-none" style="font-family: 'Pacifico', cursive;">
+        <div in:fade={{duration: 150, delay: 1700}} class="px-9 font-bold text-[200px] z-20 area-letter leading-none" style="font-family: 'Pacifico', cursive;">
             AREA
         </div>
         <div in:fade={{duration: 150, delay: 2000}} class="text-white text-5xl mt-10 z-10" style="font-family: 'Pacifico', cursive;">
             automate your workflow
         </div>
-        <a in:fade={{duration: 150, delay: 2600}} use:scrollTo={{ref: 'pageBegin', duration: 850}} class="absolute bottom-1 left-1/2 -translate-x-1/2 mb-4 z-10">
+        <a href="#" in:fade={{duration: 150, delay: 2600}} use:scrollTo={{ref: 'pageBegin', duration: 850}} class="absolute bottom-1 left-1/2 -translate-x-1/2 mb-4 z-10">
             <div class="flex flex-col justify-center items-center hover:scale-110 transition-all">
                 <div class="animate-bounce animation-controller"><Fa icon={icons.faAnglesDown} color="#eee" size="4x"/></div>
             </div>

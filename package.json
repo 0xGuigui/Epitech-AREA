@@ -10,8 +10,6 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web-client\" \"npm run dev:app-client\""
   },
   "dependencies": {
-    "concurrently": "^7.5.0",
-    "svelte-scrolling": "^1.2.2",
-    "web": "file:client/web"
+    "concurrently": "^7.5.0"
   }
 }

@@ -42,6 +42,7 @@
 		"aos": "^2.3.4",
 		"svelte-fa": "^3.0.3",
 		"svelte-forms-lib": "^2.0.1",
-		"svelte-frappe-charts": "^1.9.2"
+		"svelte-frappe-charts": "^1.9.2",
+		"svelte-scrolling": "^1.2.2"
 	}
 }
