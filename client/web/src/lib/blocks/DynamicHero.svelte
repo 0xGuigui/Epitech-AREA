@@ -53,7 +53,7 @@
 
 <section class="relative flex flex-col justify-center items-center w-full h-screen bg-area-header overflow-hidden">
     {#if show}
-        <div in:fade={{duration: 150, delay: 1700}} class="font-bold text-[200px] z-20 gradient-text leading-none" style="font-family: 'Pacifico', cursive;">
+        <div in:fade={{duration: 150, delay: 1700}} class="font-bold text-[200px] z-20 area-letter leading-none" style="font-family: 'Pacifico', cursive;">
             AREA
         </div>
         <div in:fade={{duration: 150, delay: 2000}} class="text-white text-5xl mt-10 z-10" style="font-family: 'Pacifico', cursive;">
@@ -75,11 +75,5 @@
 <style>
     .animation-controller:hover {
         animation-play-state: paused;
-    }
-
-    .gradient-text {
-        background: linear-gradient(to right top, #3a529e, #47529b, #515399, #5a5496, #615593, #715294, #814f93, #914a8f, #b03b83, #c9286c, #da194e, #e02527);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
     }
 </style>

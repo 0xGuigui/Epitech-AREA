@@ -53,6 +53,8 @@ module.exports = (area) => {
                 'Area - Verify your account',
                 'verify-account-template',
                 newUser.username,
+                newUser.username,
+                (new Date()).toLocaleString(),
                 redirectUrl
             )
             res.status(200).json({message: 'User created'})
