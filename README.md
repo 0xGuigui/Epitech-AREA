@@ -4,19 +4,19 @@
 </p>
 
 <h3 align="center">AREA Project</h3>
-[![Status - Finished](https://img.shields.io/badge/Status-Finished-2ea44f?style=for-the-badge&logo=Cachet)](https://)
-[![FrontEnd - Svelte](https://img.shields.io/badge/FrontEnd-Svelte-FF3E00?style=for-the-badge&logo=Svelte)]()
-[![FrontMobile - React Native](https://img.shields.io/static/v1?label=FrontMobile&message=React+Native&color=%2361DAFB&style=for-the-badge&logo=React)]()
-[![Mobile App powered by - Expo](https://img.shields.io/static/v1?label=Mobile+App+powered+by&message=Expo&color=%23000020&style=for-the-badge&logo=Expo)]()
-[![BackEnd - Express](https://img.shields.io/static/v1?label=BackEnd&message=Express&color=%23F7DF1E&style=for-the-badge&logo=express)]()
-[![Made for - Epitech](https://img.shields.io/static/v1?label=Made+for&message=Epitech&color=%23004088&style=for-the-badge&logo=Epitech)]()
-[![Database - Mongo 4.4.6](https://img.shields.io/static/v1?label=Database&message=Mongo+4.4.6&color=%2347A248&style=for-the-badge&logo=MongoDB)]()
-[![Deployment - Docker](https://img.shields.io/static/v1?label=Deployment&message=Docker&color=%232496ED&style=for-the-badge&logo=Docker)]()
-[![Made with a little grain of salt](https://img.shields.io/static/v1?label=&message=Made+with+a+little+grain+of+salt&color=%23E71D29&style=for-the-badge&logo=Undertale)]()
 <div align="center">
 
-
-
+<a href="https://"><img src="https://img.shields.io/badge/Status-Finished-2ea44f?style=for-the-badge&logo=Cachet" alt="Status - Finished"></a>
+<a href="https://"><img src="https://img.shields.io/badge/Version-1.0.0-2ea44f?style=for-the-badge&logo=Git" alt="Version - 1.0.0"></a>
+<a href="https://"><img src="https://img.shields.io/badge/Contributors-5-2ea44f?style=for-the-badge&logo=GitHub" alt="Contributors - 4"></a>
+<a href="https://"><img src="https://img.shields.io/badge/FrontEnd-Svelte-FF3E00?style=for-the-badge&logo=Svelte" alt="FrontEnd - Svelte"></a>
+<a href="https://"><img src="https://img.shields.io/badge/BackEnd-NodeJS-339933?style=for-the-badge&logo=Node.js" alt="BackEnd - NodeJS"></a>
+<a href="https://"><img src="https://img.shields.io/badge/Database-MongoDB-47A248?style=for-the-badge&logo=MongoDB" alt="Database - MongoDB"></a>
+<a href="https://"><img src="https://img.shields.io/badge/FrontEnd_Mobile-React_Native-61DAFB?style=for-the-badge&logo=React" alt="FrontEnd Mobile - React Native"></a>
+<a href="https://"><img src="https://img.shields.io/static/v1?label=Mobile+host&message=Expo&color=%23000020&style=for-the-badge&logo=Expo" alt="Mobile host - Expo"></a>
+<a href="https://"><img src="https://img.shields.io/badge/Epitech-006bb2?style=for-the-badge" alt="Epitech"></a>
+<a href="https://"><img src="https://img.shields.io/static/v1?label=Deployment&message=Docker&color=%232496ED&style=for-the-badge&logo=Docker" alt="Deployment - Docker"></a>
+<a href="https://"><img src="https://img.shields.io/static/v1?label=&message=Made+by+us+with+a+little+grain+of+salt&color=%23E71D29&style=for-the-badge&logo=Undertale" alt="Made by us with a little grain of salt"></a>
 </div>
 
 ---
@@ -129,7 +129,7 @@ Now you can access the website at http(s)://yourdomain.com
 
 ## ✍️ Authors <a name = "authors"></a>
 
-- [@Paul Gervais](https://github.com/Gagonlaire) 
+- [@Paul Gervais](https://github.com/Gagonlaire)
 - [@Julien Hennion](https://github.com/Yusisako)
 - [@Florian Garnier](https://github.com/Suolumi)
 - [@Antoine Paul](https://github.com/PAn-27)
