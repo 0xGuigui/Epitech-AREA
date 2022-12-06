@@ -1,10 +1,11 @@
 <script>
     import {createForm} from "svelte-forms-lib";
+    import {serverUrl} from "../../../store";
 
     let errs = {};
 
     async function logUser(form) {
-        const response = await fetch(`test/register`, {
+        const response = await fetch(`${$serverUrl}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
