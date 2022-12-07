@@ -101,9 +101,13 @@ class AREA {
         }
 
         await this.connectToDB()
-        await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
-            upsert: true, setDefaultsOnInsert: true
-        }).exec()
+        try {
+            await mongoose.models.User.findOneAndUpdate({username: "admin"}, adminUserData, {
+                upsert: true, setDefaultsOnInsert: true
+            }).exec()
+        } catch (err) {
+            logger.error("Failed to upsert admin user, informations might be outdated")
+        }
         logger.debug("Admin user created, check your .env for credentials")
         return this.app.listen(process.env.PORT || process.env.AREA_SERVER_PORT, callback)
     }
