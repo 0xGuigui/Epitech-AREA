@@ -71,13 +71,13 @@ The .env file needs to be at the root of the repository
 Clone the project
 
 ```bash
-  git clone git@github.com:EpitechPromo2025/B-DEV-500-LIL-5-1-area-guilhem.jehanno.git
+  git clone git@github.com:EpitechPromo2025/B-DEV-500-LIL-5-1-area-mflr0.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd B-DEV-500-LIL-5-1-area-guilhem.jehanno
+  cd B-DEV-500-LIL-5-1-area-mflr0
 ```
 
 Install **repository** dependencies
@@ -575,7 +575,7 @@ Clears the jwt cookie
 
 - [@Paul Gervais](https://github.com/Gagonlaire)
 - [@Julien Hennion](https://github.com/Yusisako)
-- [@Guilhem Jéhanno](https://github.com/Nysioko)
+- [@mflr0](https://github.com/mflr0)
 - [@Florian Garnier](https://github.com/Suolumi)
 - [@Antoine Paul](https://github.com/PAn-27)
 
